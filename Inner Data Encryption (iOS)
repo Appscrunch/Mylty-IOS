@@ -1,0 +1,61 @@
+[Link to the task](https://github.com/Appscrunch/Multy/wiki/Mobile-secure-data-storage)
+
+[Here](https://support.urbanairship.com/hc/en-us/articles/213492363-UDID-and-other-device-identifiers-for-iOS) we can read general info about iOS identifiers
+
+### f1() ###
+
+**Device token for appplication**
+
+Here is the recipe for device token
+
+[Apple doc for APNS](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
+
+The main part.
+APNs can issue a new device token for a variety of reasons:
+
+* User installs your app on a new device
+
+* User restores device from a backup
+
+* User reinstalls the operating system
+
+* Other system-defined events
+
+
+### f2() ###
+
+**ASIdentifierManager in AdSupport Framework**
+
+[Ad Support Documetation](https://developer.apple.com/documentation/adsupport/asidentifiermanager)
+
+Unlike the **identifierForVendor** property of the UIDevice, the same value is returned to all vendors. This identifier may change—for example, if the user erases the device—so you should not cache it.
+
+### f3() ###
+
+**Identifier for Vendor (IDFV)**
+
+[Here](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is Apple Documentation about **identifierForVendor**.
+
+The value of this property is the same for apps that come from the same vendor running on the same device. A different value is returned for apps on the same device that come from different vendors, and for apps on different devices regardless of vendor.
+
+### Keychain Storing ###
+
+[UID Key](https://www.theiphonewiki.com/wiki/UID_key) is an AES 256-bit hardware key, unique to each iPhone. It cannot be read by software instruments. Also one can read [GID Key](https://www.theiphonewiki.com/wiki/GID_Key)
+
+Keychain storage use to secure data with UID key. Stored data can be marked "...ThisDeviceOnly" to avoid transferring data to another device (emulator/simulator). For example, 
+
+
+```
+#!swift
+
+let kSecAttrAccessibleWhenUnlockedThisDeviceOnly: CFString
+The data in the keychain item can be accessed only while the device is unlocked by the user.
+```
+
+
+Always use the most restrictive option that makes sense for your app. For apps running entirely in the foreground, them most secure option is kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly. If your app must access keychain items while running in the background, the most secure option is kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly.
+
+Analyze [security](http://resources.infosecinstitute.com/ios-application-security-part-12-dumping-keychain-data/#gref) of keychain security.
+
+
+[Manual](https://medium.com/ios-os-x-development/securing-user-data-with-keychain-for-ios-e720e0f9a8e2) for iOS
