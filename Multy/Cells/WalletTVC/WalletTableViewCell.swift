@@ -59,15 +59,14 @@ class WalletTableViewCell: UITableViewCell {
 //        if self.wallet?.cryptoName == "BTC" {
             self.tokenImage.image = #imageLiteral(resourceName: "btcIconBig")
 //        }
-        let sumInFiat = ((self.wallet?.sumInCrypto)! * exchangeCourse).fixedFraction(digits: 2)
-        self.walletNameLbl.text = self.wallet?.name
-        self.cryptoSumLbl.text  = self.wallet?.sumInCrypto.fixedFraction(digits: 8)
-        self.cryptoNameLbl.text = self.wallet?.cryptoName
+        let sumInFiat = (self.wallet!.sumInCrypto * exchangeCourse).fixedFraction(digits: 2)
+        self.walletNameLbl.text = self.wallet!.name
+        self.cryptoSumLbl.text  = self.wallet!.sumInCrypto.fixedFraction(digits: 8)
+        self.cryptoNameLbl.text = self.wallet!.cryptoName
         self.fiatSumLbl.text = "\(sumInFiat) \(self.wallet!.fiatSymbol)"
         
         if wallet != nil {
-            let isHidden = wallet!.calculateBlockedAmount() == 0
-            self.statusImage.isHidden = isHidden
+            self.statusImage.isHidden = !wallet!.isTherePendingAmount()
         }
     }
 }

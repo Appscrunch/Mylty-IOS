@@ -25,6 +25,9 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="331.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gradientForWallet" translatesAutoresizingMaskIntoConstraints="NO" id="V9a-Am-ouD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="331.5"/>
+                    </imageView>
                     <pageControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Rya-sD-JBP">
                         <rect key="frame" x="168" y="294.5" width="39" height="37"/>
                     </pageControl>
@@ -43,9 +46,10 @@
                         </connections>
                     </collectionView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prT-1y-lyc">
-                        <rect key="frame" x="0.0" y="17" width="70" height="47"/>
+                        <rect key="frame" x="0.0" y="20" width="90" height="50"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="70" id="GqW-6z-xrG"/>
+                            <constraint firstAttribute="width" constant="90" id="GqW-6z-xrG"/>
+                            <constraint firstAttribute="height" constant="50" id="St8-bd-sl5"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                         <state key="normal" title="Close">
@@ -63,7 +67,7 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57B-xg-IGV">
-                        <rect key="frame" x="305" y="12" width="70" height="52"/>
+                        <rect key="frame" x="305" y="15" width="70" height="49"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="X2u-Me-8yn"/>
                         </constraints>
@@ -83,22 +87,25 @@
                 <constraints>
                     <constraint firstItem="oci-Q7-YYq" firstAttribute="top" secondItem="57B-xg-IGV" secondAttribute="bottom" id="0dp-sO-DkV"/>
                     <constraint firstItem="bew-sY-tZZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="prT-1y-lyc" secondAttribute="trailing" constant="5" id="4iD-fC-YK6"/>
-                    <constraint firstItem="oci-Q7-YYq" firstAttribute="top" secondItem="prT-1y-lyc" secondAttribute="bottom" id="6DX-fc-kea"/>
-                    <constraint firstItem="prT-1y-lyc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="17" id="AtO-k0-u6t"/>
+                    <constraint firstItem="prT-1y-lyc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="AtO-k0-u6t"/>
                     <constraint firstAttribute="bottom" secondItem="Rya-sD-JBP" secondAttribute="bottom" id="Df1-3p-8EG"/>
                     <constraint firstAttribute="trailing" secondItem="SDL-hS-0qY" secondAttribute="trailing" constant="17" id="Dgl-pI-AQe"/>
-                    <constraint firstItem="57B-xg-IGV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="DjK-KQ-prD"/>
+                    <constraint firstItem="57B-xg-IGV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="DjK-KQ-prD"/>
                     <constraint firstItem="57B-xg-IGV" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="bew-sY-tZZ" secondAttribute="trailing" constant="5" id="EZu-UV-x4o"/>
                     <constraint firstItem="prT-1y-lyc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="FPP-iW-WVh"/>
                     <constraint firstItem="Rya-sD-JBP" firstAttribute="top" secondItem="oci-Q7-YYq" secondAttribute="bottom" constant="-15" id="PSk-jr-XJ2"/>
                     <constraint firstItem="oci-Q7-YYq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Poa-UB-qZs"/>
+                    <constraint firstAttribute="bottom" secondItem="V9a-Am-ouD" secondAttribute="bottom" id="Ppe-Vi-YiX"/>
                     <constraint firstAttribute="trailing" secondItem="oci-Q7-YYq" secondAttribute="trailing" id="R4B-1h-vCr"/>
                     <constraint firstItem="oci-Q7-YYq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="64" id="VZY-yx-uG7"/>
                     <constraint firstItem="oci-Q7-YYq" firstAttribute="top" secondItem="SDL-hS-0qY" secondAttribute="bottom" constant="12" id="Wz2-Ga-9S1"/>
                     <constraint firstItem="Rya-sD-JBP" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="YNr-Eq-xVI"/>
                     <constraint firstItem="oci-Q7-YYq" firstAttribute="top" secondItem="bew-sY-tZZ" secondAttribute="bottom" constant="10" id="Yhj-yo-x1g"/>
+                    <constraint firstItem="V9a-Am-ouD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ahM-MU-HTm"/>
                     <constraint firstItem="bew-sY-tZZ" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="gPX-6n-bH0"/>
                     <constraint firstAttribute="trailing" secondItem="57B-xg-IGV" secondAttribute="trailing" id="iUM-j6-ut7"/>
+                    <constraint firstAttribute="trailing" secondItem="V9a-Am-ouD" secondAttribute="trailing" id="sQo-Lh-nVX"/>
+                    <constraint firstItem="V9a-Am-ouD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="vG5-tq-WFU"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -112,6 +119,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="gradientForWallet" width="332" height="375"/>
         <image name="settings" width="25" height="20"/>
     </resources>
 </document>

@@ -1,2 +1,2 @@
-# Mylty-IOS
+# Multy-IOS
 Coming soon..

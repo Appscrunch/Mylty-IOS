@@ -20,6 +20,9 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var constraintDonationHeight: NSLayoutConstraint!
     @IBOutlet weak var nextBtn: ZFRippleButton!
     
+    @IBOutlet weak var bottomBtnConstraint: NSLayoutConstraint!
+    
+    
     let presenter = SendDetailsPresenter()
     
     var maxLengthForSum = 12
@@ -39,6 +42,8 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
         presenter.requestFee()
         
         presenter.getWalletVerbose()
+        
+        presenter.getData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,10 +60,14 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.presenter.nullifyDonation()
+        
+        if screenHeight == 812 {
+            bottomBtnConstraint.constant = 0
+        }
     }
     
     func setupDonationUI() {
-        self.donationTF.text = "\(self.presenter.donationInCrypto ?? 0.0)"
+        self.donationTF.text = "\((self.presenter.donationInCrypto ?? 0.0).fixedFraction(digits: 8))"
         self.presenter.donationInFiat = self.presenter.donationInCrypto! * exchangeCourse
         self.donationFiatSumLbl.text = "\(self.presenter.donationInFiat?.fixedFraction(digits: 2) ?? "0.00")"
     }
@@ -80,14 +89,16 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func nextAction(_ sender: Any) {
+        self.view.endEditing(true)
+        
         if self.presenter.selectedIndexOfSpeed != nil {
             if isDonateAvailableSW.isOn {
                 self.presenter.createDonation()
             }
             self.presenter.createTransaction(index: self.presenter.selectedIndexOfSpeed!)
-            self.presenter.checkMaxEvelable()
+            self.presenter.checkMaxAvailable()
         } else {
-            let alert = UIAlertController(title: "Transaction speed not selected!", message: "Please choose one or set cuctom", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Transaction speed not selected!", message: "Please choose one or set custom", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
@@ -105,6 +116,9 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0{
                 self.view.frame.origin.y -= keyboardSize.height
+                if screenHeight == 812 {
+                    bottomBtnConstraint.constant -= 35
+                }
             }
         }
     }
@@ -113,6 +127,9 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y != 0{
                 self.view.frame.origin.y += keyboardSize.height
+                if screenHeight == 812 {
+                    bottomBtnConstraint.constant = 0
+                }
             }
         }
     }
@@ -136,7 +153,10 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
                 self.constraintDonationHeight.constant
         }
         self.hideOrShowDonationBottom()
-        self.scrollView.scrollRectToVisible(self.nextBtn.frame, animated: true)
+//        self.scrollView.scrollRectToVisible(self.nextBtn.frame, animated: true)
+        var offset = scrollView.contentOffset
+        offset.y = scrollView.contentSize.height + scrollView.contentInset.bottom - scrollView.bounds.size.height - 75
+        scrollView.setContentOffset(offset, animated: true)
     }
     
     func hideOrShowDonationBottom() {
@@ -210,12 +230,12 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
         if string == "" && self.donationTF.text == "" {
             self.presenter.donationInCrypto = 0.0
             self.presenter.donationInFiat = 0.0
-            self.donationFiatSumLbl.text = "\(self.presenter.donationInFiat ?? 0.0)"
+            self.donationFiatSumLbl.text = "\((self.presenter.donationInFiat ?? 0.0).fixedFraction(digits: 2))"
         } else {
             self.presenter.donationInCrypto = (self.donationTF.text! + string as NSString).doubleValue
             self.presenter.donationInFiat = self.presenter.donationInCrypto! * exchangeCourse
             self.presenter.donationInFiat = Double(round(100*self.presenter.donationInFiat!)/100)
-            self.donationFiatSumLbl.text = "\(self.presenter.donationInFiat ?? 0.0)"
+            self.donationFiatSumLbl.text = "\((self.presenter.donationInFiat ?? 0.0).fixedFraction(digits: 2))"
         }
     }
     
@@ -229,6 +249,8 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate {
             sendAmountVC.presenter.donationObj = self.presenter.donationObj
             sendAmountVC.presenter.transactionObj = self.presenter.trasactionObj
             sendAmountVC.presenter.walletAddresses = self.presenter.walletAddresses
+            sendAmountVC.presenter.historyArray = self.presenter.historyArray
+            sendAmountVC.presenter.customFee = presenter.customFee
             if self.presenter.amountFromQr != nil {
                 sendAmountVC.presenter.sumInCrypto = self.presenter.amountFromQr!
             }

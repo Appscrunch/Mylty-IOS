@@ -1,9 +1,10 @@
 {
-  "info" : {
-    "author" : "zeplin",
-    "version" : 1
-  },
   "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "arrowCoin.png",
+      "scale" : "1x"
+    },
     {
       "idiom" : "universal",
       "filename" : "arrowCoin@2x.png",
@@ -13,11 +14,10 @@
       "idiom" : "universal",
       "filename" : "arrowCoin@3x.png",
       "scale" : "3x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "arrowCoin.png",
-      "scale" : "1x"
     }
-  ]
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "zeplin"
+  }
 }

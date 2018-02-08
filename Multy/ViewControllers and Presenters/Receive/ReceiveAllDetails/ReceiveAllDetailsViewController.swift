@@ -3,6 +3,7 @@
 //See LICENSE for details
 
 import UIKit
+import Branch
 
 class ReceiveAllDetailsViewController: UIViewController {
 
@@ -19,7 +20,7 @@ class ReceiveAllDetailsViewController: UIViewController {
     @IBOutlet weak var walletNameLbl: UILabel!
     @IBOutlet weak var walletCryptoSumBtn: UIButton! //set title with sum here
     @IBOutlet weak var walletFiatSumLbl: UILabel!
-    
+    @IBOutlet weak var constraintForSum: NSLayoutConstraint!
     
     let presenter = ReceiveAllDetailsPresenter()
     
@@ -31,6 +32,7 @@ class ReceiveAllDetailsViewController: UIViewController {
         super.viewDidLoad()
         self.presenter.receiveAllDetailsVC = self
         self.tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,6 +40,7 @@ class ReceiveAllDetailsViewController: UIViewController {
         self.checkValuesAndSetupUI()
         self.updateUIWithWallet()
         self.makeQRCode()
+        self.ipadFix()
     }
     
     @IBAction func cancelAction(_ sender: Any) {
@@ -60,12 +63,48 @@ class ReceiveAllDetailsViewController: UIViewController {
     @IBAction func addressBookAction(_ sender: Any) {
     }
     
+    func branchDict() -> NSDictionary {
+        //check for blockchain
+        //if bitcoin - address: "\(chainName):\(presenter.walletAddress)"
+        let chainName = "bitcoin"
+        let dict: NSDictionary = ["$og_title" : "Multy",
+                                  "address"   : "\(chainName):\(presenter.walletAddress)",
+                                  "amount"    : presenter.cryptoSum ?? 0.0]
+        
+        return dict
+    }
+    
+    
     @IBAction func moreOptionsAction(_ sender: Any) {
-        let message = "MULTY \n\nYour Address: \n\(self.presenter.walletAddress) \n\nRequested Amount: \(self.presenter.cryptoSum ?? 0.0) \(self.presenter.cryptoName ?? "")"
-        let objectsToShare = [message] as [String]
-        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-        self.present(activityVC, animated: true, completion: nil)
+        let branch = Branch.getInstance()
+        branch?.getShortURL(withParams: branchDict() as! [String : Any], andChannel: "Create option \"Multy\"", andFeature: "sharing", andCallback: { (url, err) in
+            let objectsToShare = [url] as! [String]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+            self.present(activityVC, animated: true, completion: nil)
+        })
+        
+//        let linkProperties: BranchLinkProperties = BranchLinkProperties()
+//        linkProperties.feature = "sharing"
+////        linkProperties.addControlParam("$desktop_url", withValue: "http://onliner.by/")
+////        linkProperties.addControlParam("$ios_url", withValue: "multy://")
+//        linkProperties.addControlParam("address", withValue: self.presenter.walletAddress)
+//
+//
+//        let branchUniversalObject: BranchUniversalObject = BranchUniversalObject(canonicalIdentifier: "item/12345")
+//        branchUniversalObject.title = "My Content Title"
+//        branchUniversalObject.getShortUrl(with: linkProperties) { (url, error) in
+//            let objectsToShare = [url] as! [String]
+//            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+//            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+//            self.present(activityVC, animated: true, completion: nil)
+//        }
+        
+//        let message = "MULTY \n\nYour Address: \n\(self.presenter.walletAddress) \n\nRequested Amount: \(self.presenter.cryptoSum ?? 0.0) \(self.presenter.cryptoName ?? "")"
+//        let objectsToShare = [message] as [String]
+//        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+//        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+//        self.present(activityVC, animated: true, completion: nil)
     }
     
     @IBAction func chooseAnotherWalletAction(_ sender: Any) {
@@ -79,15 +118,16 @@ class ReceiveAllDetailsViewController: UIViewController {
     
     func updateUIWithWallet() {
         self.walletNameLbl.text = self.presenter.wallet?.name
-        self.walletCryptoSumBtn.setTitle("\(self.presenter.wallet?.sumInCrypto ?? 0.0) \(self.presenter.wallet?.cryptoName ?? "")", for: .normal)
-        self.walletFiatSumLbl.text = "\(self.presenter.wallet?.sumInFiat ?? 0.0) \(self.presenter.wallet?.fiatSymbol ?? "")"
+        self.walletCryptoSumBtn.setTitle("\((self.presenter.wallet?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.presenter.wallet?.cryptoName ?? "")", for: .normal)
+        let sum = (presenter.wallet!.sumInCrypto * exchangeCourse).fixedFraction(digits: 2)
+        self.walletFiatSumLbl.text = "\(sum) \(self.presenter.wallet?.fiatSymbol ?? "")"
         self.presenter.walletAddress = (self.presenter.wallet?.address)!
         self.addressLbl.text = self.presenter.walletAddress
     }
     
     
     func makeStringForQRWithSumAndAdress(cryptoName: String) -> String { // cryptoName = bitcoin
-        return "\(cryptoName):\(self.presenter.walletAddress)?amount=\(self.presenter.cryptoSum ?? 0.0)"
+        return "\(cryptoName):\(self.presenter.walletAddress)?amount=\((self.presenter.cryptoSum ?? 0.0).fixedFraction(digits: 8))"
     }
     
 // MARK: QRCode Activity
@@ -133,9 +173,9 @@ class ReceiveAllDetailsViewController: UIViewController {
         self.fiatSumLbl.isHidden = false
         self.fiatNameLbl.isHidden = false
         
-        self.sumValueLbl.text = "\(self.presenter.cryptoSum ?? 0.0)"
+        self.sumValueLbl.text = "\((self.presenter.cryptoSum ?? 0.0).fixedFraction(digits: 8))"
         self.cryptoNameLbl.text = self.presenter.cryptoName
-        self.fiatSumLbl.text = "\(self.presenter.fiatSum ?? 0.0)"
+        self.fiatSumLbl.text = "\((self.presenter.fiatSum ?? 0.0).fixedFraction(digits: 2))"
         self.fiatNameLbl.text = self.presenter.fiatName
         
         self.makeQrWithSum()
@@ -159,6 +199,13 @@ class ReceiveAllDetailsViewController: UIViewController {
                 destVC.fiatName = self.presenter.fiatName!
                 destVC.sumInFiat = self.presenter.fiatSum!
             }
+        }
+    }
+    
+    func ipadFix() {
+        if screenHeight == 480 {
+            self.sumValueLbl.font = sumValueLbl.font.withSize(30)
+            self.cryptoNameLbl.font = cryptoNameLbl.font.withSize(30)
         }
     }
 }

@@ -567,12 +567,13 @@ This feature will be in the next update.</string>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="MXS-yj-hGB" secondAttribute="trailing" id="81J-mp-pAa"/>
                             <constraint firstItem="MXS-yj-hGB" firstAttribute="leading" secondItem="7QJ-UA-aaR" secondAttribute="leading" id="NCD-aI-Jbk"/>
-                            <constraint firstItem="CoE-mk-MVK" firstAttribute="top" secondItem="MXS-yj-hGB" secondAttribute="bottom" id="OnT-UF-okz"/>
+                            <constraint firstAttribute="bottom" secondItem="MXS-yj-hGB" secondAttribute="bottom" id="OnT-UF-okz"/>
                             <constraint firstItem="MXS-yj-hGB" firstAttribute="top" secondItem="7QJ-UA-aaR" secondAttribute="top" id="RZB-In-AtV"/>
                         </constraints>
                     </view>
                     <size key="freeformSize" width="375" height="1010"/>
                     <connections>
+                        <outlet property="bottomBtnConstraint" destination="oxO-oN-TlI" id="5Xu-8T-ako"/>
                         <outlet property="constraintDonationHeight" destination="UZx-4s-uXi" id="6dS-td-Pze"/>
                         <outlet property="donationCryptoNameLbl" destination="gdi-l2-max" id="rRJ-QF-W5L"/>
                         <outlet property="donationFiatNameLbl" destination="sEm-BU-U5Q" id="nCt-z7-mye"/>
@@ -657,24 +658,24 @@ This feature will be in the next update.</string>
                                 <color key="textColor" red="0.97647058819999999" green="0.98039215690000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oaC-Rz-vgT">
-                                <rect key="frame" x="174.5" y="638" width="26.5" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oaC-Rz-vgT">
+                                <rect key="frame" x="182.5" y="638" width="11" height="25"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <color key="textColor" red="0.97647058819999999" green="0.98039215690000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uDq-Td-EBb">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uDq-Td-EBb">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backGrey" translatesAutoresizingMaskIntoConstraints="NO" id="Lm1-SW-8dk">
-                                        <rect key="frame" x="16" y="33" width="13" height="21"/>
+                                        <rect key="frame" x="16" y="34.5" width="13" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="13" id="AQA-gx-oJL"/>
                                             <constraint firstAttribute="height" constant="21" id="XaL-VO-3Mc"/>
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D9i-dd-7eI" userLabel="back">
-                                        <rect key="frame" x="0.0" y="28" width="60" height="30"/>
+                                        <rect key="frame" x="0.0" y="34.5" width="60" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="Yd4-uV-FWa"/>
                                         </constraints>
@@ -699,34 +700,34 @@ This feature will be in the next update.</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOo-l7-Vq8">
-                                        <rect key="frame" x="224" y="409" width="30.5" height="22"/>
+                                        <rect key="frame" x="203" y="193" width="30.5" height="22"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                         <color key="textColor" red="0.52941176469999995" green="0.63137254899999995" blue="0.7725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WHc-k4-50p">
-                                        <rect key="frame" x="201" y="454" width="158" height="2"/>
+                                        <rect key="frame" x="201" y="238" width="158" height="2"/>
                                         <color key="backgroundColor" red="0.52941176469999995" green="0.63137254899999995" blue="0.7725490196" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="A0u-GB-AGP"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A45-fp-vZe">
-                                        <rect key="frame" x="16" y="454" width="155" height="2"/>
+                                        <rect key="frame" x="16" y="238" width="155" height="2"/>
                                         <color key="backgroundColor" red="0.52941176469999995" green="0.63137254899999995" blue="0.7725490196" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="2" id="h7e-rf-Hhd"/>
                                         </constraints>
                                     </view>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swap" translatesAutoresizingMaskIntoConstraints="NO" id="70x-BQ-w30">
-                                        <rect key="frame" x="175" y="445" width="24" height="21"/>
+                                        <rect key="frame" x="175" y="229" width="24" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="dzY-zt-bpO"/>
                                             <constraint firstAttribute="width" constant="24" id="fyz-pn-CDy"/>
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tyQ-1e-aWF">
-                                        <rect key="frame" x="164" y="481" width="47" height="22"/>
+                                        <rect key="frame" x="164" y="265" width="47" height="22"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iP4-gf-E0A">
                                                 <rect key="frame" x="0.0" y="0.0" width="14" height="22"/>
@@ -743,7 +744,7 @@ This feature will be in the next update.</string>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1r8-E7-NF8">
-                                        <rect key="frame" x="82.5" y="518" width="210.5" height="31"/>
+                                        <rect key="frame" x="82.5" y="302" width="210.5" height="31"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pay for commission        " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ie-5f-uXv">
                                                 <rect key="frame" x="0.0" y="0.0" width="161.5" height="31"/>
@@ -761,7 +762,7 @@ This feature will be in the next update.</string>
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rnf-u0-7bX">
-                                        <rect key="frame" x="0.0" y="559" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="343" width="375" height="44"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MAX" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhi-Qs-0Ca">
                                                 <rect key="frame" x="325" y="11" width="37" height="22"/>
@@ -804,14 +805,17 @@ This feature will be in the next update.</string>
                                             <constraint firstAttribute="trailing" secondItem="6NZ-xx-Nqv" secondAttribute="trailing" id="xpg-Ba-Upb"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gfE-Vc-rTR">
-                                        <rect key="frame" x="151.5" y="377.5" width="72.5" height="68.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gfE-Vc-rTR">
+                                        <rect key="frame" x="173" y="161.5" width="30" height="68.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="68.5" id="YX9-R0-d07"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="50"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZE-Cd-gDu">
-                                        <rect key="frame" x="145" y="432" width="84" height="76"/>
+                                        <rect key="frame" x="145" y="216" width="84" height="76"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="84" id="etG-Ra-wBk"/>
                                         </constraints>
@@ -826,7 +830,7 @@ This feature will be in the next update.</string>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="70x-BQ-w30" firstAttribute="centerX" secondItem="uDq-Td-EBb" secondAttribute="centerX" id="1QK-ib-Lcm"/>
-                                    <constraint firstItem="Lm1-SW-8dk" firstAttribute="top" secondItem="uDq-Td-EBb" secondAttribute="top" constant="33" id="4cR-QQ-rXn"/>
+                                    <constraint firstItem="Lm1-SW-8dk" firstAttribute="centerY" secondItem="VhT-01-bTB" secondAttribute="centerY" id="3Un-QL-QAD"/>
                                     <constraint firstItem="fOo-l7-Vq8" firstAttribute="bottom" secondItem="gfE-Vc-rTR" secondAttribute="bottom" constant="-15" id="8jK-nA-1j1"/>
                                     <constraint firstItem="bZE-Cd-gDu" firstAttribute="centerX" secondItem="uDq-Td-EBb" secondAttribute="centerX" id="9GC-nw-scf"/>
                                     <constraint firstItem="gfE-Vc-rTR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="uDq-Td-EBb" secondAttribute="leading" priority="990" constant="20" id="AcU-fU-Vdt"/>
@@ -835,7 +839,7 @@ This feature will be in the next update.</string>
                                     <constraint firstItem="VhT-01-bTB" firstAttribute="top" secondItem="uDq-Td-EBb" secondAttribute="top" constant="33" id="M0o-zY-FNM"/>
                                     <constraint firstItem="1r8-E7-NF8" firstAttribute="top" secondItem="bZE-Cd-gDu" secondAttribute="bottom" constant="10" id="P3b-Gc-rJn"/>
                                     <constraint firstItem="Lm1-SW-8dk" firstAttribute="leading" secondItem="uDq-Td-EBb" secondAttribute="leading" constant="16" id="Qlq-ys-HTl"/>
-                                    <constraint firstItem="Rnf-u0-7bX" firstAttribute="top" secondItem="uDq-Td-EBb" secondAttribute="top" constant="559" id="TNk-LE-kDe"/>
+                                    <constraint firstItem="gfE-Vc-rTR" firstAttribute="top" secondItem="VhT-01-bTB" secondAttribute="bottom" constant="105" id="RJ1-gs-5mw"/>
                                     <constraint firstItem="gfE-Vc-rTR" firstAttribute="centerX" secondItem="uDq-Td-EBb" secondAttribute="centerX" id="TyA-3u-UGW"/>
                                     <constraint firstItem="A45-fp-vZe" firstAttribute="centerY" secondItem="70x-BQ-w30" secondAttribute="centerY" id="XtI-6w-SNs"/>
                                     <constraint firstItem="WHc-k4-50p" firstAttribute="leading" secondItem="70x-BQ-w30" secondAttribute="trailing" constant="2" id="YLN-ro-kTv"/>
@@ -844,16 +848,16 @@ This feature will be in the next update.</string>
                                     <constraint firstAttribute="trailing" secondItem="Rnf-u0-7bX" secondAttribute="trailing" id="adX-vI-BAa"/>
                                     <constraint firstItem="1r8-E7-NF8" firstAttribute="top" secondItem="tyQ-1e-aWF" secondAttribute="bottom" constant="15" id="apj-dr-7vC"/>
                                     <constraint firstItem="Rnf-u0-7bX" firstAttribute="top" secondItem="1r8-E7-NF8" secondAttribute="bottom" constant="10" id="bIm-zv-uGT"/>
-                                    <constraint firstAttribute="bottom" secondItem="Rnf-u0-7bX" secondAttribute="bottom" id="bYx-4N-Wrh"/>
+                                    <constraint firstAttribute="bottom" secondItem="Rnf-u0-7bX" secondAttribute="bottom" constant="-44" id="bYx-4N-Wrh"/>
                                     <constraint firstItem="D9i-dd-7eI" firstAttribute="leading" secondItem="uDq-Td-EBb" secondAttribute="leading" id="ecU-Nu-VjJ"/>
-                                    <constraint firstItem="cLW-Qu-SGI" firstAttribute="top" secondItem="uDq-Td-EBb" secondAttribute="top" constant="26" id="fwq-Es-Uak"/>
                                     <constraint firstItem="70x-BQ-w30" firstAttribute="leading" secondItem="A45-fp-vZe" secondAttribute="trailing" constant="4" id="fyP-uk-opF"/>
                                     <constraint firstItem="70x-BQ-w30" firstAttribute="top" secondItem="gfE-Vc-rTR" secondAttribute="bottom" constant="-0.5" id="hM2-TY-UoJ"/>
                                     <constraint firstItem="bZE-Cd-gDu" firstAttribute="top" secondItem="gfE-Vc-rTR" secondAttribute="bottom" constant="-13.5" id="iaO-Yg-kxv"/>
                                     <constraint firstItem="Rnf-u0-7bX" firstAttribute="centerX" secondItem="uDq-Td-EBb" secondAttribute="centerX" id="j5Q-Vh-VM2"/>
-                                    <constraint firstItem="D9i-dd-7eI" firstAttribute="top" secondItem="uDq-Td-EBb" secondAttribute="top" constant="28" id="kCW-8y-aAT"/>
                                     <constraint firstItem="1r8-E7-NF8" firstAttribute="centerX" secondItem="uDq-Td-EBb" secondAttribute="centerX" id="nFa-j9-Aef"/>
+                                    <constraint firstItem="cLW-Qu-SGI" firstAttribute="centerY" secondItem="VhT-01-bTB" secondAttribute="centerY" id="pZx-21-J9n"/>
                                     <constraint firstAttribute="trailing" secondItem="cLW-Qu-SGI" secondAttribute="trailing" constant="16" id="pge-lL-wGL"/>
+                                    <constraint firstItem="D9i-dd-7eI" firstAttribute="top" secondItem="Lm1-SW-8dk" secondAttribute="top" id="sjW-UI-ksN"/>
                                     <constraint firstItem="fOo-l7-Vq8" firstAttribute="leading" secondItem="gfE-Vc-rTR" secondAttribute="trailing" id="szT-6r-cTL"/>
                                     <constraint firstItem="VhT-01-bTB" firstAttribute="centerX" secondItem="uDq-Td-EBb" secondAttribute="centerX" id="ttK-o3-4ti"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fOo-l7-Vq8" secondAttribute="trailing" constant="20" id="xQ0-88-ytT"/>
@@ -883,7 +887,10 @@ This feature will be in the next update.</string>
                         <outlet property="bottomSumLbl" destination="iP4-gf-E0A" id="wff-n7-Mlp"/>
                         <outlet property="btnSumLbl" destination="oaC-Rz-vgT" id="eJm-WN-mtB"/>
                         <outlet property="commissionSwitch" destination="Bvb-dk-gfb" id="RCd-v2-the"/>
+                        <outlet property="constraintForTitletoBtn" destination="RJ1-gs-5mw" id="gAI-bs-ePt"/>
                         <outlet property="constraintNextBtnBottom" destination="Bq3-lI-q8R" id="fiG-mw-0Dd"/>
+                        <outlet property="constraintSpendableViewBottom" destination="bYx-4N-Wrh" id="Sp0-OA-Alr"/>
+                        <outlet property="constraintTop" destination="M0o-zY-FNM" id="7YX-3a-m9m"/>
                         <outlet property="constratintNextBtnHeight" destination="RGo-sn-svA" id="YXL-gK-NCu"/>
                         <outlet property="maxBtn" destination="6NZ-xx-Nqv" id="pUa-8A-pPb"/>
                         <outlet property="maxLbl" destination="Xhi-Qs-0Ca" id="ArQ-Ci-rlc"/>
@@ -971,7 +978,7 @@ This feature will be in the next update.</string>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RI9-ER-ncF">
                                                 <rect key="frame" x="60" y="39" width="223" height="60.5"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0152" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ycp-p1-sYK">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0,0152" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ycp-p1-sYK">
                                                         <rect key="frame" x="0.0" y="0.0" width="139.5" height="60.5"/>
                                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="44"/>
                                                         <nil key="textColor"/>
@@ -1004,8 +1011,8 @@ This feature will be in the next update.</string>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="j2L-wX-UIu">
-                                                <rect key="frame" x="41" y="151.5" width="267.5" height="16.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="j2L-wX-UIu">
+                                                <rect key="frame" x="41" y="151.5" width="261" height="33"/>
                                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1013,6 +1020,7 @@ This feature will be in the next update.</string>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="j2L-wX-UIu" firstAttribute="centerX" secondItem="iHg-A2-nCQ" secondAttribute="centerX" id="CEr-xG-mSZ"/>
                                             <constraint firstItem="Ed2-gG-ZRs" firstAttribute="top" secondItem="Cba-NB-csm" secondAttribute="bottom" constant="12" id="Ku1-DL-ECB"/>
                                             <constraint firstItem="AkA-WX-ZNe" firstAttribute="top" secondItem="Ycp-p1-sYK" secondAttribute="bottom" constant="10" id="PXE-Gl-2zx"/>
                                             <constraint firstItem="RI9-ER-ncF" firstAttribute="centerX" secondItem="iHg-A2-nCQ" secondAttribute="centerX" id="T1K-Cb-URs"/>
@@ -1021,7 +1029,7 @@ This feature will be in the next update.</string>
                                             <constraint firstItem="j2L-wX-UIu" firstAttribute="top" secondItem="Cba-NB-csm" secondAttribute="bottom" constant="11" id="aL7-4U-yqm"/>
                                             <constraint firstAttribute="trailing" secondItem="Cba-NB-csm" secondAttribute="trailing" id="oiz-Xu-gsg"/>
                                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="j2L-wX-UIu" secondAttribute="trailing" constant="10" id="onQ-tQ-OR2"/>
-                                            <constraint firstItem="j2L-wX-UIu" firstAttribute="leading" secondItem="Ed2-gG-ZRs" secondAttribute="trailing" constant="8" id="q4I-iw-hnA"/>
+                                            <constraint firstItem="j2L-wX-UIu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ed2-gG-ZRs" secondAttribute="trailing" constant="8" id="q4I-iw-hnA"/>
                                             <constraint firstItem="Cba-NB-csm" firstAttribute="leading" secondItem="iHg-A2-nCQ" secondAttribute="leading" id="uGn-f2-JhA"/>
                                             <constraint firstItem="Cba-NB-csm" firstAttribute="top" secondItem="AkA-WX-ZNe" secondAttribute="bottom" constant="7" id="uQo-QP-TGP"/>
                                             <constraint firstItem="AkA-WX-ZNe" firstAttribute="centerX" secondItem="iHg-A2-nCQ" secondAttribute="centerX" id="yXQ-J9-Hhv"/>
@@ -1293,6 +1301,6 @@ This feature will be in the next update.</string>
         <image name="swap" width="25" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="EUD-ex-a5v"/>
+        <segue reference="RTX-aa-bzX"/>
     </inferredMetricsTieBreakers>
 </document>

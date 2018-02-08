@@ -39,7 +39,8 @@ class CreateWalletPresenter: NSObject {
     
     func create() {
         var binData : BinaryData = account!.binaryDataString.createBinaryData()!
-        let dict = DataManager.shared.createNewWallet(for: &binData, CURRENCY_BITCOIN.rawValue, walletID: account!.topIndex.uint32Value)
+        //MARK: topIndex
+        let dict = DataManager.shared.createNewWallet(for: &binData, CURRENCY_BITCOIN.rawValue, walletID: account!.topIndexes[0].topIndex.uint32Value)
         let cell = mainVC?.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! CreateWalletNameTableViewCell
         let params = [
             "currencyID"  : dict!["currency"] as! UInt32,
@@ -49,7 +50,7 @@ class CreateWalletPresenter: NSObject {
             "walletName"      : cell.walletNameTF.text ?? "Wallet"
             ] as [String : Any]
         
-        DataManager.shared.addWallet(self.account!.token, params: params) { (dict, error) in
+        DataManager.shared.addWallet(params: params) { (dict, error) in
             if error == nil {
                 print(dict as Any)
                 self.mainVC?.cancleAction(UIButton())

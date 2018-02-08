@@ -58,6 +58,7 @@ extension WalletChoooseViewController: UITableViewDelegate, UITableViewDataSourc
         walletCell.arrowImage.image = nil
         walletCell.wallet = self.presenter.walletsArr[indexPath.row]
         walletCell.fillInCell()
+        
         return walletCell
     }
     
@@ -66,6 +67,14 @@ extension WalletChoooseViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if presenter.amountFromQr != nil {
+            if presenter.walletsArr[indexPath.row].sumInCrypto < presenter.amountFromQr! {
+                presenter.presentAlert()
+                
+                return
+            }
+        }
+        
         self.presenter.selectedIndex = indexPath.row
         self.performSegue(withIdentifier: "sendDetailsVC", sender: Any.self)
     }

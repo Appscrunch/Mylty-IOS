@@ -19,7 +19,7 @@ class SpendableOutputRLM: Object {
         
         for outputInfo in spendableArray {
             let output = SpendableOutputRLM.initWithInfo(addressInfo: outputInfo as! NSDictionary)
-            output.addressID = addressID
+//            output.addressID = addressID
             outputs.append(output)
         }
         
@@ -48,6 +48,10 @@ class SpendableOutputRLM: Object {
         
         if let txStatus = addressInfo["txstatus"]  {
             spendable.transactionStatus = txStatus as! NSNumber
+        }
+        
+        if let txAddressIndex = addressInfo["addressindex"]  {
+            spendable.addressID = txAddressIndex as! NSNumber
         }
      
         return spendable

@@ -3,6 +3,7 @@
 //See LICENSE for details
 
 import UIKit
+import Branch
 
 class AddressViewController: UIViewController {
 
@@ -17,6 +18,7 @@ class AddressViewController: UIViewController {
     @IBOutlet weak var fourthConstraint: NSLayoutConstraint!
     
     var wallet: UserWalletRLM?
+    var addressIndex: Int?
     
     var qrcodeImage: CIImage!
     
@@ -24,11 +26,15 @@ class AddressViewController: UIViewController {
         super.viewDidLoad()
         let appDel = UIApplication.shared.delegate as! AppDelegate
         appDel.presentedVC = self
-        self.makeQRCode()
-        self.addressLbl.text = self.wallet?.address
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.view.addGestureRecognizer(tap)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.makeQRCode()
+        self.addressLbl.text = makeStringWithAddress()
     }
     
     override func viewDidLayoutSubviews() {
@@ -39,28 +45,55 @@ class AddressViewController: UIViewController {
         }
     }
     
+    func makeStringWithAddress() -> String {
+        if addressIndex == nil {
+            return wallet!.address
+        } else {
+            return wallet!.addresses[addressIndex!].address
+        }
+    }
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func copyToClipboardAction(_ sender: Any) {
-        UIPasteboard.general.string = self.wallet?.address
+        UIPasteboard.general.string = makeStringWithAddress()
     }
     
     @IBAction func shareAction(_ sender: Any) {
-        let message = "MULTY \n\nMy \(self.wallet?.cryptoName ?? "") Address: \n\(self.wallet?.address ?? "")"
-        let objectsToShare = [message] as [String]
-        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-        self.present(activityVC, animated: true, completion: nil)
+        let branch = Branch.getInstance()
+        branch?.getShortURL(withParams: branchDict() as! [String : Any], andChannel: "Create option \"Multy\"", andFeature: "sharing", andCallback: { (url, err) in
+            let objectsToShare = [url] as! [String]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+            self.present(activityVC, animated: true, completion: nil)
+        })
+
+//        let message = "MULTY \n\nMy \(self.wallet?.cryptoName ?? "") Address: \n\(makeStringWithAddress())"
+//        let objectsToShare = [message] as [String]
+//        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+//        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+//        self.present(activityVC, animated: true, completion: nil)
     }
     
+    func branchDict() -> NSDictionary {
+        //check for blockchain
+        //if bitcoin - address: "\(chainName):\(presenter.walletAddress)"
+        let chainName = "bitcoin"
+        let dict: NSDictionary = ["$og_title" : "Multy",
+                                  "address"   : "\(chainName):\(makeStringWithAddress())",
+                                  "amount"    : 0.0]
+
+        return dict
+    }
+  
     @IBAction func cancelAction(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     func makeStringForQRWithSumAndAdress(cryptoName: String) -> String { // cryptoName = bitcoin
-        return "\(cryptoName):\(self.wallet?.address ?? "")"
+        return "\(cryptoName):\(makeStringWithAddress())"
     }
     
     func makeQRCode() {

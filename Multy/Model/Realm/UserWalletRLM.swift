@@ -21,24 +21,30 @@ class UserWalletRLM: Object {
             sumInFiat = sumInCrypto * exchangeCourse
         }
     }
+    
     @objc dynamic var sumInFiat: Double = 0.0
+    
     @objc dynamic var fiatName = String()
     @objc dynamic var fiatSymbol = String()
     
     @objc dynamic var address = String()
+    
+    @objc dynamic var historyAddress : AddressRLM?
     
     var addresses = List<AddressRLM>() {
         didSet {
             var sum : UInt32 = 0
             
             for address in addresses {
+//                for out in address.spendableOutput {
+//                    sum += out.transactionOutAmount.uint32Value
+//                }
                 for out in address.spendableOutput {
                     sum += out.transactionOutAmount.uint32Value
                 }
-//                sum += address.amount.uint32Value
             }
             
-            sumInCrypto = Double(sum) / 100000000.0
+            sumInCrypto = convertSatoshiToBTC(sum: sum)
             
             address = addresses.last?.address ?? ""
         }
@@ -58,10 +64,11 @@ class UserWalletRLM: Object {
     public class func initWithInfo(walletInfo: NSDictionary) -> UserWalletRLM {
         let wallet = UserWalletRLM()
         
-        if let chain = walletInfo["CurrencyID"]  {
+        if let chain = walletInfo["currencyid"]  {
             wallet.chain = NSNumber(value: chain as! UInt32)
         }
         
+        //MARK: to be deleted
         if let walletID = walletInfo["WalletIndex"]  {
             wallet.walletID = NSNumber(value: walletID as! UInt32)
         }
@@ -88,9 +95,13 @@ class UserWalletRLM: Object {
     
     public func updateWalletWithInfo(walletInfo: NSDictionary) {
         
-        
+        //MARK: to be deleted
         if let addresses = walletInfo["Adresses"] {
             self.addresses = AddressRLM.initWithArray(addressesInfo: addresses as! NSArray)
+        }
+        
+        if let address = walletInfo["address"] as? NSDictionary {
+            self.historyAddress = AddressRLM.initWithInfo(addressInfo: address)
         }
         
         if let addresses = walletInfo["addresses"] {
@@ -122,21 +133,57 @@ class UserWalletRLM: Object {
             for out in address.spendableOutput {
                 if out.transactionStatus.intValue == TxStatus.MempoolIncoming.rawValue {
                     sum += out.transactionOutAmount.uint32Value
-                } else if out.transactionStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
+                }/* else if out.transactionStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
                     let addresses = self.fetchAddresses()
                     
                     if addresses.contains(address.address) {
                         sum += out.transactionOutAmount.uint32Value
                     }
-                }
+                }*/
             }
         }
         
         return sum
     }
     
+    func availableAmount() -> UInt32 {
+        var sum = UInt32(0)
+        
+        for address in self.addresses {
+            for out in address.spendableOutput {
+                if out.transactionStatus.intValue == TxStatus.BlockIncoming.rawValue {
+                    sum += out.transactionOutAmount.uint32Value
+                }/* else if out.transactionStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
+                 let addresses = self.fetchAddresses()
+                 
+                 if addresses.contains(address.address) {
+                 sum += out.transactionOutAmount.uint32Value
+                 }
+                 }*/
+            }
+        }
+        
+        return sum
+    }
+    
+    func isTherePendingAmount() -> Bool {
+        for address in self.addresses {
+            for out in address.spendableOutput {
+                if out.transactionStatus.intValue == TxStatus.MempoolIncoming.rawValue && out.transactionOutAmount.uint32Value > 0 {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
     override class func primaryKey() -> String? {
         return "id"
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["availableSumInCrypto", "availableSumInFiat"]
     }
     
 //    public func updateWallet(walletInfo: NSDictionary) {

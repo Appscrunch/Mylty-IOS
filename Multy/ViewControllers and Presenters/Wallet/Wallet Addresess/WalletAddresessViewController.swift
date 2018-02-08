@@ -65,6 +65,7 @@ extension WalletAddresessViewController: UITableViewDelegate, UITableViewDataSou
         let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
         let adressVC = storyboard.instantiateViewController(withIdentifier: "walletAdressVC") as! AddressViewController
         adressVC.modalPresentationStyle = .overCurrentContext
+        adressVC.addressIndex = indexPath.row
         adressVC.wallet = self.presenter.wallet
         //        self.mainVC.present
         self.present(adressVC, animated: true, completion: nil)

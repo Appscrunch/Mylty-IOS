@@ -12,7 +12,7 @@ class SendingAnimationViewController: UIViewController {
     @IBOutlet weak var sendingLbl: UILabel!
     @IBOutlet weak var closeBtn: ZFRippleButton!
     
-    let when = DispatchTime.now() + 3 // change 2 to desired number of seconds
+    let when = DispatchTime.now() + 0.1 // change 2 to desired number of seconds
 
     override func viewDidLoad() {
         super.viewDidLoad()

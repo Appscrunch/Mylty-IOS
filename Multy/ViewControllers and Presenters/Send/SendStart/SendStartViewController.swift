@@ -20,16 +20,30 @@ class SendStartViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = true
         self.tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         (self.tabBarController as! CustomTabBarViewController).menuButton.isHidden = true
-        self.hideKeyboardWhenTappedAround()
+        self.hideKeyboardWhenTappedAroundForSendStart()
         self.nextBtn.backgroundColor = UIColor(red: 209/255, green: 209/255, blue: 214/255, alpha: 1.0)
         self.ipadFix()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.presenter.adressSendTo != "" {
-            self.makeAvailableNextBtn()
-        }
+//        if self.presenter.addressSendTo != "" {
+//            self.modifyNextButtonMode()
+//        }
+    }
+    
+    func hideKeyboardWhenTappedAroundForSendStart() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissSendKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissSendKeyboard() {
+        let searchCell = self.tableView.cellForRow(at: [0,0]) as! SearchAddressTableViewCell
+        presenter.addressSendTo = searchCell.addressTV.text
+        
+        modifyNextButtonMode()
+        view.endEditing(true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -37,6 +51,10 @@ class SendStartViewController: UIViewController {
         
         let topCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? NewWalletTableViewCell
         topCell?.makeTopCorners()
+        
+        if self.presenter.addressSendTo != "" {
+            self.modifyNextButtonMode()
+        }
     }
     
     func registerCells() {
@@ -58,18 +76,31 @@ class SendStartViewController: UIViewController {
         }
     }
     
-    func makeAvailableNextBtn() {
-        self.nextBtn.isEnabled = true
-        self.nextBtn.applyGradient(withColours: [UIColor(ciColor: CIColor(red: 0/255, green: 178/255, blue: 255/255)),
-                                                 UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
-                                   gradientOrientation: .horizontal)
+    func modifyNextButtonMode() {
+        if presenter.addressSendTo.isValidCryptoAddress() {
+            if !nextBtn.isEnabled {
+                self.nextBtn.isEnabled = true
+                self.nextBtn.applyGradient(withColours: [UIColor(ciColor: CIColor(red: 0/255, green: 178/255, blue: 255/255)),
+                                                         UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
+                                           gradientOrientation: .horizontal)
+            }
+        } else {
+            if nextBtn.isEnabled {
+                nextBtn.isEnabled = false
+                nextBtn.backgroundColor = UIColor(red: 209/255, green: 209/255, blue: 214/255, alpha: 1.0)
+                if nextBtn.layer.sublayers?.count == 3 {
+                    nextBtn.layer.sublayers?.first?.removeFromSuperlayer()
+                }
+            }
+        }
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "chooseWalletVC"?:
             let chooseWalletVC = segue.destination as! WalletChoooseViewController
-            chooseWalletVC.presenter.addressToStr = self.presenter.adressSendTo
+            chooseWalletVC.presenter.addressToStr = self.presenter.addressSendTo
             chooseWalletVC.presenter.amountFromQr = self.presenter.amountInCrypto
         case "qrCamera"?:
             let qrScanerVC = segue.destination as! QrScannerViewController
@@ -77,7 +108,7 @@ class SendStartViewController: UIViewController {
         case "transactionDetail"?:
             let sendDetailsVC = segue.destination as! SendDetailsViewController
             sendDetailsVC.presenter.choosenWallet = self.presenter.choosenWallet
-            sendDetailsVC.presenter.addressToStr = self.presenter.adressSendTo
+            sendDetailsVC.presenter.addressToStr = self.presenter.addressSendTo
         default: break
         }
     }
@@ -96,19 +127,22 @@ extension SendStartViewController:  UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath == [0, 0] {
             let searchAddressCell = self.tableView.dequeueReusableCell(withIdentifier: "searchAddressCell") as! SearchAddressTableViewCell
-            if self.presenter.adressSendTo != "" {
-                searchAddressCell.updateWithAddress(address: self.presenter.adressSendTo)
+            if self.presenter.addressSendTo != "" {
+                searchAddressCell.updateWithAddress(address: self.presenter.addressSendTo)
             }
             searchAddressCell.cancelDelegate = self.presenter
             searchAddressCell.sendAddressDelegate = self.presenter
             searchAddressCell.goToQrDelegate = self.presenter
+            
             return searchAddressCell
         } else if indexPath == [0, 1] {
             let oneLabelCell = self.tableView.dequeueReusableCell(withIdentifier: "oneLabelCell") as! NewWalletTableViewCell
             oneLabelCell.setupForSendStartVC()
+            
             return oneLabelCell
         } else {
             let recentCell = self.tableView.dequeueReusableCell(withIdentifier: "recentCell") as! RecentAddressTableViewCell
+            
             return recentCell
         }
     }
@@ -125,11 +159,11 @@ extension SendStartViewController:  UITableViewDelegate, UITableViewDataSource {
         if indexPath.row > 1 {
             let searchCell = self.tableView.cellForRow(at: [0,0]) as! SearchAddressTableViewCell
             let selectedCell = self.tableView.cellForRow(at: indexPath) as! RecentAddressTableViewCell
-            searchCell.addressTF.text = selectedCell.addressLbl.text
+            searchCell.addressTV.text = selectedCell.addressLbl.text
             searchCell.addressInTfLlb.text = selectedCell.addressLbl.text
-            self.presenter.adressSendTo = selectedCell.addressLbl.text!
+            self.presenter.addressSendTo = selectedCell.addressLbl.text!
             self.tableView.deselectRow(at: indexPath, animated: true)
-            self.makeAvailableNextBtn()
+            self.modifyNextButtonMode()
         }
     }
     

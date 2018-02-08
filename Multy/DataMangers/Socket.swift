@@ -16,7 +16,7 @@ class Socket: NSObject {
     override init() {
         //dev:  6680
         //prod: 7780
-        manager = SocketManager(socketURL: URL(string: "http://88.198.47.112:7780/")!, config: [.log(true), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false)])
+        manager = SocketManager(socketURL: URL(string: socketUrl)!, config: [.log(true), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .secure(false)])
         socket = manager.defaultSocket
     }
     
@@ -26,11 +26,11 @@ class Socket: NSObject {
                 return
             }
             
-            let header = ["userID": "\(account!.userID)",
+            let header = ["userID": account!.userID,
                 "deviceType": "\(account!.deviceType)",
-                "jwtToken": "\(account!.token)"]
+                "jwtToken": account!.token]
             
-            self.manager = SocketManager(socketURL: URL(string: "http://88.198.47.112:7780")!, config: [.log(true), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .extraHeaders(header)])
+            self.manager = SocketManager(socketURL: URL(string: socketUrl)!, config: [.log(true), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .extraHeaders(header), .secure(false)])
             self.socket = self.manager.defaultSocket
             
             
@@ -42,13 +42,17 @@ class Socket: NSObject {
             }
             
             self.socket.on("exchangeAll") {data, ack in
-                print("-----exchangeAll: \(data)")
+//                print("-----exchangeAll: \(data)")
             }
             //"exchangeUpdate"
             self.socket.on("exchangePoloniex") {data, ack in
-                print("-----exchangeUpdate: \(data)")
+//                print("-----exchangeUpdate: \(data)")
                 if !(data is NSNull) {
-                    exchangeCourse = ((data[0] as! NSDictionary)["btc_usd"] as! NSNumber).doubleValue
+                    //MARK: uncomment
+                    let course = ((data[0] as! NSDictionary)["btc_usd"] as! NSNumber).doubleValue
+                    if course > 0 {
+                        exchangeCourse = course
+                    }
                 }//"BTCtoUSD"
             }
             
@@ -77,9 +81,9 @@ class Socket: NSObject {
                                             "To": "BTC"]).socketRepresentation()
         
         socket.emitWithAck("/getExchangeReq", abc).timingOut(after: 0) { (data) in
-            print("\n\n\n\n\n\n\n")
-            print(data)
-            print("\n\n\n\n\n\n\n")
+//            print("\n\n\n\n\n\n\n")
+//            print(data)
+//            print("\n\n\n\n\n\n\n")
         }
     }
 }

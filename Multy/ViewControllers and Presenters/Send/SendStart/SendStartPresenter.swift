@@ -8,7 +8,7 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
     
     var sendStartVC: SendStartViewController?
     
-    var adressSendTo = ""
+    var addressSendTo = ""
     
     var amountInCrypto = 0.0
     
@@ -27,9 +27,21 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
         }
     }
     
+    func presentNoInternet() {
+        if !(ConnectionCheck.isConnectedToNetwork()) {
+            if self.isKind(of: NoInternetConnectionViewController.self) || self.isKind(of: UIAlertController.self) {
+                return
+            }
+            
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NoConnectionVC") as! NoInternetConnectionViewController
+            self.sendStartVC!.present(nextViewController, animated: true, completion: nil)
+        }
+    }
+    
     func sendAddress(address: String) {
-        self.adressSendTo = address
-        self.sendStartVC?.makeAvailableNextBtn()
+        self.addressSendTo = address
+        self.sendStartVC?.modifyNextButtonMode()
     }
     
     func goToScanQr() {
@@ -58,24 +70,24 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
         switch array.count {
         case 1:                              // shit in qr
             let messageFromQr = array[0]
-            self.adressSendTo = messageFromQr
+            self.addressSendTo = messageFromQr
             print(messageFromQr)
         case 2:                              // chain name + address
 //            let blockchainName = array[0]
             let addressStr = array[1]
 //            print(blockchainName, addressStr)
-            self.adressSendTo = addressStr
+            self.addressSendTo = addressStr
         case 4:                                // chain name + address + amount
 //            let blockchainName = array[0]
             let addressStr = array[1]
             let amount = array[3]
 //            print(blockchainName, addressStr, amount)
-            self.adressSendTo = addressStr
+            self.addressSendTo = addressStr
             self.amountInCrypto = (amount as NSString).doubleValue
         default:
             return
         }
-        self.sendStartVC?.makeAvailableNextBtn()
+        self.sendStartVC?.modifyNextButtonMode()
         self.sendStartVC?.updateUI()
     }
 }

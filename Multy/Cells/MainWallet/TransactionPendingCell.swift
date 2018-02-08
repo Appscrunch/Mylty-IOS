@@ -28,7 +28,7 @@ class TransactionPendingCell: UITableViewCell {
         }
         self.addressLabel.text = histObj.txInputs[0].address
         
-        self.cryptoAmountLabel.text = "\(convertSatoshiToBTC(sum: histObj.txOutAmount.uint32Value)) BTC"
+        self.cryptoAmountLabel.text = "\(convertSatoshiToBTC(sum: histObj.txOutAmount.uint32Value).fixedFraction(digits: 8)) BTC"
         self.fiatAmountLabel.text = "\((convertSatoshiToBTC(sum: histObj.txOutAmount.uint32Value) * histObj.btcToUsd).fixedFraction(digits: 2)) USD"
         
         
@@ -79,7 +79,7 @@ class TransactionPendingCell: UITableViewCell {
             
             for tx in histObj.txOutputs {
                 if addresses.contains(tx.address) {
-                    sum += histObj.txOutAmount.uint32Value
+                    sum += tx.amount.uint32Value
                 }
             }
         }

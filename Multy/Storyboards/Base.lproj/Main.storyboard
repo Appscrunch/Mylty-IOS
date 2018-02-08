@@ -6,7 +6,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -30,14 +32,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="activityEs" translatesAutoresizingMaskIntoConstraints="NO" id="lKm-bu-dKO">
-                                <rect key="frame" x="87" y="133.5" width="200" height="170"/>
+                                <rect key="frame" x="87" y="158.5" width="200" height="170"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="YSu-c3-Xtw"/>
-                                    <constraint firstAttribute="height" constant="170" id="waQ-Gq-gEG"/>
+                                    <constraint firstAttribute="width" secondItem="lKm-bu-dKO" secondAttribute="height" multiplier="20:17" id="lxa-jg-uTD"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No activity yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LRJ-bG-I4l">
-                                <rect key="frame" x="102.5" y="333.5" width="170" height="36"/>
+                                <rect key="frame" x="102.5" y="358.5" width="170" height="36"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="26"/>
                                 <color key="textColor" red="0.31738731269999998" green="0.40774086120000003" blue="0.4547684193" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -45,13 +46,15 @@
                         </subviews>
                         <color key="backgroundColor" red="0.97644573450088501" green="0.98039692640304565" blue="0.99984890222549438" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="lKm-bu-dKO" firstAttribute="width" secondItem="6tf-nj-MVi" secondAttribute="width" multiplier="200/375" id="AE3-4y-cqc"/>
                             <constraint firstItem="LRJ-bG-I4l" firstAttribute="centerX" secondItem="6tf-nj-MVi" secondAttribute="centerX" id="EWE-0u-cvc"/>
                             <constraint firstItem="LRJ-bG-I4l" firstAttribute="top" secondItem="lKm-bu-dKO" secondAttribute="bottom" constant="30" id="a6T-48-0Uj"/>
-                            <constraint firstItem="lKm-bu-dKO" firstAttribute="centerY" secondItem="6tf-nj-MVi" secondAttribute="centerY" constant="-115" id="eqE-4v-CaW"/>
+                            <constraint firstItem="lKm-bu-dKO" firstAttribute="centerY" secondItem="6tf-nj-MVi" secondAttribute="centerY" constant="-90" id="eqE-4v-CaW"/>
                             <constraint firstItem="lKm-bu-dKO" firstAttribute="centerX" secondItem="6tf-nj-MVi" secondAttribute="centerX" id="vY9-OE-yXc"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mgy-Do-dmy"/>
+                    <nil key="simulatedTopBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PMc-n8-FmC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -244,14 +247,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addressBookEs" translatesAutoresizingMaskIntoConstraints="NO" id="7BV-hB-twF">
-                                <rect key="frame" x="92" y="133.5" width="190" height="200"/>
+                                <rect key="frame" x="92" y="143.5" width="190" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="190" id="8xz-kM-nvQ"/>
-                                    <constraint firstAttribute="height" constant="200" id="YQG-An-dH0"/>
+                                    <constraint firstAttribute="width" secondItem="7BV-hB-twF" secondAttribute="height" multiplier="19:20" id="2HO-iJ-JiK"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No contacts yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F39-3R-vjc">
-                                <rect key="frame" x="95" y="363.5" width="185" height="36"/>
+                                <rect key="frame" x="95" y="373.5" width="185" height="36"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="26"/>
                                 <color key="textColor" red="0.31738731265068054" green="0.40774086117744446" blue="0.45476841926574707" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -260,12 +262,14 @@
                         <color key="backgroundColor" red="0.97644573450088501" green="0.98039692640304565" blue="0.99984890222549438" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="7BV-hB-twF" firstAttribute="centerX" secondItem="FqR-yZ-vN6" secondAttribute="centerX" id="6Nc-JQ-bc0"/>
-                            <constraint firstItem="7BV-hB-twF" firstAttribute="centerY" secondItem="FqR-yZ-vN6" secondAttribute="centerY" constant="-100" id="Gko-hT-lU5"/>
+                            <constraint firstItem="7BV-hB-twF" firstAttribute="centerY" secondItem="FqR-yZ-vN6" secondAttribute="centerY" constant="-90" id="Gko-hT-lU5"/>
                             <constraint firstItem="F39-3R-vjc" firstAttribute="centerX" secondItem="FqR-yZ-vN6" secondAttribute="centerX" id="avc-EH-oEe"/>
                             <constraint firstItem="F39-3R-vjc" firstAttribute="top" secondItem="7BV-hB-twF" secondAttribute="bottom" constant="30" id="fDh-xd-Btw"/>
+                            <constraint firstItem="7BV-hB-twF" firstAttribute="width" secondItem="FqR-yZ-vN6" secondAttribute="width" multiplier="190/375" id="zD5-cK-KtR"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="u4f-01-75E"/>
+                    <nil key="simulatedTopBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d3Q-Ma-B8L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -853,7 +857,7 @@ correctly</string>
                                 <color key="textColor" red="0.31764705882352939" green="0.40784313725490196" blue="0.45490196078431372" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a69-V8-DmE">
+                            <switch opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a69-V8-DmE">
                                 <rect key="frame" x="305" y="95" width="51" height="31"/>
                                 <color key="onTintColor" red="0.056432507932186127" green="0.55575066804885864" blue="0.99944394826889038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>

@@ -22,7 +22,7 @@ target 'Multy' do
   pod 'Firebase/Core'
   pod 'Fabric'
   pod 'Crashlytics'
-  
+  pod 'Branch'
   
 #  pod 'BiometricAuthentication'
 

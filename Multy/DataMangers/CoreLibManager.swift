@@ -7,7 +7,7 @@ import RealmSwift
 
 class CoreLibManager: NSObject {
     static let shared = CoreLibManager()
-    let donationAddress = "n165LkPsBxDVeztbT3SYmVAxckfXoS6k7X"
+    var donationAddress = UserDefaults.standard.string(forKey: "BTCDonationAddress") != nil ? UserDefaults.standard.string(forKey: "BTCDonationAddress")! : ""
     
     func testTransaction(from binaryData: inout BinaryData, wallet: UserWalletRLM) {
         
@@ -156,7 +156,7 @@ class CoreLibManager: NSObject {
             addressString = String(cString: newAddressStringPointer.pointee!)
             print("addressString: \(addressString)")
             
-            walletDict["address"] = addressString
+            walletDict["address"] = addressString!
         }
         
         let gakPRIV = get_account_key(newAddressPointer.pointee, KEY_TYPE_PRIVATE, addressPrivateKeyPointer)
@@ -279,7 +279,7 @@ class CoreLibManager: NSObject {
             addressString = String(cString: newAddressStringPointer.pointee!)
             print("addressString: \(addressString)")
             
-            addressDict["address"] = addressString
+            addressDict["address"] = addressString!
         }
         
         let gakPRIV = get_account_key(newAddressPointer.pointee, KEY_TYPE_PRIVATE, addressPrivateKeyPointer)
@@ -364,7 +364,7 @@ class CoreLibManager: NSObject {
 //        createTransaction(addressPointer: newAddressPointer.pointee!, sendAddress: "", sendAmountString: "100000000", feeAmountString: "20000", donationAddress: "", donationAmount: "10000000", txid: "`x", txoutid: 1, txoutamount: 804, txoutscript: "a914bddce1db77593a7ac8d67f0d488c4311d5103ffa87")
     }
     
-    func getTotalFee(addressPointer: OpaquePointer, feeAmountString: String, isDonationExists: Bool, isPayCommission: Bool , addressesCount: Int) -> UInt32 {
+    func getTotalFee(addressPointer: OpaquePointer, feeAmountString: String, isDonationExists: Bool, isPayCommission: Bool , inputsCount: Int) -> UInt32 {
         
         //create transaction
         let transactionPointer = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
@@ -388,7 +388,7 @@ class CoreLibManager: NSObject {
         
         let estimate = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         let amountStringPointer = UnsafeMutablePointer<UnsafePointer<Int8>?>.allocate(capacity: 1)
-        let tet = transaction_estimate_total_fee(transactionPointer.pointee, addressesCount, outputCount, estimate)
+        let tet = transaction_estimate_total_fee(transactionPointer.pointee, inputsCount, outputCount, estimate)
         if tet != nil {
             let _ = returnErrorString(opaquePointer: tet!, mask: "transaction_estimate_total_fee")
         }
@@ -476,7 +476,17 @@ class CoreLibManager: NSObject {
         }
     }
     
-    func createTransaction(addressPointer: OpaquePointer, sendAddress: String, sendAmountString: String, feeAmountString: String, isDonationExists: Bool, donationAmount: String, isPayCommission: Bool, wallet: UserWalletRLM, binaryData: inout BinaryData, feeAmount: UInt32, inputs: List<AddressRLM>) -> (String, Double) {
+    func createTransaction(addressPointer: OpaquePointer,
+                           sendAddress: String,
+                           sendAmountString: String,
+                           feePerByteAmount: String,
+                           isDonationExists: Bool,
+                           donationAmount: String,
+                           isPayCommission: Bool,
+                           wallet: UserWalletRLM,
+                           binaryData: inout BinaryData,
+                           feeAmount: UInt32,
+                           inputs: List<AddressRLM>) -> (String, Double) {
         
         let inputs = DataManager.shared.realmManager.spendableOutput(addresses: inputs)
         let inputSum = DataManager.shared.spendableOutputSum(outputs: inputs)
@@ -497,10 +507,10 @@ class CoreLibManager: NSObject {
         }
         
         
-        let maxFee = UInt32(feeAmountString)!
-        let maxFeeString = String(maxFee + (maxFee / 10))
+        let maxFee = UInt32(feePerByteAmount)!
+        let maxFeeString = String(maxFee + (maxFee / 5))// 20% error
         //Amount
-        setAmountValue(key: "amount_per_byte", value: feeAmountString, pointer: fee.pointee!)
+        setAmountValue(key: "amount_per_byte", value: feePerByteAmount, pointer: fee.pointee!)
         setAmountValue(key: "max_amount_per_byte", value: maxFeeString, pointer: fee.pointee!) // optional
 
         //spendable info
@@ -522,7 +532,7 @@ class CoreLibManager: NSObject {
                                value: input.transactionOutScript,
                                pointer: transactionSource.pointee!)
             
-            let privateKey = createPrivateKey(currencyID: 0,
+            let privateKey = createPrivateKey(currencyID: wallet.chain.uint32Value,
                                               walletID: wallet.walletID.uint32Value,
                                               addressID: input.addressID.uint32Value,
                                               binaryData: &binaryData)
@@ -534,7 +544,7 @@ class CoreLibManager: NSObject {
         
         if isPayCommission {
             sendSum = convertBTCStringToSatoshi(sum: sendAmountString)
-            changeSum = inputSum - (convertBTCStringToSatoshi(sum: sendAmountString) + convertBTCStringToSatoshi(sum: donationAmount) + feeAmount)
+            changeSum = inputSum - (sendSum + convertBTCStringToSatoshi(sum: donationAmount) + feeAmount)
         } else {
             sendSum = convertBTCStringToSatoshi(sum: sendAmountString) - (convertBTCStringToSatoshi(sum: donationAmount) + feeAmount)
             changeSum = inputSum - convertBTCStringToSatoshi(sum: sendAmountString)
@@ -558,7 +568,10 @@ class CoreLibManager: NSObject {
         
         //change
         //MARK: UInt32(wallet.addresses.count)
-        let dict = createAddress(currencyID: wallet.chain.uint32Value, walletID: wallet.walletID.uint32Value, addressID: 0, binaryData: &binaryData)
+        let dict = createAddress(currencyID: wallet.chain.uint32Value,
+                                 walletID: wallet.walletID.uint32Value,
+                                 addressID: UInt32(wallet.addresses.count),
+                                 binaryData: &binaryData)
         
         let changeDestination = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
         transaction_add_destination(transactionPointer.pointee, changeDestination)
@@ -576,6 +589,8 @@ class CoreLibManager: NSObject {
             let errrString = String(cString: pointer!.pointee.message)
             
             print("tu: \(errrString))")
+            
+            return (errrString, -1)
         }
         
         let tSign = transaction_sign(transactionPointer.pointee)
@@ -585,6 +600,8 @@ class CoreLibManager: NSObject {
             let errrString = String(cString: pointer!.pointee.message)
             
             print("tSign: \(errrString))")
+            
+            return (errrString, -1)
         }
         
         let tSer = transaction_serialize(transactionPointer.pointee, serializedTransaction)
@@ -594,6 +611,8 @@ class CoreLibManager: NSObject {
             let errrString = String(cString: pointer!.pointee.message)
             
             print("tSer: \(errrString))")
+            
+            return (errrString, -1)
         }
         
         print("\(tu) -- \(tSign) -- \(tSer)")

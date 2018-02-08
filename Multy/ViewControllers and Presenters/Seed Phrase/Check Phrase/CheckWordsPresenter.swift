@@ -23,6 +23,18 @@ class CheckWordsPresenter: NSObject {
     }
     
     func auth(seedString: String) {
+        if !(ConnectionCheck.isConnectedToNetwork()) {
+            if self.isKind(of: NoInternetConnectionViewController.self) || self.isKind(of: UIAlertController.self) {
+                return
+            }
+            
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NoConnectionVC") as! NoInternetConnectionViewController
+            self.checkWordsVC!.present(nextViewController, animated: true, completion: nil)
+            
+            return
+        }
+        
         self.checkWordsVC?.view.isUserInteractionEnabled = false
         if let errString = DataManager.shared.getRootString(from: seedString).1 {
 //            let alert = UIAlertController(title: "Warning", message: errString, preferredStyle: .alert)

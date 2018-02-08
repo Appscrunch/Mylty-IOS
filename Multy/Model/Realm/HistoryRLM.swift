@@ -7,7 +7,11 @@ import RealmSwift
 
 class HistoryRLM: Object {
     
-    @objc dynamic var address = String()
+    @objc dynamic var addresses = String() {
+        didSet {
+            addressesArray = addresses.components(separatedBy: " ")
+        }
+    }
     @objc dynamic var blockHeight = Int()
     @objc dynamic var blockTime = Date()
     @objc dynamic var btcToUsd = Double()
@@ -22,6 +26,17 @@ class HistoryRLM: Object {
     @objc dynamic var txStatus = NSNumber(value: 0)
     @objc dynamic var walletIndex = NSNumber(value: 0)
     
+    @objc dynamic var mempoolTime = Date()
+    @objc dynamic var confirmations = Int()
+    
+    @objc dynamic var addressesArray = [String]()
+    var exchangeRates = List<StockExchangeRateRLM>()
+    var walletInput = List<UserWalletRLM>()
+    var walletOutput = List<UserWalletRLM>()
+    
+    override static func ignoredProperties() -> [String] {
+        return ["addressesArray"]
+    }
     
     public class func initWithArray(historyArr: NSArray) -> List<HistoryRLM> {
         let history = List<HistoryRLM>()
@@ -40,21 +55,37 @@ class HistoryRLM: Object {
 //        if let address = txHistory["address"] {
 //            txHist.address = address as! String
 //        }
-        if let address = historyDict["address"] {
-            hist.address = address as! String
+        if let addresses = historyDict["addresses"] {
+            hist.addresses = (addresses as! NSArray).componentsJoined(by: " ")
         }
         
         if let blockheight = historyDict["blockheight"] {
             hist.blockHeight = blockheight as! Int
         }
         
+        if let confirmations = historyDict["confirmations"] as? Int {
+            hist.confirmations = confirmations
+        }
+        
         if let blocktime = historyDict["blocktime"] {
             hist.blockTime = NSDate(timeIntervalSince1970: (blocktime as! Double)) as Date
         }
         
-        if let btctousd = historyDict["btctousd"] {
-            hist.btcToUsd = btctousd as! Double
+        if hist.blockHeight == -1 {
+            hist.blockTime = Date()
         }
+        
+        if let mempoolTime = historyDict["mempooltime"] {
+            hist.mempoolTime = NSDate(timeIntervalSince1970: (mempoolTime as! Double)) as Date
+        }
+        
+        if let rates = historyDict["stockexchangerate"] as? NSArray {
+            hist.exchangeRates = StockExchangeRateRLM.initWithArray(stockArray: rates)
+            if hist.exchangeRates.count > 0 {
+                hist.btcToUsd = hist.exchangeRates.first!.btc2usd.doubleValue
+            }
+        }
+        
         
         if let txfee = historyDict["txfee"] {
             hist.txFee = txfee as! NSNumber
@@ -96,10 +127,22 @@ class HistoryRLM: Object {
             hist.walletIndex = walletindex as! NSNumber
         }
         
+        if let walletIndex = historyDict["walletsinput"] as? NSArray {
+            hist.walletInput = UserWalletRLM.initWithArray(walletsInfo: walletIndex)
+        }
+        
+        if let walletOutput = historyDict["walletsoutput"] as? NSArray{
+            hist.walletOutput = UserWalletRLM.initWithArray(walletsInfo: walletOutput)
+        }
+        
         return hist
     }
     
     override class func primaryKey() -> String? {
         return "txId"
+    }
+    
+    func isIncoming() -> Bool {
+        return self.txStatus.intValue == TxStatus.MempoolIncoming.rawValue || self.txStatus.intValue == TxStatus.BlockIncoming.rawValue || self.txStatus.intValue == TxStatus.BlockConfirmedIncoming.rawValue
     }
 }

@@ -19,6 +19,36 @@ private let swizzling: (AnyClass, Selector, Selector) -> () = { forClass, origin
     }
 }
 
+extension UIApplication {
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
+        }
+        
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        
+        return base
+    }
+}
+
+extension NSObject {
+    var className: String {
+        return String(describing: type(of: self)).components(separatedBy: ".").last!
+    }
+    
+    class var className: String {
+        return String(describing: self).components(separatedBy: ".").last!
+    }
+}
+
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
@@ -34,7 +64,6 @@ extension UIViewController {
         return ProcessInfo().isOperatingSystemAtLeast(OperatingSystemVersion(majorVersion: 11, minorVersion: 0, patchVersion: 0))
     }
 
-    
     static let classInit: Void = {
         let originalSelector = #selector(UIViewController.viewWillAppear(_:))
         let swizzledSelector = #selector(proj_viewWillAppear(animated:))
@@ -47,14 +76,42 @@ extension UIViewController {
             if self.isKind(of: NoInternetConnectionViewController.self) || self.isKind(of: UIAlertController.self) {
                 return
             }
+            
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NoConnectionVC") as! NoInternetConnectionViewController
-            self.present(nextViewController, animated: true, completion: nil)
+            
+            //case where exists textfields
+            let tmvc = UIApplication.topViewController()
+            
+            if tmvc != nil && (tmvc!.className.hasPrefix("SendDetails") ||
+                tmvc!.className.hasPrefix("CustomFee") ||
+                tmvc!.className.hasPrefix("SendAmount") ||
+                tmvc!.className.hasPrefix("BackupSeedPhraseViewController") ||
+                tmvc!.className.hasPrefix("CheckWords")) {
+                
+            } else if tmvc != nil && tmvc!.shouldRemoveKeyboard() {
+                tmvc!.dismissKeyboard()
+                
+                tmvc!.present(nextViewController, animated: true, completion: nil)
+            } else {
+                self.present(nextViewController, animated: true, completion: nil)
+            }
         }
         //        print("swizzled_layoutSubviews")
     }
     
     func isVisible() -> Bool {
         return self.isViewLoaded && view.window != nil
+    }
+    
+    func shouldRemoveKeyboard() -> Bool {
+        if self.className.hasPrefix("SendStart") ||
+            self.className.hasPrefix("WalletSettings") ||
+            self.className.hasPrefix("CreateWallet") ||
+            self.className.hasPrefix("ReceiveAmount") {
+                return true
+        }
+        
+        return false
     }
 }

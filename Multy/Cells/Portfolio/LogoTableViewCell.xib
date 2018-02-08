@@ -58,7 +58,6 @@
                     <constraint firstAttribute="trailing" secondItem="Iqd-E2-4bq" secondAttribute="trailing" id="Rq8-OX-x7D"/>
                     <constraint firstItem="9te-dh-4iM" firstAttribute="top" secondItem="eJd-b3-U7d" secondAttribute="bottom" constant="13" id="dmK-qC-PHo"/>
                     <constraint firstAttribute="trailing" secondItem="9te-dh-4iM" secondAttribute="trailing" constant="30" id="e5G-sA-1cL"/>
-                    <constraint firstItem="eJd-b3-U7d" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="51" id="fG0-cg-jFA"/>
                     <constraint firstItem="Iqd-E2-4bq" firstAttribute="top" secondItem="9te-dh-4iM" secondAttribute="bottom" constant="4.5" id="uGF-6v-KHE"/>
                 </constraints>
             </tableViewCellContentView>

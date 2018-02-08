@@ -47,7 +47,7 @@ class MainWalletCollectionViewCell: UICollectionViewCell {
         let sumInFiat = ((self.wallet?.sumInCrypto)! * exchangeCourse).fixedFraction(digits: 2)
         self.cryptoAmountLabel.text = "\(wallet?.sumInCrypto.fixedFraction(digits: 8) ?? "0.0")"
         self.cryptoNameLabel.text = "\(wallet?.cryptoName ?? "")"
-        self.fiatAmountLabel.text = "\(sumInFiat)"
+        self.fiatAmountLabel.text = sumInFiat
         self.fiatNameLabel.text = "\(wallet?.fiatName ?? "")"
         self.addressLabel.text = "\(wallet?.address ?? "")"
         
@@ -67,7 +67,17 @@ class MainWalletCollectionViewCell: UICollectionViewCell {
             lockedPopverWithBorders.layer.masksToBounds = true
             lockedPopverWithBorders.layer.borderWidth = 1.0
             
-            let availableCryptoAmount = convertSatoshiToBTC(sum: convertBTCStringToSatoshi(sum: "\(wallet!.sumInCrypto)") - blockedAmount)
+            
+            //some strange info from server
+            //MARK: FIX THIS
+            var sum = UInt32(0)
+            if convertBTCStringToSatoshi(sum: wallet!.sumInCrypto.fixedFraction(digits: 8)) >= blockedAmount {
+                sum = convertBTCStringToSatoshi(sum: wallet!.sumInCrypto.fixedFraction(digits: 8)) - blockedAmount
+            } else {
+                sum = blockedAmount
+            }
+            
+            let availableCryptoAmount = convertSatoshiToBTC(sum: sum)
             let availableFiatAmount = availableCryptoAmount * exchangeCourse
             
             lockedCryptoAmountLabel.text = availableCryptoAmount.fixedFraction(digits: 8)

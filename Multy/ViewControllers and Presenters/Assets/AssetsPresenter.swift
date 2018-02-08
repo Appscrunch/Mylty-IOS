@@ -12,6 +12,7 @@ class AssetsPresenter: NSObject {
     var tabBarFrame: CGRect?
     
     var isJailed = false
+    var tappedIndexPath = IndexPath(row: 0, section: 0)
     
     var account : AccountRLM? {
         didSet {
@@ -47,7 +48,7 @@ class AssetsPresenter: NSObject {
                     DispatchQueue.main.async {
                         self.account = account
                         DataManager.shared.socketManager.start()
-                        self.getWalletVerbose(completion: {_ in })
+                        self.getWalletsVerbose(completion: {_ in })
                     }
                 }
             } else {
@@ -55,7 +56,7 @@ class AssetsPresenter: NSObject {
                 DataManager.shared.auth(rootKey: self.account?.backupSeedPhrase, completion: { (acc, err) in
                     if acc != nil {
                         self.account = acc
-                        self.getWalletVerbose(completion: {_ in})
+                        self.getWalletsVerbose(completion: {_ in})
                         DataManager.shared.socketManager.start()
                     }
                 })
@@ -86,7 +87,7 @@ class AssetsPresenter: NSObject {
         DataManager.shared.getAccount { (acc, err) in
             if acc != nil {
                 self.account = acc
-                self.getWalletVerbose(completion: {_ in })
+                self.getWalletsVerbose(completion: {_ in })
             }
         }
     }
@@ -137,19 +138,8 @@ class AssetsPresenter: NSObject {
     //////////////////////////////////////////////////////////////////////
     //test
     
-    func fetchTickets() {
-        DataManager.shared.apiManager.getTickets(account!.token, direction: "") { (dict, error) in
-            guard dict != nil  else {
-                return
-            }
-            
-            print(dict!)
-        }
-    }
-    
     func getTransInfo() {
-        DataManager.shared.apiManager.getTransactionInfo(account!.token,
-                                                         transactionString: "d83a5591585f05dc367d5e68579ece93240a6b4646133a38106249cadea53b77") { (transDict, error) in
+        DataManager.shared.apiManager.getTransactionInfo(transactionString: "d83a5591585f05dc367d5e68579ece93240a6b4646133a38106249cadea53b77") { (transDict, error) in
                                                             guard transDict != nil else {
                                                                 return
                                                             }
@@ -159,13 +149,13 @@ class AssetsPresenter: NSObject {
     }
     
     func getWalletOutputs() {
-        DataManager.shared.getWalletOutputs(account!.token, currencyID: 0, address: account!.wallets[0].address) { (dict, error) in
+        DataManager.shared.getWalletOutputs(currencyID: 0, address: account!.wallets[0].address) { (dict, error) in
             print("getWalletOutputs: \(dict)")
         }
     }
     
-    func getWalletVerbose(completion: @escaping (_ flag: Bool) -> ()) {
-        DataManager.shared.getWalletsVerbose(account!.token) { (walletsArrayFromApi, err) in
+    func getWalletsVerbose(completion: @escaping (_ flag: Bool) -> ()) {
+        DataManager.shared.getWalletsVerbose() { (walletsArrayFromApi, err) in
             if err != nil {
                 return
             } else {
@@ -189,7 +179,7 @@ class AssetsPresenter: NSObject {
     }
     
     func getWalletVerboseForSockets(completion: @escaping (_ flag: Bool) -> ()) {
-        DataManager.shared.getWalletsVerbose(account!.token) { (walletsArrayFromApi, err) in
+        DataManager.shared.getWalletsVerbose() { (walletsArrayFromApi, err) in
             if err != nil {
                 return
             } else {

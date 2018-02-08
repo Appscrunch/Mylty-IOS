@@ -5,6 +5,7 @@
 import UIKit
 import RealmSwift
 import Firebase
+import Branch
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,12 +31,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("\n\nScreennshot!\n\n")
                 //executes after screenshot
         }
-        
+
         self.performFirstEnterFlow()
-        
+
         DataManager.shared.realmManager.getAccount { (acc, err) in
             isNeedToAutorise = acc != nil
-            
+
             //MAKR: Check here isPin option from NSUserDefaults
             UserPreferences.shared.getAndDecryptCipheredMode(completion: { (pinMode, error) in
                 isNeedToAutorise = (pinMode! as NSString).boolValue
@@ -43,15 +44,93 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
         }
         
+        exchangeCourse = UserDefaults.standard.double(forKey: "exchangeCourse")
+        
         //FOR TEST NOT MAIN STRORYBOARD
 //        self.window = UIWindow(frame: UIScreen.main.bounds)
-//        let storyboard = UIStoryboard(name: "Receive", bundle: nil)
-//        let initialViewController = storyboard.instantiateViewController(withIdentifier: "ReceiveStart")
+//        let storyboard = UIStoryboard(name: "Send", bundle: nil)
+//        let initialViewController = storyboard.instantiateViewController(withIdentifier: "sendAmount")
 //        self.window?.rootViewController = initialViewController
 //        self.window?.makeKeyAndVisible()
-//        self.realmConfig()
+        
+        
+//        let branch: Branch = Branch.getInstance()
+//        branch.initSession(launchOptions: launchOptions, andRegisterDeepLinkHandler: {params, error in
+//            if error == nil {
+//                // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
+//                // params will be empty if no data found
+//                // ... insert custom logic here ...
+//                print("params: %@", params as? [String: AnyObject] ?? {})
+//            }
+//        })
+        // for debug and development only
+        Branch.getInstance().setDebug()
+        // listener for Branch Deep Link data
+        Branch.getInstance().initSession(launchOptions: launchOptions) { (params, error) in
+            // do stuff with deep link data (nav to page, display content, etc)
+//            print(params as? [String: AnyObject] ?? {})
+            if error == nil {
+                let dictFormLink = params! as NSDictionary
+                if (dictFormLink["address"] != nil) {
+                    DataManager.shared.getAccount(completion: { (acc, err) in
+                        if acc == nil {
+                            return
+                        }
+                        let chainNameFromLink = (dictFormLink["address"] as! String).split(separator: ":").first
+                        let addressFromLink = (dictFormLink["address"] as! String).split(separator: ":").last
+                        let amountFromLink = dictFormLink["amount"] as! Double
+                        
+                        let storyboard = UIStoryboard(name: "Send", bundle: nil)
+                        let sendStartVC = storyboard.instantiateViewController(withIdentifier: "sendStart") as! SendStartViewController
+                        sendStartVC.presenter.addressSendTo = "\(addressFromLink ?? "")"
+                        sendStartVC.presenter.amountInCrypto = amountFromLink
+                        ((self.window?.rootViewController as! CustomTabBarViewController).selectedViewController as! UINavigationController).pushViewController(sendStartVC, animated: false)
+                        sendStartVC.performSegue(withIdentifier: "chooseWalletVC", sender: (Any).self)
+                    })
+//                    self.window?.rootViewController?.navigationController?.pushViewController(sendStartVC, animated: false)
+//                    let chooseWalletVC = WalletChoooseViewController()
+//                    self.window?.rootViewController?.navigationController?.pushViewController(chooseWalletVC, animated: true)
+                }
+            }
+        }
+        
         return true
     }
+    
+    // Respond to URI scheme links
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+//        // pass the url to the handle deep link call
+//        let branchHandled = Branch.getInstance().application(application,
+//                                                             open: url,
+//                                                             sourceApplication: sourceApplication,
+//                                                             annotation: annotation
+//        )
+//        if (!branchHandled) {
+//            // If not handled by Branch, do other deep link routing for the Facebook SDK, Pinterest SDK, etc
+//        }
+//
+//        // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
+        return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        // handler for URI Schemes (depreciated in iOS 9.2+, but still used by some apps)
+        Branch.getInstance().application(app, open: url, options: options)
+        return true
+    }
+    
+    // Respond to Universal Links
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        // pass the url to the handle deep link call
+        Branch.getInstance().continue(userActivity)
+        
+        return true
+    }
+    
+    
+    
+    
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         DataManager.shared.finishRealmSession()
@@ -75,6 +154,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.openedAlert?.dismiss(animated: true, completion: nil)
             }
         }
+        
+        UserDefaults.standard.set(exchangeCourse, forKey: "exchangeCourse")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -85,15 +166,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             presentedVC?.dismiss(animated: true, completion: nil)
             openedAlert?.dismiss(animated: true, completion: nil)
         }
+        
+        exchangeCourse = UserDefaults.standard.double(forKey: "exchangeCourse")
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         self.authorization()
+        exchangeCourse = UserDefaults.standard.double(forKey: "exchangeCourse")
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         DataManager.shared.finishRealmSession()
+        UserDefaults.standard.set(exchangeCourse, forKey: "exchangeCourse")
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     

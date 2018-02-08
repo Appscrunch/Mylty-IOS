@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -155,7 +155,7 @@ Scan</string>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7v-9n-7zd">
                         <rect key="frame" x="16" y="88" width="343" height="70"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search or Enter Address Here" textAlignment="center" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cr8-Jx-Rfq">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search or Enter Address Here" textAlignment="center" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="cr8-Jx-Rfq">
                                 <rect key="frame" x="10" y="10" width="323" height="50"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
@@ -165,23 +165,33 @@ Scan</string>
                                     <outlet property="delegate" destination="KGk-i7-Jjw" id="5oJ-Y9-En4"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fOw-KZ-LML">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="fOw-KZ-LML">
                                 <rect key="frame" x="172" y="5" width="0.0" height="60"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ujo-6f-Vfx">
+                                <rect key="frame" x="10" y="10" width="323" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Ujo-6f-Vfx" secondAttribute="bottom" constant="10" id="17G-Ca-ast"/>
+                            <constraint firstItem="Ujo-6f-Vfx" firstAttribute="top" secondItem="T7v-9n-7zd" secondAttribute="top" constant="10" id="1aK-lM-UrQ"/>
                             <constraint firstItem="fOw-KZ-LML" firstAttribute="top" secondItem="T7v-9n-7zd" secondAttribute="top" constant="5" id="IO1-UP-0NL"/>
                             <constraint firstItem="fOw-KZ-LML" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="T7v-9n-7zd" secondAttribute="leading" constant="10" id="PTS-9M-dri"/>
+                            <constraint firstAttribute="trailing" secondItem="Ujo-6f-Vfx" secondAttribute="trailing" constant="10" id="Pof-Eg-ied"/>
                             <constraint firstAttribute="height" constant="70" id="RCE-ox-Yxy"/>
                             <constraint firstItem="fOw-KZ-LML" firstAttribute="centerX" secondItem="cr8-Jx-Rfq" secondAttribute="centerX" id="ZFH-4a-ayC"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fOw-KZ-LML" secondAttribute="trailing" constant="10" id="ghf-Zr-hWk"/>
                             <constraint firstItem="cr8-Jx-Rfq" firstAttribute="leading" secondItem="T7v-9n-7zd" secondAttribute="leading" constant="10" id="ith-eV-6nN"/>
                             <constraint firstItem="cr8-Jx-Rfq" firstAttribute="top" secondItem="T7v-9n-7zd" secondAttribute="top" constant="10" id="k8X-da-3LM"/>
+                            <constraint firstItem="Ujo-6f-Vfx" firstAttribute="leading" secondItem="T7v-9n-7zd" secondAttribute="leading" constant="10" id="mOQ-5B-0qt"/>
                             <constraint firstItem="fOw-KZ-LML" firstAttribute="centerY" secondItem="cr8-Jx-Rfq" secondAttribute="centerY" id="u4z-Zp-3Th"/>
                             <constraint firstAttribute="bottom" secondItem="fOw-KZ-LML" secondAttribute="bottom" constant="5" id="uqZ-OQ-gDL"/>
                             <constraint firstAttribute="bottom" secondItem="cr8-Jx-Rfq" secondAttribute="bottom" constant="10" id="vyR-5N-SWY"/>
@@ -236,7 +246,7 @@ Scan</string>
             </tableViewCellContentView>
             <connections>
                 <outlet property="addressInTfLlb" destination="fOw-KZ-LML" id="fha-UB-PmJ"/>
-                <outlet property="addressTF" destination="cr8-Jx-Rfq" id="VtB-jk-Zfs"/>
+                <outlet property="addressTV" destination="Ujo-6f-Vfx" id="GVz-mW-lRm"/>
             </connections>
             <point key="canvasLocation" x="33.5" y="32"/>
         </tableViewCell>

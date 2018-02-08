@@ -11,6 +11,8 @@ class RealmManager: NSObject {
     private var realm : Realm? = nil
     let schemaVersion : UInt64 = 12
     
+    var account: AccountRLM?
+    
     private override init() {
         super.init()
         
@@ -190,8 +192,17 @@ class RealmManager: NSObject {
                         accountRLM.binaryDataString = accountDict["binaryData"] as! String
                     }
                     
-                    if accountDict["topindex"] != nil {
-                        accountRLM.topIndex = accountDict["topindex"] as! NSNumber
+                    if accountDict["topindexes"] != nil {
+                        let newTopIndexes = TopIndexRLM.initWithArray(indexesArray: accountDict["topindexes"] as! NSArray)
+                        accountRLM.topIndexes.removeAll()
+                        for newIndex in newTopIndexes {
+                            accountRLM.topIndexes.append(newIndex)
+                        }
+                    }
+                    
+                    //MARK: create topIndexes for all currencies
+                    if accountRLM.topIndexes.count == 0 {
+                        accountRLM.topIndexes.append(TopIndexRLM.createDefaultIndex(currencyID: 0, topIndex: 0))
                     }
                     
                     if accountDict["wallets"] != nil && !(accountDict["wallets"] is NSNull) {
@@ -211,6 +222,7 @@ class RealmManager: NSObject {
                     }
                     
                     realm.add(accountRLM, update: true)
+                    self.account = accountRLM
                     
                     completion(accountRLM, nil)
                     
@@ -287,7 +299,8 @@ class RealmManager: NSObject {
             if let realm = realmOpt {
                 let acc = realm.object(ofType: AccountRLM.self, forPrimaryKey: 1)
                 if acc != nil {
-                    completion(acc, nil)
+                    self.account = acc!
+                    completion(acc!, nil)
                 } else {
                     completion(nil, nil)
                 }
@@ -363,6 +376,9 @@ class RealmManager: NSObject {
                 
                 //                        acc!.wallets = newWallets
                 //                        acc?.wallets = arrOfWallets
+                
+                self.account = account
+                
                 completion(account, nil)
             }
         }
@@ -450,6 +466,8 @@ class RealmManager: NSObject {
                 }
             }
         }
+        
+        self.account = nil
     }
     
     // MARK: - Migrations

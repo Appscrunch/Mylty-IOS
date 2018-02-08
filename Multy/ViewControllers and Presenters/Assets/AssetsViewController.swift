@@ -104,8 +104,10 @@ class AssetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         (self.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: presenter.account == nil)
         self.tabBarController?.tabBar.frame = self.presenter.tabBarFrame!
         
-        tableView.reloadData()
-        tableView.scrollToRow(at: [0, presenter.account!.wallets.count - 1], at: .bottom, animated: false)
+//        if presenter.account != nil && tableView.numberOfRows(inSection: 0) > presenter.tappedIndexPath.row {
+//            tableView.reloadData()
+//            tableView.scrollToRow(at: presenter.tappedIndexPath, at: .bottom, animated: true)
+//        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -176,7 +178,12 @@ class AssetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return
         }
         let view = UIView()
-        view.frame = CGRect(x: 16, y: 25, width: screenWidth - 32, height: 44)
+        if screenHeight == 812 {
+            view.frame = CGRect(x: 16, y: 35, width: screenWidth - 32, height: 44)
+        } else {
+            view.frame = CGRect(x: 16, y: 25, width: screenWidth - 32, height: 44)
+        }
+        
         view.layer.cornerRadius = 20
         view.backgroundColor = #colorLiteral(red: 0.9229970574, green: 0.08180250973, blue: 0.2317947149, alpha: 1)
         
@@ -225,24 +232,13 @@ class AssetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return
         }
         
-        DataManager.shared.apiManager.getAssets(presenter.account!.token, completion: { (assetsDict, error) in
+        DataManager.shared.apiManager.getAssets(completion: { (assetsDict, error) in
              print(assetsDict as Any)
         })
     }
     
-    func fetchTickets() {
-        DataManager.shared.apiManager.getTickets(presenter.account!.token, direction: "") { (dict, error) in
-            guard dict != nil  else {
-                return
-            }
-            
-            print(dict!)
-        }
-    }
-    
     func getTransInfo() {
-        DataManager.shared.apiManager.getTransactionInfo(presenter.account!.token,
-                                                         transactionString: "d83a5591585f05dc367d5e68579ece93240a6b4646133a38106249cadea53b77") { (transDict, error) in
+        DataManager.shared.apiManager.getTransactionInfo(transactionString: "d83a5591585f05dc367d5e68579ece93240a6b4646133a38106249cadea53b77") { (transDict, error) in
                                                             guard transDict != nil else {
                                                                 return
                                                             }
@@ -367,7 +363,7 @@ class AssetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        presenter.tappedIndexPath = indexPath
 //        let wallet = presenter.account!.wallets[indexPath.row - 2]
 //        var binData = presenter.account!.binaryDataString.createBinaryData()!
 //        let newAddressDict = DataManager.shared.coreLibManager.createAddress(currencyID: wallet.chain.uint32Value,
@@ -482,7 +478,11 @@ class AssetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if indexPath == [0,0] {
 //            return 283  //portfolio height
             if self.presenter.account?.seedPhrase != nil && self.presenter.account?.seedPhrase != "" {
-                return 225 //logo height
+                if screenHeight == 812 {
+                    return 255 //logo height
+                } else {
+                    return 245
+                }
             } else {
                 return 220
             }

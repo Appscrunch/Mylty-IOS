@@ -6,4 +6,5 @@ import Foundation
 
 protocol CancelProtocol {
     func cancelAction()
+    func presentNoInternet()
 }

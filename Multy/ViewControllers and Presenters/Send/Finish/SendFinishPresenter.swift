@@ -27,6 +27,17 @@ class SendFinishPresenter: NSObject {
     
     var transactionObj: TransactionRLM?
     
+    //Example for addressData
+    //        ["privateKey": "2bdeccJBhnRiDz5cSaHhxfiAoACGaQzfbZizmK7KNqbvtP4Bmc",
+    //         "addressIndex": 0,
+    //         "addressPrivateKeyPointer": 0x0000000174456560,
+    //         "addressPointer": 0x0000000174289ce0,
+    //         "address": "mzNZBhim9XGy66FkdzrehHwdWNgbiTYXCQ",
+    //         "walletIndex": 0,
+    //         "currencyID": 0,
+    //         "publicKey": "NkWaWtGAq2MA2wkQaZ4s66HttE598b3Bqc7CueS9J3ry7zvBLG76us11eTxkpVYH7th1z5SKDP3oNMJxGyZe8zRv"]
+    var addressData : Dictionary<String, Any>?
+    
     func makeEndSum() {
         switch self.isCrypto {
         case true:
