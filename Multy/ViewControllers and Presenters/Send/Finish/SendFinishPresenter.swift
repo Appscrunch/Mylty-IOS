@@ -34,4 +34,14 @@ class SendFinishPresenter: NSObject {
             self.sumInCrypto = self.sumInFiat!
         }
     }
+    
+    func makeFrameForSlider() -> CGRect {
+        var y = self.sendFinishVC!.view.frame.height - 64
+        if screenHeight == heightOfX {
+            y = 705.0
+        }
+        let frame = CGRect(x: 0, y: y, width: screenWidth, height: 64.0)
+        
+        return frame
+    }
 }
