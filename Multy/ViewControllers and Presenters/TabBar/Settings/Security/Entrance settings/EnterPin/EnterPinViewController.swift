@@ -156,6 +156,12 @@ class EnterPinViewController: UIViewController, UITextFieldDelegate {
         circleForClear.backgroundColor = .clear
     }
     
+    func hideCancel() {
+        if self.cancelBtn != nil {
+            self.cancelBtn.isHidden = true
+        }
+    }
+    
     func getPass() {
         UserPreferences.shared.getAndDecryptPin { (pin, err) in
             if pin != nil {

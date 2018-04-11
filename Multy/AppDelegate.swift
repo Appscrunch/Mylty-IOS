@@ -271,6 +271,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            pinVC.cancelDelegate = self
             pinVC.whereFrom = vcOnScreen
             pinVC.isNeedToPresentBiometric = isNeedToPresentBiometric
+            pinVC.hideCancel()
             pinVC.modalPresentationStyle = .overCurrentContext
             
             vcOnScreen?.present(pinVC, animated: true, completion: nil)
