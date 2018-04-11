@@ -178,6 +178,10 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         sendDetailsVC?.sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(transactionDTO.choosenWallet!.chain)", eventName: customFeeSetuped)
     }
     
+    func setPreviousSelected(index: Int?) {
+        
+    }
+    
     //==============================
     
     func calculateBlockedAmount() -> UInt64 {

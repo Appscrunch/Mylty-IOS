@@ -19,6 +19,7 @@ class CustomFeeViewController: UIViewController, UITextFieldDelegate {
     weak var delegate: CustomFeeRateProtocol?
     
     var rate = 0
+    var previousSelected: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +53,7 @@ class CustomFeeViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func cancelAction(_ sender: Any) {
         //for BTC
+        self.delegate?.setPreviousSelected(index: self.previousSelected)
         self.navigationController?.popViewController(animated: true)
     }
     

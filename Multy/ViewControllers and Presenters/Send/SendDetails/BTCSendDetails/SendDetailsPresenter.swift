@@ -191,4 +191,10 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         self.sendDetailsVC?.tableView.reloadData()
         sendDetailsVC?.sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(transactionDTO.choosenWallet!.chain)", eventName: customFeeSetuped)
     }
+    
+    func setPreviousSelected(index: Int?) {
+        self.sendDetailsVC?.tableView.selectRow(at: [0,index!], animated: false, scrollPosition: .none)
+        self.sendDetailsVC?.tableView.delegate?.tableView!(self.sendDetailsVC!.tableView, didSelectRowAt: [0,index!])
+        self.selectedIndexOfSpeed = index!
+    }
 }

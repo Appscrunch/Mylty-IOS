@@ -73,6 +73,10 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
         if screenHeight == heightOfX {
             bottomBtnConstraint.constant = 0
         }
+        if self.presenter.selectedIndexOfSpeed == nil {
+            self.tableView.selectRow(at: [0,2], animated: false, scrollPosition: .none)
+            self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: [0,2])
+        }
     }
     
     func setupShadow() {
@@ -337,6 +341,7 @@ extension TableViewDelegate: UITableViewDelegate {
             customVC.presenter.chainId = self.presenter.transactionDTO.choosenWallet!.chain
             customVC.delegate = self.presenter
             customVC.rate = Int(self.presenter.customFee)
+            customVC.previousSelected = self.presenter.selectedIndexOfSpeed
             self.presenter.selectedIndexOfSpeed = indexPath.row
             self.navigationController?.pushViewController(customVC, animated: true)
             
