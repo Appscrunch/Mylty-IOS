@@ -208,6 +208,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     pinVc?.isNeedToPresentBiometric = true
                     pinVc?.viewWillAppear(true)
                 }
+                if let seedVC = vcOnScren as? CheckWordsViewController {
+                    seedVC.wordTF.becomeFirstResponder()
+                }
             }
             isActiveFirstTime = false
         }
