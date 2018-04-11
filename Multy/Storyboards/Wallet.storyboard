@@ -1125,7 +1125,6 @@ By donating you help us to bring blockchain technology one step closer to ordina
                     </view>
                     <connections>
                         <outlet property="walletNameTF" destination="ygK-hr-LcL" id="x1c-sO-Bxd"/>
-                        <segue destination="6xP-od-a8P" kind="presentation" identifier="showKey" modalPresentationStyle="overCurrentContext" id="hrN-Jj-kJG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wHR-vM-u9O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1135,7 +1134,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
         <!--Private Key View Controller-->
         <scene sceneID="zdR-RF-1Rg">
             <objects>
-                <viewController id="6xP-od-a8P" customClass="PrivateKeyViewController" customModule="Multy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="privateKey" id="6xP-od-a8P" customClass="PrivateKeyViewController" customModule="Multy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="h36-Cr-QEy"/>
                         <viewControllerLayoutGuide type="bottom" id="sIp-ka-gXV"/>
@@ -1241,6 +1240,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
                                             <constraint firstItem="k4a-bD-22T" firstAttribute="leading" secondItem="QPb-nk-2ek" secondAttribute="leading" id="bSk-dE-PxT"/>
                                             <constraint firstItem="jhS-TU-GFq" firstAttribute="top" secondItem="k4a-bD-22T" secondAttribute="bottom" id="bh6-8d-zrJ"/>
                                             <constraint firstAttribute="bottom" secondItem="ZiB-8K-BTa" secondAttribute="bottom" id="eSw-c3-T20"/>
+                                            <constraint firstItem="OSe-nt-KE0" firstAttribute="top" secondItem="a6o-9x-tsS" secondAttribute="bottom" constant="50" id="eer-Xa-AoY"/>
                                             <constraint firstItem="ZiB-8K-BTa" firstAttribute="top" secondItem="jhS-TU-GFq" secondAttribute="bottom" id="f3b-Y8-TPg"/>
                                             <constraint firstAttribute="bottom" secondItem="jhS-TU-GFq" secondAttribute="bottom" constant="57" id="fba-vz-du5"/>
                                             <constraint firstItem="5Ai-kQ-3aX" firstAttribute="leading" secondItem="QPb-nk-2ek" secondAttribute="leading" id="fxP-J3-wW0"/>
@@ -1305,7 +1305,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MRV-mf-MDY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-716" y="1467"/>
+            <point key="canvasLocation" x="1023" y="715"/>
         </scene>
         <!--Wallet Addresess View Controller-->
         <scene sceneID="UHs-XP-Pw1">
@@ -1379,7 +1379,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cfQ-Lc-gr1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="343" y="715"/>
+            <point key="canvasLocation" x="167" y="715"/>
         </scene>
         <!--Eth Wallet View Controller-->
         <scene sceneID="OO5-Bs-lQf">

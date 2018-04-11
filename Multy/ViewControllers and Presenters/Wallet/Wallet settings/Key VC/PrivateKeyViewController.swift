@@ -11,6 +11,10 @@ class PrivateKeyViewController: UIViewController {
     
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     
+    var wallet: UserWalletRLM?
+    var account: AccountRLM?
+    var addressID: Int?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let appDel = UIApplication.shared.delegate as! AppDelegate
@@ -26,6 +30,7 @@ class PrivateKeyViewController: UIViewController {
         if screenHeight == heightOfiPad {
             heightConstraint.constant = 460
         }
+        self.keyLbl.text = makePrivateKey()
     }
 
     @IBAction func copyAction(_ sender: Any) {
@@ -44,5 +49,13 @@ class PrivateKeyViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    func makePrivateKey() -> String {
+        var binaryData = account!.binaryDataString.createBinaryData()!
+        let privateKeyString = DataManager.shared.privateKeyString(blockchain: BlockchainType.create(wallet: wallet!),
+                                                                   walletID: wallet?.walletID as! UInt32,
+                                                                   addressID: UInt32(addressID!),
+                                                                   binaryData: &binaryData)
+        return privateKeyString
+    }
     
 }

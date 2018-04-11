@@ -112,4 +112,8 @@ extension DataManager {
                                                            gasPrice: gasPriceString,
                                                            gasLimit: gasLimitString)
     }
+    
+    func privateKeyString(blockchain: BlockchainType, walletID: UInt32, addressID: UInt32, binaryData: inout BinaryData) -> String {
+        return coreLibManager.privateKeyString(blockchain: blockchain, walletID: walletID, addressID: addressID, binaryData: &binaryData)
+    }
 }
