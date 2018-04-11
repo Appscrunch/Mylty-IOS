@@ -38,6 +38,10 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
         self.mainVC?.makeSendAvailable(isAvailable: true)
     }
     
+    func setPreviousSelected(index: Int?) {
+        
+    }
+    
     func getAddress() {
         let addresses = DataManager.shared.getBTCDonationAddressesFromUserDerfaults()
         donationAddress = addresses[DataManager.shared.donationCode]!

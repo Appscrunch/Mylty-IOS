@@ -89,7 +89,7 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     }
     
     func createSlideView() {
-        let unlockSlider = AURUnlockSlider(frame: CGRect(x: 0, y: view.frame.height - sendBtn.frame.height, width: screenWidth, height: sendBtn.frame.height))
+        let unlockSlider = AURUnlockSlider(frame: self.presenter.makeFrameForSlider())
         unlockSlider.delegate = self
         
         unlockSlider.sliderText = "Slide to Send"
@@ -102,6 +102,9 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
         label.textColor = UIColor.white     //test
         
 //        unlockSlider.addSubview(label)
+        if self.view.subviews.contains(unlockSlider) {
+            unlockSlider.removeFromSuperview()
+        }
         self.view.addSubview(unlockSlider)
     }
     
@@ -224,6 +227,7 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
             self.btnTopConstraint.constant = 110
         }
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "sendingAnimationVC" {

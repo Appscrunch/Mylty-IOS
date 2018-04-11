@@ -11,6 +11,7 @@ class WalletAddresessViewController: UIViewController,AnalyticsProtocol {
     @IBOutlet weak var headerLbl: UILabel!
     
     let presenter = WalletAddresessPresenter()
+    var whereFrom: UIViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,17 +68,36 @@ extension WalletAddresessViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
-        let adressVC = storyboard.instantiateViewController(withIdentifier: "walletAdressVC") as! AddressViewController
-        adressVC.modalPresentationStyle = .overCurrentContext
-        adressVC.addressIndex = indexPath.row
-        adressVC.wallet = self.presenter.wallet
-        //        self.mainVC.present
-        self.present(adressVC, animated: true, completion: nil)
+        if self.whereFrom == nil {
+            let adressVC = storyboard.instantiateViewController(withIdentifier: "walletAdressVC") as! AddressViewController
+            adressVC.modalPresentationStyle = .overCurrentContext
+            adressVC.addressIndex = indexPath.row
+            adressVC.wallet = self.presenter.wallet
+            //        self.mainVC.present
+            self.present(adressVC, animated: true, completion: nil)
+            sendAnalyticsEvent(screenName: "\(screenWalletAddressWithChain)\(presenter.wallet!.chain)", eventName: "\(addressWithChainTap)\(presenter.wallet!.chain)")
+            
+            //FIXME: adding adresses to wallet//remove
+            addAddress()
+        } else {
+            let privateKeyVC = storyboard.instantiateViewController(withIdentifier: "privateKey") as! PrivateKeyViewController
+            privateKeyVC.modalPresentationStyle = .overCurrentContext
+            
+            DataManager.shared.getAccount(completion: { (acc, err) in
+                privateKeyVC.account = acc
+                privateKeyVC.wallet = self.presenter.wallet
+                privateKeyVC.addressID = indexPath.row
+                
+                self.present(privateKeyVC, animated: true, completion: nil)
+            })
+        }
         self.tableView.deselectRow(at: indexPath, animated: true)
+
         sendAnalyticsEvent(screenName: "\(screenWalletAddressWithChain)\(presenter.wallet!.chain)", eventName: "\(addressWithChainTap)\(presenter.wallet!.chain)")
         
         //FIXME: adding adresses to wallet//remove
 //        addAddress()
+
     }
     
     func addAddress() {

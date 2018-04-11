@@ -81,7 +81,12 @@ class WalletSettingsViewController: UIViewController,AnalyticsProtocol {
     }
     
     @IBAction func myPrivateAction(_ sender: Any) {
-        self.performSegue(withIdentifier: "showKey", sender: sender)
+        let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
+        let adressesVC = storyboard.instantiateViewController(withIdentifier: "walletAddresses") as! WalletAddresessViewController
+        adressesVC.presenter.wallet = self.presenter.wallet
+        adressesVC.whereFrom = self
+        self.navigationController?.pushViewController(adressesVC, animated: true)
+        
         sendAnalyticsEvent(screenName: "\(screenWalletSettingsWithChain)\(presenter.wallet!.chain)", eventName: "\(showKeyWithChainTap)\(presenter.wallet!.chain)")
     }
     

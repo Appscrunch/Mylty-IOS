@@ -208,6 +208,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     pinVc?.isNeedToPresentBiometric = true
                     pinVc?.viewWillAppear(true)
                 }
+                if let seedVC = vcOnScren as? CheckWordsViewController {
+                    seedVC.wordTF.becomeFirstResponder()
+                }
             }
             isActiveFirstTime = false
         }
@@ -271,6 +274,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            pinVC.cancelDelegate = self
             pinVC.whereFrom = vcOnScreen
             pinVC.isNeedToPresentBiometric = isNeedToPresentBiometric
+            pinVC.hideCancel()
             pinVC.modalPresentationStyle = .overCurrentContext
             
             vcOnScreen?.present(pinVC, animated: true, completion: nil)

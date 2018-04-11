@@ -268,6 +268,19 @@ class CoreLibManager: NSObject {
         }
     }
     
+    func privateKeyString(blockchain: BlockchainType, walletID: UInt32, addressID: UInt32, binaryData: inout BinaryData) -> String {
+        let privateKeyPointer = createPrivateKey(blockchain: blockchain, walletID: walletID, addressID: addressID, binaryData: &binaryData)
+        
+        let privateKeyStringPointer = UnsafeMutablePointer<UnsafePointer<Int8>?>.allocate(capacity: 1)
+        
+        let ktsPRIV = key_to_string(privateKeyPointer!.pointee, privateKeyStringPointer)
+        _ = errorString(from: ktsPRIV, mask: "key_to_string:KEY_TYPE_PRIVATE")
+        
+        let privateKeyString = String(cString: privateKeyStringPointer.pointee!)
+        
+        return privateKeyString
+    }
+    
     func createAddress(blockchain: BlockchainType, walletID: UInt32, addressID: UInt32, binaryData: inout BinaryData) -> Dictionary<String, Any>? {
         let binaryDataPointer = UnsafeMutablePointer(mutating: &binaryData)
         let masterKeyPointer = UnsafeMutablePointer<OpaquePointer?>.allocate(capacity: 1)
