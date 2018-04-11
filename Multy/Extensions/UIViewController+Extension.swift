@@ -138,6 +138,7 @@ extension UIViewController {
     
     func swipeToBack() {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     func isVCVisible() -> Bool {

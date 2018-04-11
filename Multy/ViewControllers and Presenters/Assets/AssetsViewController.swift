@@ -93,6 +93,8 @@ class AssetsViewController: UIViewController, AnalyticsProtocol {
         if self.presenter.isJailed {
             self.presentWarningAlert(message: Constants.Security.jailbrokenDeviceWarningString)
         }
+        
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -103,7 +105,6 @@ class AssetsViewController: UIViewController, AnalyticsProtocol {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         
         (self.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: presenter.account == nil)
         

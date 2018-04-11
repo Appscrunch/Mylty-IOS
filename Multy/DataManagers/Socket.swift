@@ -16,7 +16,7 @@ class Socket: NSObject {
     override init() {
         //dev:  6680
         //prod: 7780
-        manager = SocketManager(socketURL: URL(string: socketUrl)!, config: [.log(true), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .secure(false)])
+        manager = SocketManager(socketURL: URL(string: socketUrl)!, config: [.log(false), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .secure(false)])
         socket = manager.defaultSocket
     }
     
@@ -30,7 +30,7 @@ class Socket: NSObject {
                 "deviceType": "\(account!.deviceType)",
                 "jwtToken": account!.token]
             
-            self.manager = SocketManager(socketURL: URL(string: socketUrl)!, config: [.log(true), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .extraHeaders(header), .secure(false)])
+            self.manager = SocketManager(socketURL: URL(string: socketUrl)!, config: [.log(false), .compress, .forceWebsockets(true), .reconnectAttempts(3), .forcePolling(false), .extraHeaders(header), .secure(false)])
             self.socket = self.manager.defaultSocket
             
             

@@ -162,7 +162,7 @@ class CoreLibManager: NSObject {
             return nil
         }
         
-        let mHDla = make_hd_leaf_account(newAccountPointer.pointee, ADDRESS_INTERNAL, 0, newAddressPointer)
+        let mHDla = make_hd_leaf_account(newAccountPointer.pointee, ADDRESS_EXTERNAL, 0, newAddressPointer)
         if mHDla != nil {
             _ = errorString(from: mHDla!, mask: "make_hd_leaf_account")
             
@@ -250,7 +250,7 @@ class CoreLibManager: NSObject {
             return nil
         }
         
-        let mHDla = make_hd_leaf_account(newAccountPointer.pointee, ADDRESS_INTERNAL, addressID, newAddressPointer)
+        let mHDla = make_hd_leaf_account(newAccountPointer.pointee, ADDRESS_EXTERNAL, addressID, newAddressPointer)
         if mHDla != nil {
             _ = errorString(from: mHDla!, mask: "mHDla")
             
@@ -335,7 +335,7 @@ class CoreLibManager: NSObject {
             return nil
         }
         
-        let mHDla = make_hd_leaf_account(newAccountPointer.pointee, ADDRESS_INTERNAL, addressID, newAddressPointer)
+        let mHDla = make_hd_leaf_account(newAccountPointer.pointee, ADDRESS_EXTERNAL, addressID, newAddressPointer)
         if mHDla != nil {
             _ = errorString(from: mHDa!, mask: "make_hd_leaf_account")
             
@@ -786,7 +786,7 @@ extension TestCoreLibManager {
             _ = errorString(from: mHDa!, mask: "make_hd_account")
         }
         
-        let mHDla = make_hd_leaf_account(newAccountPointer.pointee!, ADDRESS_INTERNAL, UInt32(0), newAddressPointer)
+        let mHDla = make_hd_leaf_account(newAccountPointer.pointee!, ADDRESS_EXTERNAL, UInt32(0), newAddressPointer)
         //        make_hd_leaf_account(OpaquePointer!, AddressType, UInt32, UnsafeMutablePointer<OpaquePointer?>!)
         if mHDla != nil {
             _ = errorString(from: mHDla!, mask: "make_hd_leaf_account")
