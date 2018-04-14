@@ -76,6 +76,8 @@
 		457569461FBDDD0F00FDEE20 /* CheckWordsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457569451FBDDD0F00FDEE20 /* CheckWordsPresenter.swift */; };
 		457569491FBDEDB900FDEE20 /* BackupFinishPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457569481FBDEDB900FDEE20 /* BackupFinishPresenter.swift */; };
 		4575694B1FBDEDE300FDEE20 /* BackupFinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4575694A1FBDEDE300FDEE20 /* BackupFinishViewController.swift */; };
+		4575F0D82081FE01002616DD /* WebTextPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4575F0D72081FE01002616DD /* WebTextPageViewController.swift */; };
+		4575F0DA2081FE1A002616DD /* WebTextPagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4575F0D92081FE1A002616DD /* WebTextPagePresenter.swift */; };
 		4583AC921FBC7122001991AA /* PortfolioTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4583AC901FBC7122001991AA /* PortfolioTableViewCell.swift */; };
 		4583AC931FBC7122001991AA /* PortfolioTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4583AC911FBC7122001991AA /* PortfolioTableViewCell.xib */; };
 		4583AC981FBC8596001991AA /* PortfolioCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4583AC961FBC8596001991AA /* PortfolioCollectionViewCell.swift */; };
@@ -367,6 +369,8 @@
 		457569451FBDDD0F00FDEE20 /* CheckWordsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckWordsPresenter.swift; sourceTree = "<group>"; };
 		457569481FBDEDB900FDEE20 /* BackupFinishPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupFinishPresenter.swift; sourceTree = "<group>"; };
 		4575694A1FBDEDE300FDEE20 /* BackupFinishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupFinishViewController.swift; sourceTree = "<group>"; };
+		4575F0D72081FE01002616DD /* WebTextPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTextPageViewController.swift; sourceTree = "<group>"; };
+		4575F0D92081FE1A002616DD /* WebTextPagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebTextPagePresenter.swift; sourceTree = "<group>"; };
 		4583AC901FBC7122001991AA /* PortfolioTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioTableViewCell.swift; sourceTree = "<group>"; };
 		4583AC911FBC7122001991AA /* PortfolioTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PortfolioTableViewCell.xib; sourceTree = "<group>"; };
 		4583AC961FBC8596001991AA /* PortfolioCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -895,6 +899,15 @@
 			path = Congratulations;
 			sourceTree = "<group>";
 		};
+		4575F0D62081FDCE002616DD /* WebPage */ = {
+			isa = PBXGroup;
+			children = (
+				4575F0D72081FE01002616DD /* WebTextPageViewController.swift */,
+				4575F0D92081FE1A002616DD /* WebTextPagePresenter.swift */,
+			);
+			path = WebPage;
+			sourceTree = "<group>";
+		};
 		4583AC8D1FBC70D6001991AA /* WalletTVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1235,6 +1248,7 @@
 				4585BD302049A8E3004542AE /* ExchangeStocks */,
 				45AC16202048209900E75BD6 /* Currency */,
 				454094482031EED500603DB5 /* Security */,
+				4575F0D62081FDCE002616DD /* WebPage */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -2124,6 +2138,7 @@
 				452236211FCD6BA7004BA490 /* TransactionPresenter.swift in Sources */,
 				44C06FC9203D832B008CBA9D /* Array+Extension.swift in Sources */,
 				45A87834205FC9E80071D6F1 /* EthSendDetailsPresenter.swift in Sources */,
+				4575F0DA2081FE1A002616DD /* WebTextPagePresenter.swift in Sources */,
 				FA8835921FD856F4007694A2 /* UserWalletRLM.swift in Sources */,
 				45F6340A202388C900C17A7C /* ViewInBlockchainPresenter.swift in Sources */,
 				45E148A8204553AF006BD4D1 /* DonationAlertViewController.swift in Sources */,
@@ -2194,6 +2209,7 @@
 				45B0B0E61FEBEDE9005BB1C0 /* ActivityViewController.swift in Sources */,
 				455EA8791FD851830093F69D /* FastOperationsViewController.swift in Sources */,
 				45A949621FC766BE003C3A23 /* SendFinishPresenter.swift in Sources */,
+				4575F0D82081FE01002616DD /* WebTextPageViewController.swift in Sources */,
 				FADC00481FC3236F00182E45 /* ApiManager.swift in Sources */,
 				FA4D43FE1FC6D058003C7117 /* TransactionWalletCell.swift in Sources */,
 				45B0B0E81FEBEEB3005BB1C0 /* ActivityPresenter.swift in Sources */,

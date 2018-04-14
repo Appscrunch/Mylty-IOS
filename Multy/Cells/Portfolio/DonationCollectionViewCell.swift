@@ -32,7 +32,7 @@ class DonationCollectionViewCell: UICollectionViewCell {
         view.layer.shadowOpacity = 1
         view.layer.shadowOffset = CGSize.zero
         view.layer.shadowRadius = 10
-        if screenHeight == heightOfiPad {   // ipad fix
+        if screenHeight == heightOfiPad || screenHeight == heightOfFive {   // ipad fix
             self.backgroundImg.contentMode = .scaleToFill
         }
     }

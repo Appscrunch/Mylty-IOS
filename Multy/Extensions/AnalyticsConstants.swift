@@ -180,7 +180,7 @@ let transactionErr              = "Error_Transaction_Sign"
 
 //              new screen  21
 
-let screenSendSummaryWithChain  = "Screen_Send_Summary "//+chainID
+let screenSendSummaryWithChain  = "Screen_Send_Summary_"//+chainID
 //let closeWithChainTap        = "Button_Close_"//+chainID         //cancel or back
 let addNoteTap                  = "Button_Add_Note"
 let transactionErrorFromServer  = "Error_Sending_Trasaction_From_Api"
