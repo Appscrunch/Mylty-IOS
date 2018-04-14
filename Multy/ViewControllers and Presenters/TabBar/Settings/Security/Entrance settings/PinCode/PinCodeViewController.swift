@@ -22,6 +22,9 @@ class PinCodeViewController: UIViewController, UITextFieldDelegate, AnalyticsPro
         super.viewDidLoad()
         pinTF.becomeFirstResponder()
         clearAllCircles()
+        
+        let appDel = UIApplication.shared.delegate as! AppDelegate
+        appDel.selectedIndexOfTabBar = 4
     }
     
     override func viewWillAppear(_ animated: Bool) {

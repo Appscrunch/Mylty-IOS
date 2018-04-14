@@ -45,11 +45,12 @@ class SendStartViewController: UIViewController, AnalyticsProtocol, DonationProt
         presenter.transactionDTO.sendAddress = searchCell.addressTV.text
         
         if presenter.transactionDTO.choosenWallet != nil && presenter.isTappedDisabledNextButton(gesture: gesture) {
-//            let isValidDTO = DataManager.shared.isAddressValid(address: presenter.transactionDTO.sendAddress!, for: presenter.transactionDTO.choosenWallet!)
+            let isValidDTO = DataManager.shared.isAddressValid(address: presenter.transactionDTO.sendAddress!, for: presenter.transactionDTO.choosenWallet!)
             
-//            if !isValidDTO.isValid {
-//                presenter.presentAlert(message: isValidDTO.1!)
-//            }
+            if !isValidDTO.isValid {
+                let message = "You entered not valid address for current blockchain."
+                presenter.presentAlert(message: message)
+            }
             
             return
         }
@@ -98,15 +99,6 @@ class SendStartViewController: UIViewController, AnalyticsProtocol, DonationProt
                                                          UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
                                            gradientOrientation: .horizontal)
             }
-//        } else {
-//            if nextBtn.isEnabled {
-//                nextBtn.isEnabled = false
-//                nextBtn.backgroundColor = UIColor(red: 209/255, green: 209/255, blue: 214/255, alpha: 1.0)
-//                if nextBtn.layer.sublayers?.count == 3 {
-//                    nextBtn.layer.sublayers?.first?.removeFromSuperlayer()
-//                }
-//            }
-//        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

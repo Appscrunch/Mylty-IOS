@@ -63,6 +63,10 @@ extension UIView {
     }
     
     func applyGradient(withColours colours: [UIColor], gradientOrientation orientation: GradientOrientation) {
+        if frame.width != screenWidth {
+            return
+        }
+        
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.frame = self.bounds
         gradient.colors = colours.map { $0.cgColor }

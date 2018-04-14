@@ -62,11 +62,17 @@ extension DataManager {
                                                                          feePerByteAmount: "\(transactionDTO.transaction!.customFee!)",
                                                                          isDonationExists: false,
                                                                          donationAmount: "0",
-                                                                         isPayCommission: true,
+                                                                         isPayCommission: false,
                                                                          wallet: transactionDTO.choosenWallet!,
                                                                          binaryData: &binaryData,
                                                                          inputs: transactionDTO.choosenWallet!.addresses)
         
+        if trData.1 < 0 {
+            completion(trData.0, NSError(domain: "", code: 400, userInfo: nil))
+            
+            return
+        }
+
         let newAddressParams = [
             "walletindex"   : wallet.walletID.intValue,
             "address"       : addressData!["address"] as! String,

@@ -466,7 +466,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ssb-nB-rPb">
                                         <rect key="frame" x="16" y="596" width="343" height="283"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="donationIcon" translatesAutoresizingMaskIntoConstraints="NO" id="ReI-wC-20S">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="donation_icon" translatesAutoresizingMaskIntoConstraints="NO" id="ReI-wC-20S">
                                                 <rect key="frame" x="122.5" y="19" width="98" height="78"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="98" id="FCy-Vl-UJk"/>
@@ -1657,6 +1657,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
         <image name="backGrey" width="13" height="21"/>
         <image name="chevron" width="15" height="22"/>
         <image name="donationIcon" width="30" height="35"/>
+        <image name="donation_icon" width="98" height="78"/>
         <image name="recieveBig" width="66" height="66"/>
         <image name="recieveIconTabbar" width="19" height="23"/>
         <image name="sendIconTabbar" width="26" height="26"/>

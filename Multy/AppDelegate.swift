@@ -210,6 +210,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 if let seedVC = vcOnScren as? CheckWordsViewController {
                     seedVC.wordTF.becomeFirstResponder()
+                } else if let seedVC = vcOnScren as? PinCodeViewController {
+                    seedVC.pinTF.becomeFirstResponder()
                 }
             }
             isActiveFirstTime = false

@@ -109,7 +109,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
     
     @IBAction func sendAction(_ sender: Any) {
         self.view.isUserInteractionEnabled = false
-        self.progressHud.show()
+        self.progressHud.blockUIandShowProgressHUD()
         self.presenter.createAndSendTransaction()
         sendDonationScreenPressSendAnalytics()
     }
@@ -120,7 +120,10 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
         let fiatSum = "\(((self.presenter.walletPayFrom?.sumInCrypto)! * exchangeCourse).fixedFraction(digits: 2)) \(self.presenter.walletPayFrom?.fiatName ?? "USD")"
         
         let percentFromSum = 0.03
-        let sumForDonat = ((self.presenter.walletPayFrom?.sumInCrypto)! * percentFromSum)
+        var sumForDonat = ((self.presenter.walletPayFrom?.sumInCrypto)! * percentFromSum)
+        if sumForDonat.satoshiValue < minSatoshiToDonate {
+            sumForDonat = minSatoshiToDonate.btcValue
+        }
         let fiatDonation = sumForDonat * exchangeCourse
         
         self.walletNameLbl.text = self.presenter.walletPayFrom?.name
@@ -244,6 +247,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
             self.presenter.makeFiatDonat()
             return false
         }
+        
         self.donationTF.text?.append(string) // = return true
         self.presenter.makeFiatDonat()
         return false

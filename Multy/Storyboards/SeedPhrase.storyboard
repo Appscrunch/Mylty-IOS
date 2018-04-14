@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="AvenirNext.ttc">
-            <string>AvenirNext-DemiBold</string>
-            <string>AvenirNext-Medium</string>
-            <string>AvenirNext-Regular</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Seed Phrase About View Controller-->
         <scene sceneID="ze1-Yw-jQJ">
@@ -36,41 +29,41 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Screenshot_icon" translatesAutoresizingMaskIntoConstraints="NO" id="q5S-mD-zQb">
-                                <rect key="frame" x="35" y="255" width="22" height="40"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spyCam" translatesAutoresizingMaskIntoConstraints="NO" id="q5S-mD-zQb">
+                                <rect key="frame" x="28" y="255" width="62" height="62"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="M0t-wa-TtD"/>
-                                    <constraint firstAttribute="width" constant="22" id="yQy-ec-qCg"/>
+                                    <constraint firstAttribute="height" constant="62" id="M0t-wa-TtD"/>
+                                    <constraint firstAttribute="width" constant="62" id="yQy-ec-qCg"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't do screenshots" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvN-cn-dsq">
-                                <rect key="frame" x="92" y="264" width="155" height="22"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move away from windows and surveillance cameras" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvN-cn-dsq">
+                                <rect key="frame" x="125" y="264" width="224.5" height="44"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Spy_cam__icon" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-tl-U4h">
-                                <rect key="frame" x="35" y="355" width="32" height="29"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="snapShot" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-tl-U4h">
+                                <rect key="frame" x="28" y="342" width="62" height="62"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="32" id="jx9-6O-fpj"/>
-                                    <constraint firstAttribute="height" constant="29" id="pyj-V5-JOW"/>
+                                    <constraint firstAttribute="width" constant="62" id="jx9-6O-fpj"/>
+                                    <constraint firstAttribute="height" constant="62" id="pyj-V5-JOW"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move away from windows and surveillance cameras" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNr-xh-HkC">
-                                <rect key="frame" x="92" y="347" width="224.5" height="44"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't do screenshots" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tNr-xh-HkC">
+                                <rect key="frame" x="125" y="362" width="155" height="22"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SPY_icon" translatesAutoresizingMaskIntoConstraints="NO" id="R0c-OL-Rcy">
-                                <rect key="frame" x="35" y="444" width="34" height="34"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="spyIcon" translatesAutoresizingMaskIntoConstraints="NO" id="R0c-OL-Rcy">
+                                <rect key="frame" x="28" y="429" width="62" height="62"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="34" id="NXS-2U-dTg"/>
-                                    <constraint firstAttribute="width" constant="34" id="cbR-4O-Xd1"/>
+                                    <constraint firstAttribute="height" constant="62" id="NXS-2U-dTg"/>
+                                    <constraint firstAttribute="width" constant="62" id="cbR-4O-Xd1"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check that no one is behind you" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Mk-vY-wxw">
-                                <rect key="frame" x="92" y="450" width="236" height="22"/>
+                                <rect key="frame" x="125" y="438" width="152.5" height="44"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -111,14 +104,15 @@
                             <constraint firstItem="vvN-cn-dsq" firstAttribute="centerY" secondItem="q5S-mD-zQb" secondAttribute="centerY" id="7pm-Bm-bui"/>
                             <constraint firstItem="7Mk-vY-wxw" firstAttribute="leading" secondItem="tNr-xh-HkC" secondAttribute="leading" id="8rl-Ag-Ze2"/>
                             <constraint firstItem="R0c-OL-Rcy" firstAttribute="leading" secondItem="fT1-tl-U4h" secondAttribute="leading" id="BK9-gq-JcK"/>
-                            <constraint firstItem="q5S-mD-zQb" firstAttribute="leading" secondItem="b3R-rP-gYc" secondAttribute="leading" constant="35" id="EE8-aF-Tz0"/>
+                            <constraint firstItem="q5S-mD-zQb" firstAttribute="leading" secondItem="b3R-rP-gYc" secondAttribute="leading" constant="28" id="EE8-aF-Tz0"/>
                             <constraint firstItem="c2M-Lw-dYk" firstAttribute="leading" secondItem="b3R-rP-gYc" secondAttribute="leading" constant="16" id="GMe-j6-ESW"/>
                             <constraint firstItem="Wey-AO-45o" firstAttribute="leading" secondItem="b3R-rP-gYc" secondAttribute="leading" id="IaB-Uk-XdV"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="tNr-xh-HkC" secondAttribute="trailing" constant="20" id="Kz8-JV-qSJ"/>
-                            <constraint firstItem="R0c-OL-Rcy" firstAttribute="top" secondItem="fT1-tl-U4h" secondAttribute="bottom" constant="60" id="Oh5-n0-dK3"/>
+                            <constraint firstItem="R0c-OL-Rcy" firstAttribute="top" secondItem="fT1-tl-U4h" secondAttribute="bottom" constant="25" id="Oh5-n0-dK3"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Mk-vY-wxw" secondAttribute="trailing" constant="20" id="PdP-7d-BOd"/>
                             <constraint firstAttribute="trailing" secondItem="Wey-AO-45o" secondAttribute="trailing" id="PzX-JW-SLh"/>
                             <constraint firstItem="7Mk-vY-wxw" firstAttribute="centerY" secondItem="R0c-OL-Rcy" secondAttribute="centerY" id="Q95-K7-uKh"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vvN-cn-dsq" secondAttribute="trailing" constant="20" id="TpG-5z-Vzk"/>
                             <constraint firstItem="tNr-xh-HkC" firstAttribute="leading" secondItem="vvN-cn-dsq" secondAttribute="leading" id="Uag-Ao-TKA"/>
                             <constraint firstItem="vvN-cn-dsq" firstAttribute="leading" secondItem="q5S-mD-zQb" secondAttribute="trailing" constant="35" id="YY6-bs-Rbi"/>
                             <constraint firstAttribute="trailing" secondItem="IHG-IF-sNd" secondAttribute="trailing" constant="20" id="a0r-av-Gnc"/>
@@ -129,7 +123,7 @@
                             <constraint firstItem="pf7-VK-HCy" firstAttribute="top" secondItem="c2M-Lw-dYk" secondAttribute="bottom" id="iLB-HU-1iU"/>
                             <constraint firstItem="QNx-57-hSf" firstAttribute="top" secondItem="Wey-AO-45o" secondAttribute="bottom" id="kd9-IG-cRd"/>
                             <constraint firstItem="fT1-tl-U4h" firstAttribute="leading" secondItem="q5S-mD-zQb" secondAttribute="leading" id="lrY-Xd-fiF"/>
-                            <constraint firstItem="fT1-tl-U4h" firstAttribute="top" secondItem="q5S-mD-zQb" secondAttribute="bottom" constant="60" id="oPn-ZY-HJH"/>
+                            <constraint firstItem="fT1-tl-U4h" firstAttribute="top" secondItem="q5S-mD-zQb" secondAttribute="bottom" constant="25" id="oPn-ZY-HJH"/>
                             <constraint firstItem="q5S-mD-zQb" firstAttribute="top" secondItem="IHG-IF-sNd" secondAttribute="bottom" constant="50" id="qhZ-IL-G4d"/>
                             <constraint firstItem="tNr-xh-HkC" firstAttribute="centerY" secondItem="fT1-tl-U4h" secondAttribute="centerY" id="z0Z-OE-AgA"/>
                         </constraints>
@@ -137,9 +131,12 @@
                     <navigationItem key="navigationItem" id="pmM-m8-eq7"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="camIcon" destination="q5S-mD-zQb" id="HqX-wI-KKS"/>
                         <outlet property="continueBtn" destination="Wey-AO-45o" id="PJI-ac-4fF"/>
                         <outlet property="firstConstraint" destination="qhZ-IL-G4d" id="y1k-2S-crl"/>
                         <outlet property="secondConstraint" destination="oPn-ZY-HJH" id="L8t-JH-dDS"/>
+                        <outlet property="snapIcon" destination="fT1-tl-U4h" id="Ypm-UQ-aSt"/>
+                        <outlet property="spyIcon" destination="R0c-OL-Rcy" id="Hjh-Ys-nNg"/>
                         <outlet property="thirdConstraint" destination="Oh5-n0-dK3" id="owc-Qe-wEe"/>
                         <outlet property="topConstraint" destination="a0x-bm-3L2" id="bxQ-bc-tiy"/>
                         <segue destination="6Mb-pe-tcp" kind="show" identifier="seedWordsVC" id="d3A-8P-xX5"/>
@@ -429,7 +426,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phrase Validation" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YXe-ZO-gQe">
-                                        <rect key="frame" x="84" y="48" width="207" height="36"/>
+                                        <rect key="frame" x="84.5" y="48" width="206.5" height="36"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="26"/>
                                         <color key="textColor" red="0.20392156859999999" green="0.20392156859999999" blue="0.20392156859999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -518,7 +515,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9x-FX-ph5">
-                                <rect key="frame" x="16" y="71" width="343" height="72"/>
+                                <rect key="frame" x="16" y="71" width="343" height="71.5"/>
                                 <attributedString key="attributedText">
                                     <fragment>
                                         <string key="content">Congratulations! 
@@ -547,7 +544,7 @@ Your wallet is protected!</string>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nBQ-cz-rgU">
-                                <rect key="frame" x="52" y="173" width="271" height="42"/>
+                                <rect key="frame" x="52" y="172.5" width="271" height="42"/>
                                 <color key="backgroundColor" red="0.97619837519999997" green="0.98009961840000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="nBQ-cz-rgU" secondAttribute="height" multiplier="271:42" id="02t-RF-TWZ"/>
@@ -555,7 +552,7 @@ Your wallet is protected!</string>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="done" translatesAutoresizingMaskIntoConstraints="NO" id="vmu-HR-7AY">
-                                <rect key="frame" x="128.5" y="295" width="117" height="117"/>
+                                <rect key="frame" x="128.5" y="294.5" width="117" height="117"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="117" id="8Xt-nX-rbi"/>
                                     <constraint firstAttribute="height" constant="117" id="GI4-LG-hWh"/>
@@ -600,7 +597,7 @@ Your wallet is protected!</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Rk-Oa-T9X">
-                                <rect key="frame" x="109" y="79" width="157" height="72"/>
+                                <rect key="frame" x="109" y="79" width="157" height="71.5"/>
                                 <attributedString key="attributedText">
                                     <fragment>
                                         <string key="content">Wrong 
@@ -640,13 +637,13 @@ Seed Phrase!</string>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wrongPhraseSign" translatesAutoresizingMaskIntoConstraints="NO" id="abo-WQ-T1q">
-                                <rect key="frame" x="135.5" y="282" width="103" height="103"/>
+                                <rect key="frame" x="135.5" y="281.5" width="103" height="103"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="abo-WQ-T1q" secondAttribute="height" multiplier="1:1" id="v7u-G8-XKe"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="errorSeed" translatesAutoresizingMaskIntoConstraints="NO" id="kke-0K-ovT">
-                                <rect key="frame" x="52" y="176" width="271" height="42"/>
+                                <rect key="frame" x="52" y="175.5" width="271" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="kke-0K-ovT" secondAttribute="height" multiplier="271:42" id="qPp-Tn-SMK"/>
                                 </constraints>
@@ -696,12 +693,12 @@ Seed Phrase!</string>
     <resources>
         <image name="01" width="271" height="31"/>
         <image name="06" width="271" height="31"/>
-        <image name="SPY_icon" width="34" height="34"/>
-        <image name="Screenshot_icon" width="22" height="40"/>
-        <image name="Spy_cam__icon" width="32" height="29"/>
         <image name="done" width="133" height="133"/>
         <image name="errorSeed" width="271" height="31"/>
         <image name="infoIconRed" width="24" height="24"/>
+        <image name="snapShot" width="62" height="62"/>
+        <image name="spyCam" width="62" height="62"/>
+        <image name="spyIcon" width="62" height="62"/>
         <image name="wrongPhraseSign" width="107" height="107"/>
     </resources>
 </document>
