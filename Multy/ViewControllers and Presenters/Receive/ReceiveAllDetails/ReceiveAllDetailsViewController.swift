@@ -169,7 +169,7 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
         
         //FIXME: BLOCKCHAIN
         let blockchain = BlockchainType.create(wallet: presenter.wallet!)
-        self.walletCryptoSumBtn.setTitle("\((self.presenter.wallet?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(blockchain.shortName /*self.presenter.wallet?.cryptoName ?? ""*/)", for: .normal)
+        self.walletCryptoSumBtn.setTitle("\((self.presenter.wallet?.sumInCryptoString) ?? "") \(blockchain.shortName /*self.presenter.wallet?.cryptoName ?? ""*/)", for: .normal)
         let sum = presenter.wallet!.sumInFiat.fixedFraction(digits: 2)
         self.walletFiatSumLbl.text = "\(sum) \(self.presenter.wallet?.fiatSymbol ?? "")"
         self.presenter.walletAddress = (self.presenter.wallet?.address)!

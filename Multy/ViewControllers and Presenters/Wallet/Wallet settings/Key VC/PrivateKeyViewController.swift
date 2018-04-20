@@ -34,11 +34,25 @@ class PrivateKeyViewController: UIViewController {
     }
 
     @IBAction func copyAction(_ sender: Any) {
-//        UIPasteboard.general.string = makeStringWithAddress()
+        UIPasteboard.general.string = makePrivateKey()
     }
     
     @IBAction func shareAction(_ sender: Any) {
-        
+        let objectsToShare = [makePrivateKey()]
+        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+        activityVC.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            if !completed {
+                // User canceled
+                return
+            } else {
+//                if let appName = activityType?.rawValue {
+//                    self.sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(self.wallet!.chain)", eventName: "\(shareToAppWithChainTap)\(self.wallet!.chain)_\(appName)")
+//                }
+            }
+        }
+        activityVC.setPresentedShareDialogToDelegate()
+        self.present(activityVC, animated: true, completion: nil)
     }
     
     @IBAction func cancelAction(_ sender: Any) {

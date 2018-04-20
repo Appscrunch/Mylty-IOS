@@ -49,12 +49,12 @@ struct Constants {
         static let availableBlockchains = [
             BlockchainType.create(currencyID: BLOCKCHAIN_BITCOIN.rawValue, netType: BITCOIN_NET_TYPE_MAINNET.rawValue),
             BlockchainType.create(currencyID: BLOCKCHAIN_BITCOIN.rawValue, netType: BITCOIN_NET_TYPE_TESTNET.rawValue),
-//            BlockchainType.create(currencyID: BLOCKCHAIN_ETHEREUM.rawValue, netType: ETHEREUM_CHAIN_ID_MAINNET.rawValue),
-//            BlockchainType.create(currencyID: BLOCKCHAIN_ETHEREUM.rawValue, netType: ETHEREUM_CHAIN_ID_RINKEBY.rawValue),
+            BlockchainType.create(currencyID: BLOCKCHAIN_ETHEREUM.rawValue, netType: UInt32(ETHEREUM_CHAIN_ID_MAINNET.rawValue)),
+            BlockchainType.create(currencyID: BLOCKCHAIN_ETHEREUM.rawValue, netType: UInt32(ETHEREUM_CHAIN_ID_RINKEBY.rawValue)),
         ]
         
         static let donationBlockchains = [
-            BlockchainType.create(currencyID: BLOCKCHAIN_ETHEREUM.rawValue,         netType: 0),
+//            BlockchainType.create(currencyID: BLOCKCHAIN_ETHEREUM.rawValue,         netType: UInt32(ETHEREUM_CHAIN_ID_MAINNET.rawValue)),
             BlockchainType.create(currencyID: BLOCKCHAIN_BITCOIN_LIGHTNING.rawValue,netType: 0),
             BlockchainType.create(currencyID: BLOCKCHAIN_GOLOS.rawValue,            netType: 0),
             BlockchainType.create(currencyID: BLOCKCHAIN_STEEM.rawValue,            netType: 0),
@@ -134,9 +134,12 @@ enum TxStatus : Int {
         BlockConfirmedOutcoming =   6
 }
 
+let minSatoshiInWalletForDonate: UInt64 = 10000 //10k minimun sum in wallet for available donation
+let minSatoshiToDonate: UInt64          = 5000  //5k minimum sum to donate
+
 //API REST constants
 //let apiUrl = "http://88.198.47.112:2278/"//"http://192.168.0.121:7778/"
-let shortURL = "stage.multy.io"
+let shortURL = "test.multy.io"
 let apiUrl = "https://\(shortURL)/"
 let socketUrl = "wss://\(shortURL)/"
 //let socketUrl = "http://88.198.47.112:2280"

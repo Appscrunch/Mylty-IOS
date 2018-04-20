@@ -52,7 +52,7 @@ class EthWalletViewController: UIViewController, AnalyticsProtocol, CancelProtoc
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateWalletAfterSockets), name: NSNotification.Name("transactionUpdated"), object: nil)
         self.tableView.addSubview(self.refreshControl)
         self.fixForX()
-        self.fixForPlus()
+//        self.fixForPlus()
         self.tableView.backgroundColor = #colorLiteral(red: 0.01194981113, green: 0.4769998789, blue: 0.9994105697, alpha: 1)
         self.tableView.bounces = false
         sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(presenter.wallet!.chain)", eventName: "\(screenWalletWithChain)\(presenter.wallet!.chain)")
@@ -242,7 +242,7 @@ class EthWalletViewController: UIViewController, AnalyticsProtocol, CancelProtoc
     
     @IBAction func sendAction(_ sender: Any) {
         if presenter.wallet!.availableAmount() == 0 {
-            self.presentAlert(with: "You have no available founds")
+            self.presentAlert(with: "You have no available funds")
             
             return
         }
@@ -353,7 +353,7 @@ extension EthWalletViewController: UITableViewDelegate, UITableViewDataSource {
             headerCell.mainVC = self
             headerCell.delegate = self
             headerCell.wallet = self.presenter.wallet
-            headerCell.blockedAmount = presenter.blockedAmount
+//            headerCell.blockedAmount = presenter.blockedAmount
             
             return headerCell
         } else {                           //  Wallet Cellx
@@ -379,6 +379,7 @@ extension EthWalletViewController: UITableViewDelegate, UITableViewDataSource {
                         walletCell.changeState(isEmpty: true)
                     } else {
                         walletCell.histObj = presenter.historyArray[indexPath.row - 1]
+                        walletCell.wallet = presenter.wallet!
                         walletCell.fillCell()
                         walletCell.changeState(isEmpty: false)
                         self.hideEmptyLbls()
@@ -416,10 +417,10 @@ extension EthWalletViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath == [0,0] {
-            presenter.topCellHeight = Constants.ETHWalletScreen.topCellHeight - (presenter.blockedAmount == 0 ? Constants.ETHWalletScreen.blockedCellDifference : 0)
+            presenter.topCellHeight = Constants.ETHWalletScreen.topCellHeight - (presenter.isTherePendingAmount ? Constants.ETHWalletScreen.blockedCellDifference : 0)
             
             backUpView(height: presenter.topCellHeight)
-            if presenter.blockedAmount == 0 {
+            if presenter.isTherePendingAmount {
                 setGradientBackground()
             }
             

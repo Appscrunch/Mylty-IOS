@@ -113,7 +113,7 @@ extension ExchangeStocksViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func logAnalytics(indexPath: IndexPath) {
-        //FIXME: add switch if here will be changing //see BlockchainsViewController
+        //FIXME: add switch if here will be changing // see AnalyticsConstants
         let eventCode = donationForBinanceStock + indexPath.row
         sendDonationAlertScreenPresentedAnalytics(code: eventCode)
     }

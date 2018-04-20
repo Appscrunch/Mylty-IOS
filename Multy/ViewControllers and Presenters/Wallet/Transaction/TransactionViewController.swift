@@ -92,53 +92,43 @@ class TransactionViewController: UIViewController, AnalyticsProtocol {
         //Receive
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm, d MMMM yyyy"
-        
         let cryptoSumInBTC = UInt64(truncating: presenter.histObj.txOutAmount).btcValue
-        
         if presenter.histObj.txStatus.intValue == TxStatus.MempoolIncoming.rawValue ||
             presenter.histObj.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
             self.dateLbl.text = dateFormatter.string(from: presenter.histObj.mempoolTime)
         } else {
             self.dateLbl.text = dateFormatter.string(from: presenter.histObj.blockTime)
         }
-        
         self.noteLbl.text = "" // NOTE FROM HIST OBJ
         self.constraintNoteFiatSum.constant = 10
-        
         let arrOfInputsAddresses = presenter.histObj.txInputs.map{ $0.address }.joined(separator: "\n")   // top address lbl
-        
 //        self.transactionCurencyLbl.text = presenter.histObj.     // check currencyID
         self.walletFromAddressLbl.text = arrOfInputsAddresses
         self.personNameLbl.text = ""   // before we don`t have address book    OR    Wallet Name
-        
         let arrOfOutputsAddresses = presenter.histObj.txOutputs.map{ $0.address }.joined(separator: "\n")
-        
         self.walletToAddressLbl.text = arrOfOutputsAddresses
-        
         self.numberOfConfirmationLbl.text = makeConfirmationText()
-        
+        self.blockchainImg.image = UIImage(named: presenter.blockchainType.iconString)
         if isIncoming {
             self.transctionSumLbl.text = "+\(cryptoSumInBTC.fixedFraction(digits: 8))"
-            self.sumInFiatLbl.text = "+\((cryptoSumInBTC * presenter.histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+            self.sumInFiatLbl.text = "+\((cryptoSumInBTC * presenter.histObj.fiatCourseExchange).fixedFraction(digits: 2)) USD"
         } else {
             let outgoingAmount = presenter.wallet.outgoingAmount(for: presenter.histObj).btcValue
             self.transctionSumLbl.text = "-\(outgoingAmount.fixedFraction(digits: 8))"
-            self.sumInFiatLbl.text = "-\((outgoingAmount * presenter.histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+            self.sumInFiatLbl.text = "-\((outgoingAmount * presenter.histObj.fiatCourseExchange).fixedFraction(digits: 2)) USD"
             
             if let donationAddress = arrOfOutputsAddresses.getDonationAddress(blockchainType: presenter.blockchainType) {
                 let donatOutPutObj = presenter.histObj.getDonationTxOutput(address: donationAddress)
                 if donatOutPutObj == nil {
                     return
                 }
-                
                 let btcDonation = (donatOutPutObj?.amount as! UInt64).btcValue
                 self.donationView.isHidden = false
                 self.constraintDonationHeight.constant = 283
                 self.donationCryptoSum.text = btcDonation.fixedFraction(digits: 8)
                 self.donationCryptoName.text = " BTC"
-                self.donationFiatSumAndName.text = "\((btcDonation * presenter.histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+                self.donationFiatSumAndName.text = "\((btcDonation * presenter.histObj.fiatCourseExchange).fixedFraction(digits: 2)) USD"
             }
-
         }
     }
     

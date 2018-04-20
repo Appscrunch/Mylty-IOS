@@ -16,6 +16,31 @@ extension BlockchainTypeEquatable: Equatable {
 // for every new blockchain entity we have to update all calculated properties:
 // iconString, shortName, fullName, qrBlockchainString
 extension BlockchainType {
+    var isMainnet: Bool {
+        switch self.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            switch UInt32(self.net_type) {
+            case BITCOIN_NET_TYPE_MAINNET.rawValue:
+                return true
+            case BITCOIN_NET_TYPE_TESTNET.rawValue:
+                return false
+            default:
+                return false
+            }
+        case BLOCKCHAIN_ETHEREUM:
+            switch Int32(self.net_type) {
+            case ETHEREUM_CHAIN_ID_MAINNET.rawValue:
+                return true
+            case ETHEREUM_CHAIN_ID_RINKEBY.rawValue:
+                return false
+            default:
+                return false
+            }
+        default:
+            return true
+        }
+    }
+    
     var iconString : String {
         var iconString = ""
         

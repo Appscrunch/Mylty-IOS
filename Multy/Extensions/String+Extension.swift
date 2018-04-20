@@ -122,7 +122,20 @@ extension String {
             modifiedString.append(delimeter: defaultDelimeter, atIndexFromEnd: index)
         }
         
+        modifiedString.deletetTrailingZeroes()
+        
         return modifiedString
+    }
+    
+    mutating func deletetTrailingZeroes() {
+        let stringParts = self.components(separatedBy: "\(defaultDelimeter)")
+        var fractionString = stringParts[1]
+        
+        while fractionString.last == "0" && fractionString.count > 1 {
+            fractionString.removeLast()
+        }
+        
+        self = stringParts[0] + "\(defaultDelimeter)" + fractionString
     }
     
     func convertToSatoshiAmountString() -> String {

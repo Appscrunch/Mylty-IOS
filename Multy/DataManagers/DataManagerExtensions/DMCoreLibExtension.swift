@@ -62,11 +62,17 @@ extension DataManager {
                                                                          feePerByteAmount: "\(transactionDTO.transaction!.customFee!)",
                                                                          isDonationExists: false,
                                                                          donationAmount: "0",
-                                                                         isPayCommission: true,
+                                                                         isPayCommission: false,
                                                                          wallet: transactionDTO.choosenWallet!,
                                                                          binaryData: &binaryData,
                                                                          inputs: transactionDTO.choosenWallet!.addresses)
         
+        if trData.1 < 0 {
+            completion(trData.0, NSError(domain: "", code: 400, userInfo: nil))
+            
+            return
+        }
+
         let newAddressParams = [
             "walletindex"   : wallet.walletID.intValue,
             "address"       : addressData!["address"] as! String,
@@ -106,7 +112,7 @@ extension DataManager {
         let _ = self.coreLibManager.createEtherTransaction(addressPointer: addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>,
                                                            sendAddress: sendAddress,
                                                            sendAmountString: sendAmountString,
-                                                           nonce: wallet.ethWallet.nonce.intValue,
+                                                           nonce: wallet.ethWallet!.nonce.intValue,
                                                            balanceAmount: "\(wallet.availableAmount())",
                                                            ethereumChainID: UInt32(4), //RINKEBY
                                                            gasPrice: gasPriceString,

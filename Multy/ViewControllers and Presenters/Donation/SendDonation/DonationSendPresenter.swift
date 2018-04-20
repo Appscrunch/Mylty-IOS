@@ -81,8 +81,17 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
         transaction.sendAmount = self.mainVC?.donationTF.text?.convertStringWithCommaToDouble()
         transaction.transaction?.customFee = self.customFee
         
-        DataManager.shared.createAndSendDonationTransaction(transactionDTO: transaction) { (answer, err) in
-            self.mainVC?.progressHud.hide()
+        DataManager.shared.createAndSendDonationTransaction(transactionDTO: transaction) { [unowned self] (answer, err) in
+            self.mainVC?.progressHud.unblockUIandHideProgressHUD()
+            
+            if err != nil {
+                if answer != nil {
+                    self.mainVC?.presentAlert(with: answer)
+                }
+                
+                return
+            }
+            
             self.mainVC?.view.isUserInteractionEnabled = true
             if err != nil {
                 let alert = UIAlertController(title: "Error", message: err.debugDescription, preferredStyle: .alert)
@@ -91,6 +100,11 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
                 return
             } else {
                 self.mainVC!.sendDonationSuccessAnalytics()
+            }
+            
+            if transaction.sendAmount! < minSatoshiToDonate.btcValue {
+                self.mainVC!.presentWarning(message: "Too low donation amount")
+                return
             }
             
             let storyboard = UIStoryboard(name: "Send", bundle: nil)

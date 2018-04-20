@@ -88,7 +88,7 @@ class SendAmountPresenter: NSObject {
             let trData = DataManager.shared.coreLibManager.createEtherTransaction(addressPointer: addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>,
                                                                                   sendAddress: transactionDTO.sendAddress!,
                                                                                   sendAmountString: self.sumInCrypto.fixedFraction(digits: 18),
-                                                                                  nonce: transactionDTO.choosenWallet!.ethWallet.nonce.intValue,
+                                                                                  nonce: transactionDTO.choosenWallet!.ethWallet!.nonce.intValue,
                                                                                   balanceAmount: "\(transactionDTO.choosenWallet?.availableAmount())",
                                                                                   ethereumChainID: BLOCKCHAIN_ETHEREUM.rawValue,
                                                                                   gasPrice: "\(transactionDTO.transaction?.customGAS?.gasPrice ?? 0)",

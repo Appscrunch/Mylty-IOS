@@ -8,4 +8,8 @@ extension _BigInt {
     var btcString: String {
         return self.toString().appendDelimeter(at: 8)
     }
+    
+    var ethString: String {
+        return self.toString().appendDelimeter(at: 18)
+    }
 }

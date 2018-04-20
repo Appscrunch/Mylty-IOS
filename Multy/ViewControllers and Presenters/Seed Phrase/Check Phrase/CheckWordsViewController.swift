@@ -122,8 +122,15 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
         
         if !self.wordTF.text!.isEmpty {
             self.presenter.phraseArr.append(wordArray.first!)
-            self.wordTF.text = ""
             self.nextWordOrContinue.setTitle("Next Word", for: .normal)
+            
+            wordTF.text = wordArray.first!
+            nextWordOrContinue.isUserInteractionEnabled = false
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [unowned self] in
+                self.wordTF.text = ""
+                self.nextWordOrContinue.isUserInteractionEnabled = true
+            }
         } else {
             return
         }

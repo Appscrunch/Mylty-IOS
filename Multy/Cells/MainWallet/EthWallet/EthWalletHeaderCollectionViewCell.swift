@@ -32,12 +32,11 @@ class EthWalletHeaderCollectionViewCell: UICollectionViewCell {
     }
 
     func fillInCell() {
-        let sumInFiat = wallet!.sumInFiat.fixedFraction(digits: 2)
-        self.cryptoAmountLabel.text = "\(wallet?.sumInCrypto.fixedFraction(digits: 8) ?? "0.0")"
+        self.cryptoAmountLabel.text = wallet?.sumInCryptoString
         let blockchain = BlockchainType.create(wallet: wallet!)
         //MARK: temporary code
         self.cryptoNameLabel.text = blockchain.shortName //"\(wallet?.cryptoName ?? "")"
-        self.fiatAmountLabel.text = sumInFiat
+        self.fiatAmountLabel.text = wallet?.sumInFiatString
         self.fiatNameLabel.text = "\(wallet?.fiatName ?? "")"
         self.addressLabel.text = "\(wallet?.address ?? "")"
         
@@ -74,4 +73,16 @@ class EthWalletHeaderCollectionViewCell: UICollectionViewCell {
             lockedFiatAmountLabel.text = availableFiatAmount.fixedFraction(digits: 2)
         }
     }
+    
+    @IBAction func showAddressAction(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
+        let adressVC = storyboard.instantiateViewController(withIdentifier: "walletAdressVC") as! AddressViewController
+        adressVC.modalPresentationStyle = .overCurrentContext
+        adressVC.modalTransitionStyle = .crossDissolve
+        adressVC.wallet = self.wallet
+        //        self.mainVC.present
+        self.mainVC?.present(adressVC, animated: true, completion: nil)
+//        sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(wallet!.chain)", eventName: "\(addressWithChainTap)\(wallet!.chain)")
+    }
+    
 }

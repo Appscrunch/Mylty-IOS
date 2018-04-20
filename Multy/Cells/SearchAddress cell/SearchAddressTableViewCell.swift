@@ -11,11 +11,13 @@ class SearchAddressTableViewCell: UITableViewCell, AnalyticsProtocol {
     @IBOutlet weak var addressTV: UITextView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var botView: UIView!
+    @IBOutlet weak var placeholderLabel: UILabel!
     
     var cancelDelegate: CancelProtocol?
     var sendAddressDelegate: SendAddressProtocol?
     var goToQrDelegate: GoToQrProtocol?
     var donationDelegate: DonationProtocol?
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,6 +31,15 @@ class SearchAddressTableViewCell: UITableViewCell, AnalyticsProtocol {
         super.setSelected(selected, animated: animated)
     }
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            placeholderLabel.isHidden = !placeholderLabel.isHidden
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
+    }
     
     func setupShadow() {
         let myColor = #colorLiteral(red: 0.6509803922, green: 0.6941176471, blue: 0.7764705882, alpha: 1)

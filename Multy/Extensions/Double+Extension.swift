@@ -15,4 +15,8 @@ extension Double {
         
         return formatter.string(from: NSNumber(floatLiteral: self))!
     }
+    
+    var satoshiValue: UInt64 {
+        return UInt64(self * pow(10, 8))
+    }
 }

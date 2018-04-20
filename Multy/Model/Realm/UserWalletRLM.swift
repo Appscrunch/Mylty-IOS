@@ -21,15 +21,48 @@ class UserWalletRLM: Object {
     @objc dynamic var cryptoName = String()  //like BTC
     @objc dynamic var sumInCrypto: Double = 0.0
     
+    var sumInCryptoString: String {
+        get {
+            switch blockchain.blockchain {
+            case BLOCKCHAIN_BITCOIN:
+                return sumInCrypto.fixedFraction(digits: 8)
+            case BLOCKCHAIN_ETHEREUM:
+                return ethWallet!.balance.appendDelimeter(at: 18)
+            default:
+                return ""
+            }
+        }
+    }
+    
+    var blockchain: BlockchainType {
+        get {
+            return BlockchainType.create(wallet: self)
+        }
+    }
+    
     var availableSumInCrypto: Double {
         get {
-            return availableAmount().btcValue
+            if self.blockchain.blockchain == BLOCKCHAIN_BITCOIN {
+                return availableAmount().btcValue
+            } else {
+                return 0
+            }
         }
     }
     
     var sumInFiat: Double {
         get {
-            return sumInCrypto * exchangeCourse
+            if self.blockchain.blockchain == BLOCKCHAIN_BITCOIN {
+                return sumInCrypto * exchangeCourse
+            } else {
+                return Double(ethWallet!.balance.appendDelimeter(at: 18).replacingOccurrences(of: ",", with: "."))! * exchangeCourse
+            }
+        }
+    }
+    
+    var sumInFiatString: String {
+        get {
+            return sumInFiat.fixedFraction(digits: 2)
         }
     }
     
@@ -42,12 +75,12 @@ class UserWalletRLM: Object {
     
     @objc dynamic var isTherePendingTx = NSNumber(value: 0)
     
-    var ethWallet = ETHWallet()
-    var btcWallet = BTCWallet()
+    @objc dynamic var ethWallet: ETHWallet?
+    @objc dynamic var btcWallet: BTCWallet?
         
     var exchangeCourse: Double {
         get {
-            return DataManager.shared.makeExchangeFor(blockchainType: BlockchainType.create(wallet: self))
+            return DataManager.shared.makeExchangeFor(blockchainType: blockchain)
         }
     }
     
@@ -80,6 +113,8 @@ class UserWalletRLM: Object {
     
     public class func initWithInfo(walletInfo: NSDictionary) -> UserWalletRLM {
         let wallet = UserWalletRLM()
+        wallet.ethWallet = ETHWallet()
+        wallet.btcWallet = BTCWallet()
         
         if let chain = walletInfo["currencyid"]  {
             wallet.chain = NSNumber(value: chain as! UInt32)
@@ -214,17 +249,22 @@ class UserWalletRLM: Object {
     }
     
     func outgoingAmount(for transaction: HistoryRLM) -> UInt64 {
-        var sum = UInt64(0)
+        var allSum = UInt64(0)
+        var ourSum = UInt64(0)
+        
+        for tx in transaction.txInputs {
+            allSum += tx.amount.uint64Value
+        }
         
         let addresses = self.fetchAddresses()
         
         for tx in transaction.txOutputs {
-            if !addresses.contains(tx.address) {
-                sum += tx.amount.uint64Value
+            if addresses.contains(tx.address) {
+                ourSum += tx.amount.uint64Value
             }
         }
         
-        return sum
+        return allSum - ourSum
     }
     
     func isTransactionPending(for transaction: HistoryRLM) -> Bool {
@@ -304,8 +344,17 @@ extension WalletUpdateRLM {
     }
     
     func updateETHWallet(from infoDict: NSDictionary) {
+        if let balance = infoDict["balance"] as? String {
+            self.ethWallet = ETHWallet()
+            self.ethWallet!.balance = balance
+        }
+        
         if let nonce = infoDict["nonce"] as? NSNumber {
-            self.ethWallet.nonce = nonce
+            self.ethWallet?.nonce = nonce
+        }
+        
+        if let pendingBalance = infoDict["pendingbalance"] as? String {
+            self.ethWallet!.pendingWeiAmountString = pendingBalance
         }
     }
 }

@@ -205,6 +205,14 @@ class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtoco
         self.navigationController?.pushViewController(secureSettingsVC, animated: true)
     }
     
+    @IBAction func privacyAndTermsAction(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let webTextPage = storyboard.instantiateViewController(withIdentifier: "webText") as! WebTextPageViewController
+        webTextPage.tagForLoad = sender.tag
+        self.navigationController?.pushViewController(webTextPage, animated: true)
+    }
+    
+    
     func appVersion() -> String {
         return infoDictionary["CFBundleShortVersionString"] as! String
     }

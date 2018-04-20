@@ -53,7 +53,8 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
         
         
         self.setupUI()
-        sendAnalyticsEvent(screenName: "\(screenSendSummaryWithChain)\(presenter.transactionDTO.choosenWallet!.chain)", eventName: "\(screenSendSummaryWithChain)\(presenter.transactionDTO.choosenWallet!.chain)")
+        sendAnalyticsEvent(screenName: "\(screenSendSummaryWithChain)\(presenter.transactionDTO.choosenWallet!.chain)",
+                            eventName: "\(screenSendSummaryWithChain)\(presenter.transactionDTO.choosenWallet!.chain)")
     }
     
     override func viewDidLayoutSubviews() {

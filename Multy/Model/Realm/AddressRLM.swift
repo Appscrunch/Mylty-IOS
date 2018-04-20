@@ -12,6 +12,7 @@ class AddressRLM: Object {
     
     @objc dynamic var address = String()                //Double
     @objc dynamic var amount = NSNumber(value: 0)       //UInt32
+    @objc dynamic var amountString = String()           //String
     @objc dynamic var lastActionDate = Date()
     
     var spendableOutput = List<SpendableOutputRLM>()
@@ -51,7 +52,11 @@ class AddressRLM: Object {
         }
         
         if let amount = addressInfo["amount"] {
-            addressRLM.amount = /*NSNumber(value:*/ amount as! NSNumber /*as! UInt32)*/
+            if let amount = amount as? NSNumber {
+                addressRLM.amount = amount
+            } else if let amountString = amount as? String {
+                addressRLM.amountString = amountString
+            }
         }
         
         if let spendableOutputs = addressInfo["spendableoutputs"] {

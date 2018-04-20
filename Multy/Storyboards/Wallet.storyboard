@@ -466,7 +466,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ssb-nB-rPb">
                                         <rect key="frame" x="16" y="596" width="343" height="283"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="donationIcon" translatesAutoresizingMaskIntoConstraints="NO" id="ReI-wC-20S">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="donation_icon" translatesAutoresizingMaskIntoConstraints="NO" id="ReI-wC-20S">
                                                 <rect key="frame" x="122.5" y="19" width="98" height="78"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="98" id="FCy-Vl-UJk"/>
@@ -1438,7 +1438,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap the button to create funds request." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHJ-KF-fDv">
-                                <rect key="frame" x="123.5" y="481" width="129" height="80"/>
+                                <rect key="frame" x="123.5" y="466" width="129" height="80"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="129" id="GpJ-8C-tkX"/>
                                     <constraint firstAttribute="height" constant="80" id="Nw7-Ja-CqC"/>
@@ -1447,8 +1447,8 @@ By donating you help us to bring blockchain technology one step closer to ordina
                                 <color key="textColor" red="0.31764705879999999" green="0.40784313729999999" blue="0.4549019608" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any transactions." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkK-EA-P5D">
-                                <rect key="frame" x="112.5" y="410" width="150" height="56"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any transactions." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IkK-EA-P5D">
+                                <rect key="frame" x="112.5" y="395" width="150" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="aWl-5e-GGx"/>
                                     <constraint firstAttribute="width" constant="150" id="aug-tD-hmh"/>
@@ -1458,7 +1458,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow" translatesAutoresizingMaskIntoConstraints="NO" id="cP6-LR-AGP">
-                                <rect key="frame" x="180.5" y="577" width="14" height="20"/>
+                                <rect key="frame" x="180.5" y="562" width="14" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="XKk-Qp-YPn"/>
                                     <constraint firstAttribute="width" constant="14" id="gy9-6h-wlj"/>
@@ -1613,7 +1613,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
                             <constraint firstItem="cP6-LR-AGP" firstAttribute="top" secondItem="xHJ-KF-fDv" secondAttribute="bottom" constant="16" id="Gx7-D2-UGs"/>
                             <constraint firstItem="FBs-ps-h3P" firstAttribute="leading" secondItem="ZLB-qZ-NPr" secondAttribute="leading" id="I6R-fb-UAb"/>
                             <constraint firstItem="l3R-2J-VZZ" firstAttribute="top" secondItem="n6F-QX-YIO" secondAttribute="top" constant="30" id="JuV-hY-Urq"/>
-                            <constraint firstItem="twS-VN-mmh" firstAttribute="top" secondItem="cP6-LR-AGP" secondAttribute="bottom" constant="15" id="QKo-tI-jQa"/>
+                            <constraint firstItem="twS-VN-mmh" firstAttribute="top" secondItem="cP6-LR-AGP" secondAttribute="bottom" constant="30" id="QKo-tI-jQa"/>
                             <constraint firstItem="cP6-LR-AGP" firstAttribute="centerX" secondItem="twS-VN-mmh" secondAttribute="centerX" id="QO9-Vk-tid"/>
                             <constraint firstAttribute="bottom" secondItem="twS-VN-mmh" secondAttribute="bottom" id="Qwc-RN-I88"/>
                             <constraint firstAttribute="trailing" secondItem="FBs-ps-h3P" secondAttribute="trailing" id="Vsc-O5-aWe"/>
@@ -1657,6 +1657,7 @@ By donating you help us to bring blockchain technology one step closer to ordina
         <image name="backGrey" width="13" height="21"/>
         <image name="chevron" width="15" height="22"/>
         <image name="donationIcon" width="30" height="35"/>
+        <image name="donation_icon" width="98" height="78"/>
         <image name="recieveBig" width="66" height="66"/>
         <image name="recieveIconTabbar" width="19" height="23"/>
         <image name="sendIconTabbar" width="26" height="26"/>

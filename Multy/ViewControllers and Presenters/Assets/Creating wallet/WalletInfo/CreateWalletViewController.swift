@@ -151,7 +151,7 @@ extension TableViewDataSource: UITableViewDataSource {
         let cell2 = blockchainCell == nil ? self.tableView.dequeueReusableCell(withIdentifier: "cell2") as! CreateWalletBlockchainTableViewCell : blockchainCell!
         cell2.blockchainLabel.text = presenter.selectedBlockchainType.fullName + " ∙ " + presenter.selectedBlockchainType.shortName
         
-        if presenter.selectedBlockchainType.net_type != 0 {
+        if presenter.selectedBlockchainType.isMainnet == false {
             cell2.blockchainLabel.text! += "  Testnet"
         }
         

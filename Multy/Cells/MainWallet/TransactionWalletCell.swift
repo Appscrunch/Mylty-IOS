@@ -30,11 +30,6 @@ class TransactionWalletCell: UITableViewCell {
     }
     
     public func fillCell() {
-        if histObj.txInputs.count == 0 {
-            return
-        }
-        let dateFormatter = Date.defaultGMTDateFormatter()
-        
         if histObj.txStatus.intValue == TxStatus.MempoolIncoming.rawValue ||
             histObj.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
             self.transactionImage.image = #imageLiteral(resourceName: "pending")
@@ -63,11 +58,7 @@ class TransactionWalletCell: UITableViewCell {
             self.cryptoAmountLabel.textColor = .black
         }
         
-        if histObj.isIncoming() {
-            self.addressLabel.text = histObj.txInputs[0].address
-        } else {
-            self.addressLabel.text = histObj.txOutputs[0].address
-        }
+        let dateFormatter = Date.defaultGMTDateFormatter()
         
         if histObj.txStatus.intValue < 0 /* rejected tx*/ {
             self.timeLabel.text = "Unable to send transaction"
@@ -75,15 +66,51 @@ class TransactionWalletCell: UITableViewCell {
             self.timeLabel.text = dateFormatter.string(from: histObj.blockTime)
         }
         
+        switch wallet.blockchain.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            fillBitcoinCell()
+        case BLOCKCHAIN_ETHEREUM:
+            fillEthereumCell()
+        default:
+            return
+        }
+    }
+    
+    func fillEthereumCell() {
+        if histObj.isIncoming() {
+            self.addressLabel.text = histObj.addressesArray.last
+        } else {
+            self.addressLabel.text = histObj.addressesArray.first
+        }
+        
+        
+        // FIXME: BIG INT
+        let ethAmountString = histObj.txAmount(for: BlockchainType.create(wallet: wallet).blockchain)
+        self.cryptoAmountLabel.text = ethAmountString + " " + wallet.cryptoName
+        let fiatAmountString = (Double(ethAmountString.replacingOccurrences(of: ",", with: "."))! * histObj.fiatCourseExchange).fixedFraction(digits: 2)
+        self.fiatAmountLabel.text = fiatAmountString  + " " + wallet.fiatName
+    }
+    
+    func fillBitcoinCell() {
+        if histObj.txInputs.count == 0 {
+            return
+        }
+        
+        if histObj.isIncoming() {
+            self.addressLabel.text = histObj.txInputs[0].address
+        } else {
+            self.addressLabel.text = histObj.txOutputs[0].address
+        }
+        
         if histObj.txStatus.intValue == TxStatus.BlockOutcoming.rawValue ||
-        histObj.txStatus.intValue == TxStatus.BlockConfirmedOutcoming.rawValue {
+            histObj.txStatus.intValue == TxStatus.BlockConfirmedOutcoming.rawValue {
             let outgoingAmount = wallet.outgoingAmount(for: histObj).btcValue
             
-            self.cryptoAmountLabel.text = "\(outgoingAmount.fixedFraction(digits: 8)) BTC"
-            self.fiatAmountLabel.text = "\((outgoingAmount * histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+            self.cryptoAmountLabel.text = "\(outgoingAmount.fixedFraction(digits: 8)) \(wallet.cryptoName)"
+            self.fiatAmountLabel.text = "\((outgoingAmount * histObj.fiatCourseExchange).fixedFraction(digits: 2)) \(wallet.fiatName)"
         } else {
-            self.cryptoAmountLabel.text = "\(histObj.txOutAmount.uint64Value.btcValue.fixedFraction(digits: 8)) BTC"
-            self.fiatAmountLabel.text = "\((histObj.txOutAmount.uint64Value.btcValue * histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+            self.cryptoAmountLabel.text = "\(histObj.txOutAmount.uint64Value.btcValue.fixedFraction(digits: 8)) \(wallet.cryptoName)"
+            self.fiatAmountLabel.text = "\((histObj.txOutAmount.uint64Value.btcValue * histObj.fiatCourseExchange).fixedFraction(digits: 2)) \(wallet.fiatName)"
         }
     }
     

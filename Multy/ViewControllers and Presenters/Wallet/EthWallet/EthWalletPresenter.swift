@@ -9,12 +9,12 @@ class EthWalletPresenter: NSObject {
     
     var topCellHeight = CGFloat(0)
     
-    var blockedAmount = UInt64(0)
+    var isTherePendingAmount = false
     var wallet : UserWalletRLM? {
         didSet {
             mainVC?.titleLbl.text = self.wallet?.name
             mainVC?.tableView.reloadRows(at: [[0, 0]], with: .none)
-            blockedAmount = wallet!.calculateBlockedAmount()
+            isTherePendingAmount = wallet!.ethWallet?.pendingETHAmountString != "0"
         }
     }
     var account : AccountRLM?
@@ -67,7 +67,9 @@ class EthWalletPresenter: NSObject {
     }
     
     func isTherePendingMoney(for indexPath: IndexPath) -> Bool {
-        return wallet!.blockedAmount(for: historyArray[indexPath.row - 1]) > 0
+        let transaction = historyArray[indexPath.row - 1]
+        
+        return transaction.txStatus.intValue == TxStatus.MempoolIncoming.rawValue
     }
     
     func getNumberOfPendingTransactions() -> Int {
