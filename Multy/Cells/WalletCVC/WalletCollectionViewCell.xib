@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="WalletCollectionViewCell" customModule="Multy" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="242" height="104"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="242" height="104"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6aR-Cn-oio">
+                        <rect key="frame" x="0.0" y="0.0" width="242" height="104"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g3f-3y-TYF" userLabel="View For Shadow">
+                                <rect key="frame" x="25" y="20" width="192" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rKe-IG-8nC" userLabel="Back View">
+                                <rect key="frame" x="16" y="6" width="210" height="92"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC ∙ Personal" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Cz-e3-hvb">
+                                        <rect key="frame" x="58" y="10.5" width="104.5" height="22"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s8t-EB-2YW">
+                                        <rect key="frame" x="130" y="33" width="38" height="28"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 233 $" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u9z-dp-Kig">
+                                        <rect key="frame" x="58" y="60.5" width="51" height="21"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
+                                        <color key="textColor" red="0.52941176469999995" green="0.63137254899999995" blue="0.7725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.1234" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aqq-Qn-XWQ">
+                                        <rect key="frame" x="58" y="32.5" width="67" height="28"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btcMediumIcon" translatesAutoresizingMaskIntoConstraints="NO" id="f2u-58-p3M">
+                                        <rect key="frame" x="12" y="30" width="33" height="33"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="f2u-58-p3M" secondAttribute="height" multiplier="1:1" id="D4V-5e-v7X"/>
+                                            <constraint firstAttribute="width" constant="33" id="Kii-TG-chN"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <bool key="isElement" value="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstItem="u9z-dp-Kig" firstAttribute="leading" secondItem="Aqq-Qn-XWQ" secondAttribute="leading" id="2zJ-aB-L1p"/>
+                                    <constraint firstItem="u9z-dp-Kig" firstAttribute="top" secondItem="Aqq-Qn-XWQ" secondAttribute="bottom" id="D4c-Es-bd4"/>
+                                    <constraint firstItem="1Cz-e3-hvb" firstAttribute="leading" secondItem="f2u-58-p3M" secondAttribute="trailing" constant="13" id="FOz-Ec-eqe"/>
+                                    <constraint firstItem="f2u-58-p3M" firstAttribute="centerY" secondItem="rKe-IG-8nC" secondAttribute="centerY" id="IGu-rS-PLx"/>
+                                    <constraint firstItem="Aqq-Qn-XWQ" firstAttribute="top" secondItem="1Cz-e3-hvb" secondAttribute="bottom" id="IZe-Tw-KCu"/>
+                                    <constraint firstItem="f2u-58-p3M" firstAttribute="leading" secondItem="rKe-IG-8nC" secondAttribute="leading" constant="12" id="MIX-Iu-u1J"/>
+                                    <constraint firstItem="Aqq-Qn-XWQ" firstAttribute="leading" secondItem="1Cz-e3-hvb" secondAttribute="leading" id="RbE-kL-VFQ"/>
+                                    <constraint firstItem="s8t-EB-2YW" firstAttribute="centerY" secondItem="Aqq-Qn-XWQ" secondAttribute="centerY" id="Rqu-Zw-OwK"/>
+                                    <constraint firstItem="s8t-EB-2YW" firstAttribute="leading" secondItem="Aqq-Qn-XWQ" secondAttribute="trailing" constant="5" id="V05-BM-1nR"/>
+                                    <constraint firstAttribute="width" constant="210" id="r8Y-hi-V0j"/>
+                                    <constraint firstItem="Aqq-Qn-XWQ" firstAttribute="centerY" secondItem="rKe-IG-8nC" secondAttribute="centerY" id="yHe-Yt-90G"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <accessibility key="accessibilityConfiguration">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
+                        <constraints>
+                            <constraint firstItem="g3f-3y-TYF" firstAttribute="trailing" secondItem="rKe-IG-8nC" secondAttribute="trailing" constant="-9" id="7KF-ct-SbE"/>
+                            <constraint firstItem="rKe-IG-8nC" firstAttribute="centerX" secondItem="6aR-Cn-oio" secondAttribute="centerX" id="DUD-Yn-hee"/>
+                            <constraint firstItem="g3f-3y-TYF" firstAttribute="leading" secondItem="rKe-IG-8nC" secondAttribute="leading" constant="9" id="Dwc-vY-ML9"/>
+                            <constraint firstAttribute="bottom" secondItem="rKe-IG-8nC" secondAttribute="bottom" constant="6" id="GNp-dS-cRg"/>
+                            <constraint firstItem="g3f-3y-TYF" firstAttribute="top" secondItem="rKe-IG-8nC" secondAttribute="top" constant="14" id="J8N-nt-yNR"/>
+                            <constraint firstItem="rKe-IG-8nC" firstAttribute="top" secondItem="6aR-Cn-oio" secondAttribute="top" constant="6" id="bAz-l4-fgw"/>
+                            <constraint firstItem="g3f-3y-TYF" firstAttribute="bottom" secondItem="rKe-IG-8nC" secondAttribute="bottom" constant="-14" id="okR-Ad-Ddh"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="6aR-Cn-oio" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1Iw-Oa-iFD"/>
+                <constraint firstItem="6aR-Cn-oio" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="5J3-wU-aoP"/>
+                <constraint firstAttribute="bottom" secondItem="6aR-Cn-oio" secondAttribute="bottom" id="MWa-fR-hFL"/>
+                <constraint firstAttribute="trailing" secondItem="6aR-Cn-oio" secondAttribute="trailing" id="o2t-an-iKF"/>
+            </constraints>
+            <connections>
+                <outlet property="backView" destination="rKe-IG-8nC" id="uCC-Ae-DgZ"/>
+                <outlet property="cryptoNameLbl" destination="s8t-EB-2YW" id="TUy-IV-5g3"/>
+                <outlet property="cryptoSumLbl" destination="Aqq-Qn-XWQ" id="fFc-64-yHi"/>
+                <outlet property="fiatSumLbl" destination="u9z-dp-Kig" id="C1y-rZ-gRU"/>
+                <outlet property="tokenImage" destination="f2u-58-p3M" id="x86-fc-QgE"/>
+                <outlet property="viewForShadow" destination="g3f-3y-TYF" id="kbf-O7-E7u"/>
+                <outlet property="walletNameLbl" destination="1Cz-e3-hvb" id="NDy-SR-xoA"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="btcMediumIcon" width="39" height="39"/>
+    </resources>
+</document>

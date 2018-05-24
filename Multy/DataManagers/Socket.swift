@@ -10,7 +10,6 @@ class Socket: NSObject {
     static let shared = Socket()
     var manager : SocketManager
     var socket : SocketIOClient
-
     
     //do exp timeout
     
@@ -76,6 +75,7 @@ class Socket: NSObject {
                 ack.with("Got your currentAmount", "dude")
             }
             
+            
             self.socket.connect()
         }
     }
@@ -88,6 +88,50 @@ class Socket: NSObject {
 //            print("\n\n\n\n\n\n\n")
 //            print(data)
 //            print("\n\n\n\n\n\n\n")
+        }
+    }
+    
+    func becomeReceiver(receiverID : String, userCode : String, currencyID : Int, networkID : Int, address : String, amount : String) {
+        socket.emitWithAck("event:receiver:on", with: [["userid" : receiverID, "usercode" : userCode, "currencyid" : currencyID, "networkid" : networkID, "address" : address,"amount" : amount ]]).timingOut(after: 1) { data in
+            print(data)
+            
+//            self.socket.on("event:payment:send") { (data, ack) in
+//                if data.first != nil {
+//                    let dataDict = data.first! as! Dictionary<String, AnyObject>
+//                    let senderID = dataDict["from_id"] as! String
+//                    let receiverID = dataDict["to_id"] as! String
+//                    let currencyID = dataDict["currency_id"] as! UInt32
+//                    let amount = dataDict["amount"] as! UInt32
+//
+//                    let payment = Payment.init(senderID: senderID, receiverID: receiverID, currencyID: currencyID, amount: amount)
+//
+//                    if self.delegate != nil {
+//                        self.delegate!.didReceivePayment(payment: payment)
+//                    }
+//                }
+//            }
+        }
+    }
+    
+    func becomeSender(nearIDs : String) {
+        socket.emitWithAck("event:receiver:on", with: [["nearIDs" : nearIDs]]).timingOut(after: 1) { data in
+            print(data)
+            
+//            self.socket.on("event:payment:send") { (data, ack) in
+//                if data.first != nil {
+//                    let dataDict = data.first! as! Dictionary<String, AnyObject>
+//                    let senderID = dataDict["from_id"] as! String
+//                    let receiverID = dataDict["to_id"] as! String
+//                    let currencyID = dataDict["currency_id"] as! UInt32
+//                    let amount = dataDict["amount"] as! UInt32
+//
+//                    let payment = Payment.init(senderID: senderID, receiverID: receiverID, currencyID: currencyID, amount: amount)
+//
+//                    if self.delegate != nil {
+//                        self.delegate!.didReceivePayment(payment: payment)
+//                    }
+//                }
+//            }
         }
     }
 }

@@ -25,8 +25,9 @@ target 'Multy' do
   pod 'Crashlytics'
   pod 'Branch'
   pod 'SwiftyStoreKit'
-  
-#  pod 'BiometricAuthentication'
+  pod 'lottie-ios'
+  pod 'UPCarouselFlowLayout'
+
 
   target 'MultyTests' do
       inherit! :search_paths

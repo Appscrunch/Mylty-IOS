@@ -205,6 +205,17 @@
 		45F8CD47208F391B00DEB495 /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8CD46208F391B00DEB495 /* TermsOfServiceViewController.swift */; };
 		45F8CD49208F393C00DEB495 /* TermsOfServicePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F8CD48208F393C00DEB495 /* TermsOfServicePresenter.swift */; };
 		50D1AA3CFDA9BDFA53D3B9D0 /* Pods_MultyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0FFD5D1BF6159BB241CBFF9 /* Pods_MultyTests.framework */; };
+		85741D8520B45E8B0093933B /* circle_grow.json in Resources */ = {isa = PBXBuildFile; fileRef = 85741D8420B45E8A0093933B /* circle_grow.json */; };
+		85741D8720B555DB0093933B /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85741D8620B555DB0093933B /* BLEManager.swift */; };
+		85741D8920B55A660093933B /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85741D8820B55A650093933B /* CoreBluetooth.framework */; };
+		85DE62DD20AB002000423D89 /* SendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DE62DC20AB002000423D89 /* SendViewController.swift */; };
+		85DE62DF20AB003A00423D89 /* SendPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DE62DE20AB003A00423D89 /* SendPresenter.swift */; };
+		85DE62E320AB077B00423D89 /* WalletCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DE62E120AB077B00423D89 /* WalletCollectionViewCell.swift */; };
+		85DE62E420AB077B00423D89 /* WalletCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85DE62E220AB077B00423D89 /* WalletCollectionViewCell.xib */; };
+		85DE62E820AC1CE100423D89 /* ActiveRequestCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DE62E620AC1CE100423D89 /* ActiveRequestCollectionViewCell.swift */; };
+		85DE62E920AC1CE100423D89 /* ActiveRequestCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85DE62E720AC1CE100423D89 /* ActiveRequestCollectionViewCell.xib */; };
+		85DE62ED20AC4E4C00423D89 /* PaymentRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85DE62EC20AC4E4C00423D89 /* PaymentRequest.swift */; };
+		85DE62F320AF188B00423D89 /* Check Mark Success Data.json in Resources */ = {isa = PBXBuildFile; fileRef = 85DE62F220AF188B00423D89 /* Check Mark Success Data.json */; };
 		BA3449F966752EDDC53A2B0D /* Pods_Multy_MultyUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 572DB9D15F9362827245CF67 /* Pods_Multy_MultyUITests.framework */; };
 		FA0B618D1FEBC1DD00ED0CE6 /* RecentAddressesRLM.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B618C1FEBC1DD00ED0CE6 /* RecentAddressesRLM.swift */; };
 		FA4125DF2004C0FD00DF9AC3 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4125DE2004C0FD00DF9AC3 /* libstdc++.tbd */; };
@@ -505,6 +516,17 @@
 		572DB9D15F9362827245CF67 /* Pods_Multy_MultyUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Multy_MultyUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		647A035491B0F1BEBEB72A55 /* Pods-MultyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MultyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MultyTests/Pods-MultyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7304C17824311A19240183E0 /* Pods_Multy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Multy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85741D8420B45E8A0093933B /* circle_grow.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = circle_grow.json; sourceTree = "<group>"; };
+		85741D8620B555DB0093933B /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		85741D8820B55A650093933B /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		85DE62DC20AB002000423D89 /* SendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendViewController.swift; sourceTree = "<group>"; };
+		85DE62DE20AB003A00423D89 /* SendPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPresenter.swift; sourceTree = "<group>"; };
+		85DE62E120AB077B00423D89 /* WalletCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCollectionViewCell.swift; sourceTree = "<group>"; };
+		85DE62E220AB077B00423D89 /* WalletCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletCollectionViewCell.xib; sourceTree = "<group>"; };
+		85DE62E620AC1CE100423D89 /* ActiveRequestCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveRequestCollectionViewCell.swift; sourceTree = "<group>"; };
+		85DE62E720AC1CE100423D89 /* ActiveRequestCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActiveRequestCollectionViewCell.xib; sourceTree = "<group>"; };
+		85DE62EC20AC4E4C00423D89 /* PaymentRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentRequest.swift; sourceTree = "<group>"; };
+		85DE62F220AF188B00423D89 /* Check Mark Success Data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Check Mark Success Data.json"; sourceTree = "<group>"; };
 		B0FFD5D1BF6159BB241CBFF9 /* Pods_MultyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MultyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4F4E06236FA82100FA1DF80 /* Pods-Multy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Multy.release.xcconfig"; path = "Pods/Target Support Files/Pods-Multy/Pods-Multy.release.xcconfig"; sourceTree = "<group>"; };
 		F845D6707FC4D00A317BC418 /* Pods-Multy-MultyUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Multy-MultyUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Multy-MultyUITests/Pods-Multy-MultyUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -591,6 +613,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85741D8920B55A660093933B /* CoreBluetooth.framework in Frameworks */,
 				FA4125DF2004C0FD00DF9AC3 /* libstdc++.tbd in Frameworks */,
 				FA4125EE2004FF1500DF9AC3 /* libkeccak-tiny.a in Frameworks */,
 				FA4125EF2004FF1500DF9AC3 /* libmulty_core.a in Frameworks */,
@@ -725,6 +748,7 @@
 				FADC00441FC322F400182E45 /* DataManagers */,
 				45A9492D1FC477F3003C3A23 /* Protocols */,
 				457486131FBD7DAF002D1925 /* Additional Libraries */,
+				85DE62F020AF186F00423D89 /* Additional Resources */,
 				FA86A74D1FC2C7E8002826EC /* Security */,
 				FA4D43E21FC590CC003C7117 /* Model */,
 				4522905B1FBB18D30024B550 /* Assets.xcassets */,
@@ -1130,6 +1154,7 @@
 		45A9493C1FC5A4FB003C3A23 /* Send */ = {
 			isa = PBXGroup;
 			children = (
+				85DE62DB20AAFFE700423D89 /* Send */,
 				45A949451FC5C513003C3A23 /* SendStart */,
 				45A949461FC5C53B003C3A23 /* WalletChoose */,
 				45A9494B1FC5D94F003C3A23 /* SendDetails */,
@@ -1320,6 +1345,8 @@
 		45B9CB041FBB4B6600AA2A31 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				85DE62E520AC1CD000423D89 /* ActiveRequestCVC */,
+				85DE62E020AB074100423D89 /* WalletCVC */,
 				45DCF9CA1FE13991005A9896 /* AddressCell */,
 				FA4D43E91FC5CE78003C7117 /* MainWallet */,
 				4583AC9A1FBC98D9001991AA /* New Wallet Cell */,
@@ -1420,6 +1447,7 @@
 				4585BD3A2049B035004542AE /* ExchangeStockObj.swift */,
 				45498F922061662A00130B94 /* CurrencyExchange.swift */,
 				45310D0E2063B9F500105532 /* EthereumGasInfo.swift */,
+				85DE62EC20AC4E4C00423D89 /* PaymentRequest.swift */,
 			);
 			path = PONSO;
 			sourceTree = "<group>";
@@ -1459,6 +1487,50 @@
 				45F8CD48208F393C00DEB495 /* TermsOfServicePresenter.swift */,
 			);
 			path = TermsOfService;
+			sourceTree = "<group>";
+		};
+		85DE62DB20AAFFE700423D89 /* Send */ = {
+			isa = PBXGroup;
+			children = (
+				85DE62DC20AB002000423D89 /* SendViewController.swift */,
+				85DE62DE20AB003A00423D89 /* SendPresenter.swift */,
+			);
+			path = Send;
+			sourceTree = "<group>";
+		};
+		85DE62E020AB074100423D89 /* WalletCVC */ = {
+			isa = PBXGroup;
+			children = (
+				85DE62E120AB077B00423D89 /* WalletCollectionViewCell.swift */,
+				85DE62E220AB077B00423D89 /* WalletCollectionViewCell.xib */,
+			);
+			path = WalletCVC;
+			sourceTree = "<group>";
+		};
+		85DE62E520AC1CD000423D89 /* ActiveRequestCVC */ = {
+			isa = PBXGroup;
+			children = (
+				85DE62E620AC1CE100423D89 /* ActiveRequestCollectionViewCell.swift */,
+				85DE62E720AC1CE100423D89 /* ActiveRequestCollectionViewCell.xib */,
+			);
+			path = ActiveRequestCVC;
+			sourceTree = "<group>";
+		};
+		85DE62F020AF186F00423D89 /* Additional Resources */ = {
+			isa = PBXGroup;
+			children = (
+				85DE62F120AF187F00423D89 /* Animations */,
+			);
+			path = "Additional Resources";
+			sourceTree = "<group>";
+		};
+		85DE62F120AF187F00423D89 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				85741D8420B45E8A0093933B /* circle_grow.json */,
+				85DE62F220AF188B00423D89 /* Check Mark Success Data.json */,
+			);
+			path = Animations;
 			sourceTree = "<group>";
 		};
 		8F3AE4440B3A342D5B1B0AB7 /* Pods */ = {
@@ -1581,6 +1653,7 @@
 			isa = PBXGroup;
 			children = (
 				4538BDCB2099E69900573426 /* StoreKit.framework */,
+				85741D8820B55A650093933B /* CoreBluetooth.framework */,
 				FA4125DE2004C0FD00DF9AC3 /* libstdc++.tbd */,
 				FA4125E62004FF1300DF9AC3 /* libkeccak-tiny.a */,
 				FA4125E92004FF1400DF9AC3 /* liblibwally-core.a */,
@@ -1623,6 +1696,7 @@
 				FADC00491FC3238D00182E45 /* RealmManager.swift */,
 				FADC004B1FC323A900182E45 /* Socket.swift */,
 				FADC004D1FC323C300182E45 /* CoreLibManager.swift */,
+				85741D8620B555DB0093933B /* BLEManager.swift */,
 			);
 			path = DataManagers;
 			sourceTree = "<group>";
@@ -1770,6 +1844,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				45DA45A220299E49004A34FB /* Multy.entitlements in Resources */,
+				85DE62E420AB077B00423D89 /* WalletCollectionViewCell.xib in Resources */,
+				85DE62F320AF188B00423D89 /* Check Mark Success Data.json in Resources */,
 				45AC1635204850AC00E75BD6 /* BlockchainCellTableViewCell.xib in Resources */,
 				FA4D43ED1FC5CEE0003C7117 /* MainWalletHeaderCell.xib in Resources */,
 				FA4D43E71FC5C2A6003C7117 /* Wallet.storyboard in Resources */,
@@ -1796,10 +1872,12 @@
 				45EBB6A8200D312700F81322 /* GoogleService-Info.plist in Resources */,
 				45AC16292048214C00E75BD6 /* CurrencyTableViewCell.xib in Resources */,
 				FACEB5A2200A46F600055788 /* TransactionPendingCell.xib in Resources */,
+				85DE62E920AC1CE100423D89 /* ActiveRequestCollectionViewCell.xib in Resources */,
 				4585BD392049AD03004542AE /* ExchangeStockTableViewCell.xib in Resources */,
 				45A949361FC5992A003C3A23 /* SearchAddressTableViewCell.xib in Resources */,
 				45B5CCAA1FDAC0B00069BD46 /* TextTableViewCell.xib in Resources */,
 				45A9493B1FC59E51003C3A23 /* RecentAddressTableViewCell.xib in Resources */,
+				85741D8520B45E8B0093933B /* circle_grow.json in Resources */,
 				4583AC931FBC7122001991AA /* PortfolioTableViewCell.xib in Resources */,
 				4583AC991FBC8596001991AA /* PortfolioCollectionViewCell.xib in Resources */,
 				4585BD2F20497D2E004542AE /* DonationCollectionViewCell.xib in Resources */,
@@ -1897,7 +1975,9 @@
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/UPCarouselFlowLayout/UPCarouselFlowLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/ZFRippleButton/ZFRippleButton.framework",
+				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
@@ -1921,7 +2001,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UPCarouselFlowLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFRippleButton.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
@@ -1973,7 +2055,9 @@
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/UPCarouselFlowLayout/UPCarouselFlowLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/ZFRippleButton/ZFRippleButton.framework",
+				"${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1995,7 +2079,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UPCarouselFlowLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFRippleButton.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lottie.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2069,6 +2155,7 @@
 				45E7A8A620065455005D2D6E /* StockExchanges.swift in Sources */,
 				FA58DF661FDC403E00C45303 /* WrongSeedPhraseViewController.swift in Sources */,
 				45090AE01FE95E7700019D00 /* BackupSeedPhraseView.swift in Sources */,
+				85DE62DF20AB003A00423D89 /* SendPresenter.swift in Sources */,
 				45B0B0ED1FEBF2CF005BB1C0 /* ContactsViewController.swift in Sources */,
 				45AC1622204820BC00E75BD6 /* CurrencyToConvertViewController.swift in Sources */,
 				45E215E21FD16AA70078945A /* GoToQrProtocol.swift in Sources */,
@@ -2098,6 +2185,7 @@
 				45A949351FC5992A003C3A23 /* SearchAddressTableViewCell.swift in Sources */,
 				45A9492A1FC426B7003C3A23 /* ReceiveAllDetailsViewController.swift in Sources */,
 				44A3DF93205AA1F300FE9955 /* BlockchainType+Extension.swift in Sources */,
+				85DE62DD20AB002000423D89 /* SendViewController.swift in Sources */,
 				451B98631FD947A400DC64A5 /* FastOperationsPresenter.swift in Sources */,
 				45DCF9CD1FE139C9005A9896 /* WalletAddressTableViewCell.swift in Sources */,
 				452236211FCD6BA7004BA490 /* TransactionPresenter.swift in Sources */,
@@ -2135,6 +2223,7 @@
 				44BCBDB520601AD0001611A5 /* BTCWallet.swift in Sources */,
 				45AC1634204850AC00E75BD6 /* BlockchainCellTableViewCell.swift in Sources */,
 				458FD4C71FE3C2CB001C25BA /* SpendableOutputRLM.swift in Sources */,
+				85DE62E820AC1CE100423D89 /* ActiveRequestCollectionViewCell.swift in Sources */,
 				FA4D43E51FC590F6003C7117 /* SeedPhraseRLM.swift in Sources */,
 				45E215DE1FD164E30078945A /* QrScannerViewController.swift in Sources */,
 				457569341FBDBC9600FDEE20 /* SeedPhraseAboutPresenter.swift in Sources */,
@@ -2158,6 +2247,7 @@
 				44EFBE5B20923EAC0081EE3A /* Blockchain+Extension.swift in Sources */,
 				FA74062B1FCC5D6A003C538C /* Constants.swift in Sources */,
 				45B0B0EB1FEBF2BB005BB1C0 /* ContactsPresenter.swift in Sources */,
+				85741D8720B555DB0093933B /* BLEManager.swift in Sources */,
 				44BCBDB720601AE3001611A5 /* ETHWallet.swift in Sources */,
 				45A949531FC6D1E1003C3A23 /* TransactionFeeTableViewCell.swift in Sources */,
 				FA869D121FD6C17900C815C3 /* ExchangePriceRLM.swift in Sources */,
@@ -2219,6 +2309,7 @@
 				45DCF9D31FE16874005A9896 /* WalletAddresessPresenter.swift in Sources */,
 				45A949401FC5A566003C3A23 /* SendStartPresenter.swift in Sources */,
 				4585BD2620496216004542AE /* CreatingWalletActionsViewController.swift in Sources */,
+				85DE62ED20AC4E4C00423D89 /* PaymentRequest.swift in Sources */,
 				457569491FBDEDB900FDEE20 /* BackupFinishPresenter.swift in Sources */,
 				FA4D44011FC71B6D003C7117 /* AccountRLM.swift in Sources */,
 				45A949251FC2EE55003C3A23 /* ReceiveAmountPresenter.swift in Sources */,
@@ -2241,6 +2332,7 @@
 				45A9492C1FC426CF003C3A23 /* ReceiveAllDetailsPresenter.swift in Sources */,
 				45C8D143200780CF00F5994E /* SplashViewController.swift in Sources */,
 				45B5CCA21FDA90DF0069BD46 /* NoInternetConnectionViewController.swift in Sources */,
+				85DE62E320AB077B00423D89 /* WalletCollectionViewCell.swift in Sources */,
 				455EA8761FD842610093F69D /* CustomTabBarViewController.swift in Sources */,
 				FA4D43FB1FC6C760003C7117 /* BTCWalletPresenter.swift in Sources */,
 				444066D22059277F00342046 /* UIAlertController+Extension.swift in Sources */,
