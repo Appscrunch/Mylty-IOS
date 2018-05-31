@@ -9,6 +9,7 @@ private typealias TableViewDataSource = CreateWalletViewController
 private typealias TableViewDelegate = CreateWalletViewController
 private typealias TextFieldDelegate = CreateWalletViewController
 private typealias ChooseBlockchainDelegate = CreateWalletViewController
+private typealias LocalizeDelegate = CreateWalletViewController
 
 class CreateWalletViewController: UIViewController, AnalyticsProtocol {
 
@@ -45,7 +46,6 @@ class CreateWalletViewController: UIViewController, AnalyticsProtocol {
     }
     
     @IBAction func cancleAction(_ sender: Any) {
-        sendAnalyticsEvent(screenName: screenCreateWallet, eventName: cancelTap)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -68,6 +68,30 @@ class CreateWalletViewController: UIViewController, AnalyticsProtocol {
             print(dict!)
         }
         sendAnalyticsEvent(screenName: screenCreateWallet, eventName: createWalletTap)
+    }
+    
+    func openNewlyCreatedWallet() {
+        let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
+        var walletVC = UIViewController()
+        
+        switch presenter.createdWallet.blockchainType.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            let vc = storyboard.instantiateViewController(withIdentifier: "WalletMainID") as! BTCWalletViewController
+            vc.presenter.wallet = presenter.createdWallet
+            vc.presenter.account = presenter.account
+            
+            walletVC = vc
+        case BLOCKCHAIN_ETHEREUM:
+            let vc = storyboard.instantiateViewController(withIdentifier: "EthWalletID") as! EthWalletViewController
+            vc.presenter.wallet = presenter.createdWallet
+            vc.presenter.account = presenter.account
+            
+            walletVC = vc
+        default:
+            return
+        }
+        
+        navigationController?.pushViewController(walletVC, animated: true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -151,7 +175,7 @@ extension TableViewDataSource: UITableViewDataSource {
         let cell2 = blockchainCell == nil ? self.tableView.dequeueReusableCell(withIdentifier: "cell2") as! CreateWalletBlockchainTableViewCell : blockchainCell!
         cell2.blockchainLabel.text = presenter.selectedBlockchainType.fullName + " ∙ " + presenter.selectedBlockchainType.shortName
         
-        if presenter.selectedBlockchainType.net_type != 0 {
+        if presenter.selectedBlockchainType.isMainnet == false {
             cell2.blockchainLabel.text! += "  Testnet"
         }
         
@@ -189,5 +213,11 @@ extension TextFieldDelegate: UITextFieldDelegate {
         } else {
             return false
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
     }
 }

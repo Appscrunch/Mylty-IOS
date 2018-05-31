@@ -11,6 +11,8 @@ class DonationAlertViewController: UIViewController, AnalyticsProtocol {
     
     weak var cancelDelegate: CancelProtocol?
     
+    var idOfProduct: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setPresentedVcToDelegate()
@@ -44,10 +46,15 @@ class DonationAlertViewController: UIViewController, AnalyticsProtocol {
         sendDonationAlertScreenCancelledAnalytics()
     }
     
-    @IBAction func donateAction(_ sender: Any) {
+    @IBAction func donateAction5(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
         self.cancelDelegate?.cancelAction()
-        
+//        self.cancelDelegate?.presentNoInternet()
         sendDonationAlertScreenPressDonateAnalytics()
+    }
+    
+    @IBAction func donate50(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+        self.cancelDelegate?.donate50!(idOfProduct: idOfProduct!)
     }
 }

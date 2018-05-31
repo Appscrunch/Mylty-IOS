@@ -16,6 +16,31 @@ extension BlockchainTypeEquatable: Equatable {
 // for every new blockchain entity we have to update all calculated properties:
 // iconString, shortName, fullName, qrBlockchainString
 extension BlockchainType {
+    var isMainnet: Bool {
+        switch self.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            switch UInt32(self.net_type) {
+            case BITCOIN_NET_TYPE_MAINNET.rawValue:
+                return true
+            case BITCOIN_NET_TYPE_TESTNET.rawValue:
+                return false
+            default:
+                return false
+            }
+        case BLOCKCHAIN_ETHEREUM:
+            switch Int32(self.net_type) {
+            case ETHEREUM_CHAIN_ID_MAINNET.rawValue:
+                return true
+            case ETHEREUM_CHAIN_ID_RINKEBY.rawValue:
+                return false
+            default:
+                return false
+            }
+        default:
+            return true
+        }
+    }
+    
     var iconString : String {
         var iconString = ""
         
@@ -64,103 +89,15 @@ extension BlockchainType {
     }
     
     var shortName : String {
-        var shortName = ""
-        
-        switch self.blockchain {
-        case BLOCKCHAIN_BITCOIN:
-            shortName = "BTC"
-        case BLOCKCHAIN_LITECOIN:
-            shortName = "LTC"
-        case BLOCKCHAIN_DASH:
-            shortName = "DASH"
-        case BLOCKCHAIN_ETHEREUM:
-            shortName = "ETH"
-        case BLOCKCHAIN_ETHEREUM_CLASSIC:
-            shortName = "ETC"
-        case BLOCKCHAIN_STEEM:
-            shortName = "STEEM"
-        case BLOCKCHAIN_BITCOIN_CASH:
-            shortName = "BCH"
-        case BLOCKCHAIN_BITCOIN_LIGHTNING:
-            shortName = "LBTC"
-        case BLOCKCHAIN_GOLOS:
-            shortName = "GOLOS"
-        case BLOCKCHAIN_BITSHARES:
-            shortName = "BTS"
-        case BLOCKCHAIN_ERC20:
-            shortName = "ERC20"
-        default:
-            shortName = ""
-        }
-        
-        return shortName
+        return blockchain.shortName
     }
     
     var fullName : String {
-        var fullName = ""
-        
-        switch self.blockchain {
-        case BLOCKCHAIN_BITCOIN:
-            fullName = "Bitcoin"
-        case BLOCKCHAIN_LITECOIN:
-            fullName = "Litecoin"
-        case BLOCKCHAIN_DASH:
-            fullName = "Dash"
-        case BLOCKCHAIN_ETHEREUM:
-            fullName = "Ethereum"
-        case BLOCKCHAIN_ETHEREUM_CLASSIC:
-            fullName = "Ethereum Classic"
-        case BLOCKCHAIN_STEEM:
-            fullName = "Steem Dollars"
-        case BLOCKCHAIN_BITCOIN_CASH:
-            fullName = "Bitcoin Cash"
-        case BLOCKCHAIN_BITCOIN_LIGHTNING:
-            fullName = "Bitcoin lightning"
-        case BLOCKCHAIN_GOLOS:
-            fullName = "Golos"
-        case BLOCKCHAIN_BITSHARES:
-            fullName = "BitShares"
-        case BLOCKCHAIN_ERC20:
-            fullName = "ERC20 Tokens"
-        default:
-            fullName = ""
-        }
-        
-        return fullName
+        return blockchain.fullName
     }
     
     var qrBlockchainString : String {
-        var fullName = ""
-        
-        switch self.blockchain {
-        case BLOCKCHAIN_BITCOIN:
-            //https://github.com/bitcoin/bips/blob/master/bip-0021.mediawiki
-            fullName = "bitcoin"
-        case BLOCKCHAIN_LITECOIN:
-            fullName = "litecoin"
-        case BLOCKCHAIN_DASH:
-            fullName = "dash"
-        case BLOCKCHAIN_ETHEREUM:
-            fullName = "ethereum"
-        case BLOCKCHAIN_ETHEREUM_CLASSIC:
-            fullName = ""
-        case BLOCKCHAIN_STEEM:
-            fullName = ""
-        case BLOCKCHAIN_BITCOIN_CASH:
-            fullName = ""
-        case BLOCKCHAIN_BITCOIN_LIGHTNING:
-            fullName = ""
-        case BLOCKCHAIN_GOLOS:
-            fullName = ""
-        case BLOCKCHAIN_BITSHARES:
-            fullName = ""
-        case BLOCKCHAIN_ERC20:
-            fullName = ""
-        default:
-            fullName = ""
-        }
-        
-        return fullName
+        return blockchain.qrBlockchainString
     }
     
     static func create(wallet: UserWalletRLM) -> BlockchainType {

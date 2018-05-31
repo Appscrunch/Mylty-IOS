@@ -1,0 +1,11 @@
+/* 
+  Settings.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";

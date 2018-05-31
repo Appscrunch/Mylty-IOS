@@ -36,7 +36,7 @@ class CreatingWalletActionsViewController: UIViewController, CancelProtocol, Ana
     
     @IBAction func importWalletAction(_ sender: Any) {
         unowned let weakSelf =  self
-        self.presentDonationAlertVC(from: weakSelf)
+        self.presentDonationAlertVC(from: weakSelf, with: "io.multy.importWallet50")
         logAnalytics()
     }
     
@@ -47,6 +47,12 @@ class CreatingWalletActionsViewController: UIViewController, CancelProtocol, Ana
     func cancelAction() {
         self.dismiss(animated: true) {
             self.cancelDelegate?.cancelAction()
+        }
+    }
+    
+    func donate50(idOfProduct: String) {
+        self.dismiss(animated: true) {
+            self.cancelDelegate?.donate50!(idOfProduct: idOfProduct)
         }
     }
     

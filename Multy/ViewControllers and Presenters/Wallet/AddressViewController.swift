@@ -109,7 +109,7 @@ class AddressViewController: UIViewController, AnalyticsProtocol {
     }
     
     func makeStringForQRWithSumAndAdress(cryptoName: String) -> String { // cryptoName = bitcoin
-        return "\(cryptoName):\(makeStringWithAddress())"
+        return "\(cryptoName):\(makeStringWithAddress())?amount:0"
     }
     
     func makeQRCode() {

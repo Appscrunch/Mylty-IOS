@@ -24,6 +24,9 @@ class SendingAnimationViewController: UIViewController, AnalyticsProtocol {
         DispatchQueue.main.asyncAfter(deadline: when) {
             self.sendOK()
         }
+        if chainId == nil {
+            return
+        }
         sendAnalyticsEvent(screenName: "\(screenSendSuccessWithChain)\(chainId!)", eventName: "\(screenSendSuccessWithChain)\(chainId!)")
     }
     

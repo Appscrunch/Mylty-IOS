@@ -32,16 +32,17 @@ class EthWalletHeaderCollectionViewCell: UICollectionViewCell {
     }
 
     func fillInCell() {
-        let sumInFiat = wallet!.sumInFiat.fixedFraction(digits: 2)
-        self.cryptoAmountLabel.text = "\(wallet?.sumInCrypto.fixedFraction(digits: 8) ?? "0.0")"
+        self.cryptoAmountLabel.text = wallet?.ethWallet?.allBalance.cryptoValueString(for: BLOCKCHAIN_ETHEREUM)
         let blockchain = BlockchainType.create(wallet: wallet!)
         //MARK: temporary code
         self.cryptoNameLabel.text = blockchain.shortName //"\(wallet?.cryptoName ?? "")"
-        self.fiatAmountLabel.text = sumInFiat
-        self.fiatNameLabel.text = "\(wallet?.fiatName ?? "")"
-        self.addressLabel.text = "\(wallet?.address ?? "")"
+        self.fiatAmountLabel.text = wallet?.sumInFiatString
+        self.fiatNameLabel.text = wallet?.fiatName ?? ""
+        self.addressLabel.text = wallet?.address ?? ""
         
-        if blockedAmount == 0 {
+        let pendingWeiAmountString = wallet!.ethWallet!.pendingWeiAmountString
+        
+        if pendingWeiAmountString == "0" {
             lockedInfoStackView.isHidden = true
             lockedInfoConstraint.constant = 20
             
@@ -57,21 +58,23 @@ class EthWalletHeaderCollectionViewCell: UICollectionViewCell {
             lockedPopverWithBorders.layer.masksToBounds = true
             lockedPopverWithBorders.layer.borderWidth = 1.0
             
-            
-            //some strange info from server
-            //MARK: FIX THIS
-            var sum = UInt64(0)
-            if convertBTCStringToSatoshi(sum: wallet!.sumInCrypto.fixedFraction(digits: 8)) >= blockedAmount {
-                sum = convertBTCStringToSatoshi(sum: wallet!.sumInCrypto.fixedFraction(digits: 8)) - blockedAmount
-            } else {
-                sum = blockedAmount
-            }
-            
-            let availableCryptoAmount = sum.btcValue
+            let availableCryptoAmount = wallet!.ethWallet!.availableBalance
             let availableFiatAmount = availableCryptoAmount * wallet!.exchangeCourse
             
-            lockedCryptoAmountLabel.text = availableCryptoAmount.fixedFraction(digits: 8)
-            lockedFiatAmountLabel.text = availableFiatAmount.fixedFraction(digits: 2)
+            lockedCryptoAmountLabel.text = availableCryptoAmount.cryptoValueString(for: BLOCKCHAIN_ETHEREUM)
+            lockedFiatAmountLabel.text = availableFiatAmount.fiatValueString(for: BLOCKCHAIN_ETHEREUM)
         }
     }
+    
+    @IBAction func showAddressAction(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
+        let adressVC = storyboard.instantiateViewController(withIdentifier: "walletAdressVC") as! AddressViewController
+        adressVC.modalPresentationStyle = .overCurrentContext
+        adressVC.modalTransitionStyle = .crossDissolve
+        adressVC.wallet = self.wallet
+        //        self.mainVC.present
+        self.mainVC?.present(adressVC, animated: true, completion: nil)
+//        sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(wallet!.chain)", eventName: "\(addressWithChainTap)\(wallet!.chain)")
+    }
+    
 }

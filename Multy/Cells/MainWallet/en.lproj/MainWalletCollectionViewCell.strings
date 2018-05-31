@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = " BTC "; ObjectID = "2YE-wb-azz"; */
+"2YE-wb-azz.text" = " BTC ";
+
+/* Class = "UILabel"; text = "1 659.04"; ObjectID = "CVO-Jz-eYv"; */
+"CVO-Jz-eYv.text" = "1 659.04";
+
+/* Class = "UILabel"; text = " "; ObjectID = "Lwb-vU-54F"; */
+"Lwb-vU-54F.text" = " ";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "Wk3-7O-oG9"; */
+"Wk3-7O-oG9.text" = "BTC";
+
+/* Class = "UILabel"; text = " "; ObjectID = "bsE-fT-4U8"; */
+"bsE-fT-4U8.text" = " ";
+
+/* Class = "UIButton"; normalTitle = "Show All Addresses"; ObjectID = "g0p-sP-wOM"; */
+"g0p-sP-wOM.normalTitle" = "Show All Addresses";
+
+/* Class = "UILabel"; text = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L"; ObjectID = "gtO-DI-sWH"; */
+"gtO-DI-sWH.text" = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L";
+
+/* Class = "UILabel"; text = "0.33833833"; ObjectID = "i4J-vW-qFW"; */
+"i4J-vW-qFW.text" = "0.33833833";
+
+/* Class = "UILabel"; text = " USD "; ObjectID = "iIr-Hw-f94"; */
+"iIr-Hw-f94.text" = " USD ";
+
+/* Class = "UILabel"; text = "0.2165"; ObjectID = "lFu-Fp-Srb"; */
+"lFu-Fp-Srb.text" = "0.2165";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "msN-mH-ClJ"; */
+"msN-mH-ClJ.text" = "USD";
+
+/* Class = "UILabel"; text = "4575.55"; ObjectID = "rUV-eb-nxq"; */
+"rUV-eb-nxq.text" = "4575.55";

@@ -1,0 +1,21 @@
+/* 
+  Assets.strings
+  Multy
+
+  Created by Alex Pro on 5/29/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"BACKUP IS NEEDED" = "Backup is needed!";
+"RESTORE MULTY" = "Restore Multy";
+"CRYPTO PORTFOLIO" = "Crypto portfolio";
+"CURRENCIES CHARTS" = "Currencies charts";
+"WORK IN PROGRESS" = "(work in progress)";
+"GETTING WALLET" = "Getting Wallets...";
+"JAILBROKEN DEVICE ALERT MESSAGE" = "Your Device is Jailbroken!\nSory, but we don`t support jailbroken devices.";
+"WE HAVE AN UPDATE" = "We have an update!";
+"UPDATE MULTY" = "Please update Multy from App Store";
+"GO TO UPDATE" = "Go to update";
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";

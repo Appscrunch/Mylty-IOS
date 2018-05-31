@@ -1,0 +1,21 @@
+/* 
+  Assets.strings
+  Multy
+
+  Created by Alex Pro on 5/29/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"BACKUP IS NEEDED" = "Потрібно резервне копіювання!";
+"RESTORE MULTY" = "Відновити Multy";
+"CRYPTO PORTFOLIO" = "Крипто-портфоліо";
+"CURRENCIES CHARTS" = "Графіки валют";
+"WORK IN PROGRESS" = "(в розробці)";
+"GETTING WALLET" = "Отримання гаманців...";
+"JAILBROKEN DEVICE ALERT MESSAGE" = "Ми виявили на вашому пристрої Джейлбрейк! Вибачте, але ми не підтримуємо такі пристрої.";
+"WE HAVE AN UPDATE" = "У нас оновлення!";
+"UPDATE MULTY" = "Будь ласка, поновіть Multy в App Store";
+"GO TO UPDATE" = "Перейти до оновлення";
+"WARNING" = "Попередження";
+"CANCEL" = "Скасувати";
+"ERROR" = "Помилка";

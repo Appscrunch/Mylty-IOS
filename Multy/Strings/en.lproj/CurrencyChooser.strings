@@ -1,0 +1,11 @@
+/* 
+  CurrencyChooser.strings
+  Multy
+
+  Created by Alex Pro on 5/29/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"AVAILABLE" = "AVAILABLE";
+"WORK IN PROGRESS" = "WORK IN PROGRESS";
+"ERROR" = "Error";

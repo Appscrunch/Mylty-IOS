@@ -13,7 +13,8 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
             self.blockedAmount = transactionDTO.choosenWallet?.calculateBlockedAmount()
             availableSumInCrypto = self.transactionDTO.choosenWallet!.sumInCrypto - self.blockedAmount!.btcValue
             availableSumInFiat = availableSumInCrypto! * transactionDTO.choosenWallet!.exchangeCourse
-            cryptoName = transactionDTO.blockchainType.shortName
+            cryptoName = transactionDTO.blockchain!.shortName
+            customFee = transactionDTO.transaction?.customFee ?? UInt64(0)
         }
     }
     
@@ -35,46 +36,40 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
     
     let transactionObj = TransactionRLM()
     let donationObj = DonationDTO()
-    var customFee = UInt64(20)
+    var customFee = UInt64(0)
     
     var feeRate: NSDictionary? {
         didSet {
-            sendDetailsVC?.tableView.reloadData()
+            if let verySlowFeeRate = feeRate?["VerySlow"] as? UInt64 {
+                if customFee == 0 {
+                    customFee = verySlowFeeRate
+                }
+                
+                sendDetailsVC?.tableView.reloadData()
+                updateCellsVisibility()
+            }
         }
     }
-    
-//    self.sumInFiat = Double(round(100*self.sumInFiat)/100)
     
     func getData() {
         DataManager.shared.getAccount { (account, error) in
             if error != nil {
                 return
             }
-            
-            
         }
-    }
-    
-    func getWalletVerbose() {
-        //MARK: implement changes
-        
-//        DataManager.shared.getAccount { (account, err) in
-//            DataManager.shared.getOneWalletVerbose(account!.token,
-//                                                   walletID: self.choosenWallet!.walletID,
-//                                                   completion: { (addresses, error) in
-//            })
-//        }
     }
     
     func requestFee() {
         DataManager.shared.getFeeRate(currencyID: transactionDTO.choosenWallet!.chain.uint32Value,
                                       networkID: transactionDTO.choosenWallet!.chainType.uint32Value,
-                                      completion: { (dict, error) in
-            if dict != nil {
-                self.feeRate = dict
-            } else {
-                print("Did failed getting feeRate")
-            }
+                                      completion: { [unowned self] (dict, error) in
+                                        self.sendDetailsVC?.progressHUD.hide()
+                                        
+                                        if dict != nil {
+                                            self.feeRate = dict
+                                        } else {
+                                            print("Did failed getting feeRate")
+                                        }
         })
     }
     
@@ -98,7 +93,7 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
             self.transactionObj.fiatName = fiatName
             self.transactionObj.numberOfBlocks = 10
         case 2:
-            self.transactionObj.speedName = "Normal"
+            self.transactionObj.speedName = "Medium"
             self.transactionObj.speedTimeString = "∙ 5 days"
             self.transactionObj.sumInCrypto = 0.00000005
             self.transactionObj.sumInFiat = Double(round(100*self.transactionObj.sumInCrypto * exchangeCourse)/100)
@@ -161,7 +156,7 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         }
         
         if !sendDetailsVC!.isDonateAvailableSW.isOn {
-            self.sendDetailsVC?.performSegue(withIdentifier: "sendAmountVC", sender: Any.self)
+            self.sendDetailsVC?.performSegue(withIdentifier: "sendEthVC", sender: Any.self)
             
             return
         }
@@ -175,7 +170,7 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         } else if self.donationObj.sumInCrypto! == self.maxAllowedToSpend {
             self.sendDetailsVC?.presentWarning(message: "Your donation is equal your wallet sum.\n\nDonation sum: \((self.donationObj.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)\n Sum in Wallet: \((self.availableSumInCrypto ?? 0.0).fixedFraction(digits: 2)) \(self.cryptoName)")
         } else {
-            self.sendDetailsVC?.performSegue(withIdentifier: "sendAmountVC", sender: Any.self)
+            self.sendDetailsVC?.performSegue(withIdentifier: "sendEthVC", sender: Any.self)
         }
     }
     
@@ -187,9 +182,23 @@ class SendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         let cell = self.sendDetailsVC?.tableView.cellForRow(at: [0, selectedIndexOfSpeed!]) as! CustomTrasanctionFeeTableViewCell
         cell.value = (firstValue)!
         cell.setupUI()
-        self.customFee = UInt64(firstValue!)
-        self.sendDetailsVC?.tableView.reloadData()
+        customFee = UInt64(firstValue!)
+//        self.sendDetailsVC?.tableView.reloadData()
+        updateCellsVisibility()
         sendDetailsVC?.sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(transactionDTO.choosenWallet!.chain)", eventName: customFeeSetuped)
+    }
+    
+    func updateCellsVisibility () {
+        var cells = sendDetailsVC?.tableView.visibleCells
+        let selectedCell = selectedIndexOfSpeed == nil ? nil : cells![selectedIndexOfSpeed!]
+        
+        for cell in cells! {
+            cell.alpha = (cell === selectedCell) ? 1.0 : 0.3
+            
+            if !cell.isKind(of: CustomTrasanctionFeeTableViewCell.self) {
+                (cell as! TransactionFeeTableViewCell).checkMarkImage.isHidden = (cell !== selectedCell)
+            }
+        }
     }
     
     func setPreviousSelected(index: Int?) {

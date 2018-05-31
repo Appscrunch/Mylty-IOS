@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = DonationSendViewController
+
 class DonationSendViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol {
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -207,7 +209,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
     }
     
     func presentWarning(message: String) {
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -341,7 +343,7 @@ extension DonationSendViewController: UITableViewDelegate, UITableViewDataSource
             let storyboard = UIStoryboard(name: "Send", bundle: nil)
             let customVC = storyboard.instantiateViewController(withIdentifier: "customVC") as! CustomFeeViewController
 //            customVC.presenter.chainId = self.presenter.transactionDTO.choosenWallet!.chain
-            customVC.presenter.chainId = 0
+            customVC.presenter.blockchainType = BlockchainType(blockchain: BLOCKCHAIN_BITCOIN, net_type: 0)
             customVC.delegate = self.presenter
             customVC.rate = Int(self.presenter.customFee)
             self.presenter.selectedIndexOfSpeed = indexPath.row
@@ -359,5 +361,11 @@ extension DonationSendViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Send"
     }
 }

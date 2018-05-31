@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = SettingsViewController
+
 class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtocol {
 
     @IBOutlet weak var pinSwitch: UISwitch!
@@ -99,7 +101,7 @@ class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtoco
                 pinSwitch.isOn = false
                 let message = "Biometric authentication is not configured on your device"
                 let alert = UIAlertController(title: "Sorry", message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
         }
@@ -241,5 +243,11 @@ class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtoco
     func makeVersion() {
         self.topVersionLbl.text = "Multy Ctypto Wallet v.\(appVersion()).\(buildVersion())"
         self.botVersionLbl.text = "Git tag: \(getGitTag())\nGit branch name: \(getGitBranch())\nGit commit hash: \(getGitCommitHash())\n\nCore version: \(getCoreLibVersion())\n\nEnvironment: \(apiUrl)"
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Settings"
     }
 }

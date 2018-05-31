@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = ResetAllDataViewController
+
 class ResetAllDataViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet weak var cancelBtn: UIButton!
@@ -44,7 +46,7 @@ class ResetAllDataViewController: UIViewController, AnalyticsProtocol {
     }
     
     @IBAction func resetAction(_ sender: Any) {
-        let alert = UIAlertController(title: "Warning", message: "Are you sure?", preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: "Are you sure?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (_) in
             self.dismiss(animated: true, completion: {
                 self.cancelDelegate?.cancelAction()
@@ -56,5 +58,10 @@ class ResetAllDataViewController: UIViewController, AnalyticsProtocol {
         }))
         self.present(alert, animated: true, completion: nil)
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Settings"
+    }
 }

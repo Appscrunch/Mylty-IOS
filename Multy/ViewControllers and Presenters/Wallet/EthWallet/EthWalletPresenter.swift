@@ -9,17 +9,23 @@ class EthWalletPresenter: NSObject {
     
     var topCellHeight = CGFloat(0)
     
-    var blockedAmount = UInt64(0)
+    var isTherePendingAmount = false
     var wallet : UserWalletRLM? {
         didSet {
+            isTherePendingAmount = wallet!.ethWallet?.pendingWeiAmountString != "0"
             mainVC?.titleLbl.text = self.wallet?.name
-            mainVC?.tableView.reloadRows(at: [[0, 0]], with: .none)
-            blockedAmount = wallet!.calculateBlockedAmount()
+            mainVC?.collectionView.reloadData()
+            mainVC?.makeConstantsForAnimation()
         }
     }
     var account : AccountRLM?
     
     var transactionsArray = [TransactionRLM]()
+    var isThereAvailableAmount: Bool {
+        get {
+            return wallet!.ethWallet!.balance != "0"
+        }
+    }
     
     var historyArray = [HistoryRLM]() {
         didSet {
@@ -52,6 +58,9 @@ class EthWalletPresenter: NSObject {
         
         let transactionPendingCell = UINib.init(nibName: "TransactionPendingCell", bundle: nil)
         self.mainVC?.tableView.register(transactionPendingCell, forCellReuseIdentifier: "TransactionPendingCellID")
+        
+        let headerCollectionCell = UINib.init(nibName: "EthWalletHeaderCollectionViewCell", bundle: nil)
+        self.mainVC?.collectionView.register(headerCollectionCell, forCellWithReuseIdentifier: "MainWalletCollectionViewCellID")
     }
     
     func fixConstraints() {
@@ -67,8 +76,12 @@ class EthWalletPresenter: NSObject {
     }
     
     func isTherePendingMoney(for indexPath: IndexPath) -> Bool {
-        return wallet!.blockedAmount(for: historyArray[indexPath.row - 1]) > 0
+        let transaction = historyArray[indexPath.row]
+        
+        return transaction.txStatus.intValue == TxStatus.MempoolIncoming.rawValue
     }
+    
+    
     
     func getNumberOfPendingTransactions() -> Int {
         var count = 0
@@ -84,6 +97,7 @@ class EthWalletPresenter: NSObject {
     
     
     func getHistoryAndWallet() {
+        mainVC?.progressHUD.blockUIandShowProgressHUD()
         DataManager.shared.getOneWalletVerbose(walletID: wallet!.walletID, blockchain: BlockchainType.create(wallet: wallet!)) { (wallet, error) in
             if wallet != nil {
                 self.wallet = wallet
@@ -91,6 +105,8 @@ class EthWalletPresenter: NSObject {
         }
         
         DataManager.shared.getTransactionHistory(currencyID: wallet!.chain, networkID: wallet!.chainType, walletID: wallet!.walletID) { (histList, err) in
+            self.mainVC?.progressHUD.unblockUIandHideProgressHUD()
+            self.mainVC?.spiner.stopAnimating()
             if err == nil && histList != nil {
                 self.mainVC!.refreshControl.endRefreshing()
                 self.mainVC!.tableView.isUserInteractionEnabled = true
@@ -100,9 +116,6 @@ class EthWalletPresenter: NSObject {
                 print("transaction history:\n\(histList)")
                 self.mainVC!.isSocketInitiateUpdating = false
             }
-            
-            //            self.mainVC?.progressHUD.hide()
-            //            self.mainVC?.updateUI()
         }
     }
 }

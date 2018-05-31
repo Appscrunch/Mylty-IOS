@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = DonationSendPresenter
+
 class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol {
 
     var mainVC: DonationSendViewController?
@@ -95,7 +97,7 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
             self.mainVC?.view.isUserInteractionEnabled = true
             if err != nil {
                 let alert = UIAlertController(title: "Error", message: errMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: self.localize(string: Constants.cancelString), style: .cancel, handler: nil))
                 self.mainVC?.present(alert, animated: true, completion: nil)
                 return
             } else {
@@ -113,5 +115,11 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
             sendSuccessVC.chainId = transaction.choosenWallet?.chain as? Int
             self.mainVC?.navigationController?.pushViewController(sendSuccessVC, animated: true)
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Send"
     }
 }

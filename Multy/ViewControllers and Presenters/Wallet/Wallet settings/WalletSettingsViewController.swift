@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = WalletSettingsViewController
+
 class WalletSettingsViewController: UIViewController,AnalyticsProtocol {
     
     @IBOutlet weak var walletNameTF: UITextField!
@@ -36,9 +38,9 @@ class WalletSettingsViewController: UIViewController,AnalyticsProtocol {
     }
     
     @IBAction func deleteAction(_ sender: Any) {
-        if presenter.wallet?.sumInCrypto.fixedFraction(digits: 8) == "0" {
+        if presenter.wallet!.isEmpty {
             let message = "Are you sure?"
-            let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+            let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Yes", style: .cancel, handler: { (action) in
                 self.progressHUD.show()
                 self.presenter.delete()
@@ -52,7 +54,7 @@ class WalletSettingsViewController: UIViewController,AnalyticsProtocol {
             self.present(alert, animated: true, completion: nil)
         } else {
             let message = "Cryptocurrency amount should be empty"
-            let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+            let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
@@ -66,7 +68,7 @@ class WalletSettingsViewController: UIViewController,AnalyticsProtocol {
     @IBAction func changeWalletName(_ sender: Any) {
         if walletNameTF.text?.trimmingCharacters(in: .whitespaces).count == 0 {
             let message = "Wallet name should be non empty"
-            let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+            let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else {            
@@ -105,5 +107,10 @@ extension WalletSettingsViewController: UITextFieldDelegate {
             return false
         }
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Wallet"
+    }
 }

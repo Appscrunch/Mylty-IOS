@@ -3,18 +3,25 @@
 //See LICENSE for details
 
 import Foundation
+import UIKit
+
+extension Character {
+    var asciiCode: UInt32 {
+        get {
+            let scalars = unicodeScalars
+            
+            return scalars[scalars.startIndex].value
+        }
+    }
+}
 
 extension String {
-    var UTF8CStringPointer: UnsafeMutablePointer<Int8> {
-        return UnsafeMutablePointer(mutating: (self as NSString).utf8String!)
+    func localized(bundle: Bundle = .main, tableName: String = "Localizable") -> String {
+        return NSLocalizedString(self, tableName: tableName, value: "**\(self)**", comment: "")
     }
     
-    var bigInt: BigInt {
-        if let bigIntValue = BigInt(self) {
-            return bigIntValue
-        }
-        
-        return BigInt(0)
+    var UTF8CStringPointer: UnsafeMutablePointer<Int8> {
+        return UnsafeMutablePointer(mutating: (self as NSString).utf8String!)
     }
     
     var stringWithDot: String {
@@ -26,6 +33,17 @@ extension String {
     var doubleValue: Double {
         get {
             return Double(self.stringWithDot)!
+        }
+    }
+    
+    //temporaty usage // FIXME: address blockchain
+    var addressBlockchainValue: Blockchain {
+        get {
+            if hasPrefix("0x") {
+                return BLOCKCHAIN_ETHEREUM
+            } else {
+                return BLOCKCHAIN_BITCOIN
+            }
         }
     }
 
@@ -81,8 +99,9 @@ extension String {
         self.insert(delimeter, at: self.index(self.endIndex, offsetBy: -atIndexFromEnd))
     }
     
-    private func toStringWithZeroes(precision: Int) -> String {
-        let components = self.components(separatedBy: CharacterSet.init(charactersIn: "\(defaultDelimeter)"))
+    func toStringWithZeroes(precision: Int) -> String {
+        let string = self.replacingOccurrences(of: ".", with: ",")
+        let components = string.components(separatedBy: CharacterSet.init(charactersIn: "\(defaultDelimeter)"))
         
         if precision < 1 {
             if self.isEmpty {
@@ -134,7 +153,28 @@ extension String {
             modifiedString.append(delimeter: defaultDelimeter, atIndexFromEnd: index)
         }
         
+        modifiedString.deletetTrailingZeroes()
+        
         return modifiedString
+    }
+    
+    mutating func deletetTrailingZeroes() {
+        let stringParts = self.components(separatedBy: "\(defaultDelimeter)")
+        var fractionString = stringParts[1]
+        
+        while fractionString.last == "0" && fractionString.count > 1 {
+            fractionString.removeLast()
+        }
+        
+        self = stringParts[0] + "\(defaultDelimeter)" + fractionString
+    }
+    
+    func convertCryptoAmountStringToMinimalUnits(in blockchain: Blockchain) -> BigInt {
+//        return blockchain.multiplyerToMinimalUnits * (Double(self.stringWithDot) ?? 0)
+        var stringAmount = toStringWithZeroes(precision: blockchain.maxPrecision).replacingOccurrences(of: ".", with: "")
+        stringAmount = stringAmount.replacingOccurrences(of: ",", with: "")
+        
+        return BigInt(stringAmount.stringWithoutZeroesFromStart())
     }
     
     func convertToSatoshiAmountString() -> String {
@@ -145,6 +185,47 @@ extension String {
         return self.toStringWithZeroes(precision: 2)
     }
     
+    func fiatValueString(for blockchainType: BlockchainType) -> String {
+        let exchangeCourse = DataManager.shared.makeExchangeFor(blockchainType: blockchainType)
+        
+        return (convertCryptoAmountStringToMinimalUnits(in: blockchainType.blockchain) * exchangeCourse).fiatValueString(for: blockchainType.blockchain)
+    }
+    
+    func showString(_ precision: Int) -> String {
+        let components = self.components(separatedBy: CharacterSet.init(charactersIn: "\(defaultDelimeter)"))
+        
+        if precision < 1 {
+            if isEmpty {
+                return "0"
+            }
+            
+            return components.first!
+        }
+        
+        //two delimeters - wrong case
+        precondition(components.count < 3, "---===Wrong string===---")
+        
+        if components.count == 1 {
+            return self
+        } else {
+            let firstComponent = components.first!
+            let secondComponent = components.last!
+            
+            var finalString = String()
+            
+            switch secondComponent.count {
+            case 0...precision:
+                finalString = firstComponent + "\(defaultDelimeter)" + secondComponent
+            case precision + 1...LONG_MAX:
+                let index = secondComponent.index(secondComponent.startIndex, offsetBy: precision)
+                finalString = firstComponent + "\(defaultDelimeter)" + secondComponent[..<index]
+            default:
+                return "0"
+            }
+            
+            return finalString
+        }
+    }
 
     func toDateTime() -> NSDate {
         let dateFromString = Date.blockDateFormatter().date(from: self)! as NSDate
@@ -174,5 +255,12 @@ extension String {
                 return nil
             }
         }
+    }
+    
+    func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
+        
+        return ceil(boundingBox.height)
     }
 }

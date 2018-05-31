@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = TermsOfServiceViewController
+
 class TermsOfServiceViewController: UIViewController, UIWebViewDelegate {
 
     @IBOutlet weak var webView: UIWebView!
@@ -64,8 +66,13 @@ class TermsOfServiceViewController: UIViewController, UIWebViewDelegate {
     @IBAction func discardAction(_ sender: Any) {
         let message = "In order to use Multy you have to accept Terms of Service. By pressing \"Accept\" you confirm that you have read, understood and agree to the following Terms of Service and that you have the right, power and authority to do so."
         let alert = UIAlertController(title: "Sorry", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
+    }
 }

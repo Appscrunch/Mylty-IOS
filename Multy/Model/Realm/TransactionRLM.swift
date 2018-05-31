@@ -5,10 +5,11 @@
 import Foundation
 import RealmSwift
 
-class TransactionRLM: Object {
+class TransactionRLM: NSObject {
     @objc dynamic var speedName = String()
     @objc dynamic var speedTimeString = String()  //∙ 10 minutes  ∙ 2 weeks
     @objc dynamic var sumInCrypto: Double = 0.0
+    @objc dynamic var sumInCryptoBigInt = BigInt("0")
     @objc dynamic var sumInFiat: Double = 0.0
     @objc dynamic var cryptoName = String()
     @objc dynamic var fiatName = String()
