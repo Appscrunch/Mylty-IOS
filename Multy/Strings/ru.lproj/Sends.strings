@@ -31,3 +31,5 @@
 "TRANSACTION ERROR" = "Ошибка транзакции";
 "LOADING" = "Загрузка";
 "ACTIVE REQUESTS" = "Текущие запросы";
+"COPY TO CLIPBOARD" = "Скопировать в буфер обмена";
+"SHARE" = "Поделиться";

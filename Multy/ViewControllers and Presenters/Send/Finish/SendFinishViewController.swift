@@ -109,6 +109,57 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(slideToSend))
         slideView.isUserInteractionEnabled = true
         slideView.addGestureRecognizer(gestureRecognizer)
+        
+        let tapOnTo = UITapGestureRecognizer(target: self, action: #selector(tapOnToAddress))
+        addressLbl.isUserInteractionEnabled = true
+        addressLbl.addGestureRecognizer(tapOnTo)
+        
+        let tapOnFrom = UITapGestureRecognizer(target: self, action: #selector(tapOnFromAddress))
+        walletsAddressesLbl.isUserInteractionEnabled = true
+        walletsAddressesLbl.addGestureRecognizer(tapOnFrom)
+    }
+    
+    @objc func tapOnToAddress(recog: UITapGestureRecognizer) {
+        tapFunction(recog: recog, labelFor: addressLbl)
+    }
+    
+    @objc func tapOnFromAddress(recog: UITapGestureRecognizer) {
+        tapFunction(recog: recog, labelFor: walletsAddressesLbl)
+    }
+    
+    func tapFunction(recog: UITapGestureRecognizer, labelFor: UILabel) {
+        let tapLocation = recog.location(in: labelFor)
+        var lineNumber = Double(tapLocation.y / 16.5)
+        lineNumber.round(.towardZero)
+        var title = ""
+        if labelFor == walletsAddressesLbl {
+            title = presenter.transactionDTO.choosenWallet!.addressesWithSpendableOutputs()[Int(lineNumber)]
+        } else { // if walletToAddressLbl
+            title = presenter.transactionDTO.sendAddress!
+        }
+        
+        let actionSheet = UIAlertController(title: "", message: title, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.copyToClipboardString), style: .default, handler: { (action) in
+            UIPasteboard.general.string = title
+        }))
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.shareString), style: .default, handler: { (action) in
+            let objectsToShare = [title]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            activityVC.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                if !completed {
+                    // User canceled
+                    return
+                } else {
+                    if let appName = activityType?.rawValue {
+                        //                        self.sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(self.wallet!.chain)", eventName: "\(shareToAppWithChainTap)\(self.wallet!.chain)_\(appName)")
+                    }
+                }
+            }
+            activityVC.setPresentedShareDialogToDelegate()
+            self.present(activityVC, animated: true, completion: nil)
+        }))
+        self.present(actionSheet, animated: true, completion: nil)
     }
     
     @IBAction func slideToSend(_ gestureRecognizer: UIPanGestureRecognizer) {

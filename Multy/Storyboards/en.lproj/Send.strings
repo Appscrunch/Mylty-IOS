@@ -207,7 +207,7 @@
 "k7z-h6-tBd.text" = "Available: ";
 
 /* Class = "UILabel"; text = "By donating to Multy you show your support and appreciation of a product. We are open-source project and your donation is the only source of profit for us. "; ObjectID = "lXZ-a8-UvA"; */
-"lXZ-a8-UvA.text" = "Здійснюючи пожертву на користь Multy, Ви висловлюєте підтримку і повагу продукту. Ми - проект з відкритим вихідним кодом і ваші внески є для нас єдиним джерелом прибутку.";
+"lXZ-a8-UvA.text" = "By donating to Multy you show your support and appreciation of a product. We are open-source project and your donation is the only source of profit for us.";
 
 /* Class = "UILabel"; text = "Slide to Send"; ObjectID = "m0G-xr-zmf"; */
 "m0G-xr-zmf.text" = "Slide to Send";
@@ -243,7 +243,7 @@
 "sEm-BU-U5Q.text" = "USD";
 
 /* Class = "UILabel"; text = "Support Multy"; ObjectID = "t0h-5W-plS"; */
-"t0h-5W-plS.text" = "Підтримка Multy";
+"t0h-5W-plS.text" = "Support Multy";
 
 /* Class = "UILabel"; text = "Send To"; ObjectID = "ttx-83-gVw"; */
 "ttx-83-gVw.text" = "Send To";

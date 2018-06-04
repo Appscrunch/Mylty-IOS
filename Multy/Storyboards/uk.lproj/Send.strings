@@ -207,7 +207,7 @@
 "k7z-h6-tBd.text" = "Доступно: ";
 
 /* Class = "UILabel"; text = "By donating to Multy you show your support and appreciation of a product. We are open-source project and your donation is the only source of profit for us. "; ObjectID = "lXZ-a8-UvA"; */
-"lXZ-a8-UvA.text" = "Совершая пожертвование Multy, Вы оказываете поддержку и уважение продукту. Мы являемся проектом с открытым исходным кодом и ваше пожертвование является для нас единственным источником прибыли.";
+"lXZ-a8-UvA.text" = "Здійснюючи пожертву на користь Multy, Ви висловлюєте підтримку і повагу продукту. Ми - проект з відкритим вихідним кодом і ваші внески є для нас єдиним джерелом прибутку.";
 
 /* Class = "UILabel"; text = "Slide to Send"; ObjectID = "m0G-xr-zmf"; */
 "m0G-xr-zmf.text" = "Слайд для відправки";
