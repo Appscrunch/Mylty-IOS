@@ -36,6 +36,7 @@ class AddressViewController: UIViewController, AnalyticsProtocol {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.view.addGestureRecognizer(tap)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +46,7 @@ class AddressViewController: UIViewController, AnalyticsProtocol {
     }
     
     override func viewDidLayoutSubviews() {
+        self.copiedView.frame.origin.y = screenHeight + 40
         if screenHeight == heightOfiPad {
             firstConstraint.constant = firstConstraint.constant/2
 //            seondConstraint.constant = seondConstraint.constant/2
