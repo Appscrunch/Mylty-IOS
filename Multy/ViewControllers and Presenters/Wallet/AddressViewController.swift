@@ -36,6 +36,7 @@ class AddressViewController: UIViewController, AnalyticsProtocol {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.view.addGestureRecognizer(tap)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +46,7 @@ class AddressViewController: UIViewController, AnalyticsProtocol {
     }
     
     override func viewDidLayoutSubviews() {
+        self.copiedView.frame.origin.y = screenHeight + 40
         if screenHeight == heightOfiPad {
             firstConstraint.constant = firstConstraint.constant/2
 //            seondConstraint.constant = seondConstraint.constant/2
@@ -80,31 +82,40 @@ class AddressViewController: UIViewController, AnalyticsProtocol {
         })
     }
     
-    @IBAction func shareAction(_ sender: Any) {
-        let branch = Branch.getInstance()
-        branch?.getShortURL(withParams: branchDict() as! [String : Any], andChannel: "Create option \"Multy\"", andFeature: "sharing", andCallback: { (url, err) in
-            let objectsToShare = [url] as! [String]
-            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-            activityVC.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-                if !completed {
-                    // User canceled
-                    return
-                } else {
-                    if let appName = activityType?.rawValue {
-                        self.sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(self.wallet!.chain)", eventName: "\(shareToAppWithChainTap)\(self.wallet!.chain)_\(appName)")
-                    }
+    func presentActivtyVC(objectToShare: String) {
+        let objectsToShare = [objectToShare] as [String]
+        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+        activityVC.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+            if !completed {
+                // User canceled
+                return
+            } else {
+                if let appName = activityType?.rawValue {
+                    self.sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(self.wallet!.chain)", eventName: "\(shareToAppWithChainTap)\(self.wallet!.chain)_\(appName)")
                 }
             }
-            activityVC.setPresentedShareDialogToDelegate()
-            self.present(activityVC, animated: true, completion: nil)
+        }
+        activityVC.setPresentedShareDialogToDelegate()
+        self.present(activityVC, animated: true, completion: nil)
+    }
+    
+    func makeSharedString(urlString: String) -> String {
+        var chainName = ""
+        if wallet!.blockchainType.isMainnet {
+            chainName = wallet!.blockchainType.shortName
+        } else {
+            chainName = "\(wallet!.blockchainType.shortName) TESTNET"
+        }
+        return "My \(chainName) Address: \(self.makeStringWithAddress())\n\nURL for open in app it\n\n\(urlString)"
+    }
+    
+    @IBAction func shareAction(_ sender: Any) {
+        let branch = Branch.getInstance()
+        branch?.getShortURL(withParams: self.branchDict() as! [String : Any], andChannel: "Create option \"Multy\"", andFeature: "sharing", andCallback: { (url, err) in
+            self.presentActivtyVC(objectToShare: self.makeSharedString(urlString: url!))
         })
         sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(wallet!.chain)", eventName: "\(shareWithChainTap)\(wallet!.chain)")
-//        let message = "MULTY \n\nMy \(self.wallet?.cryptoName ?? "") Address: \n\(makeStringWithAddress())"
-//        let objectsToShare = [message] as [String]
-//        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-//        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-//        self.present(activityVC, animated: true, completion: nil)
     }
     
     func branchDict() -> NSDictionary {

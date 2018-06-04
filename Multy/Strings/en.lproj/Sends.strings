@@ -7,7 +7,7 @@
 */
 
 "WARNING" = "Warning";
-"CANCEL" = "Отменить";
+"CANCEL" = "Cancel";
 "ERROR" = "Error";
 "SOMETHING WENT WRONG" = "Something went wrong";
 "NOT VALID ADDRESS" = "You entered not valid address for current blockchain.";
@@ -31,3 +31,5 @@
 "TRANSACTION ERROR" = "Transaction Error";
 "LOADING" = "Loading";
 "ACTIVE REQUESTS" = "Active Requests";
+"COPY TO CLIPBOARD" = "Copy to clipboard";
+"SHARE" = "Share";
