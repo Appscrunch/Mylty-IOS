@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = CurrencyToConvertViewController
+
 class CurrencyToConvertViewController: UIViewController, CancelProtocol, AnalyticsProtocol {
 
     @IBOutlet weak var tableView: UITableView!
@@ -31,7 +33,12 @@ class CurrencyToConvertViewController: UIViewController, CancelProtocol, Analyti
     }
     
     func cancelAction() {
-        presentDonationVCorAlert()
+//        presentDonationVCorAlert()
+        self.makePurchaseFor(productId: "io.multy.estimationCurrencies5")
+    }
+    
+    func donate50(idOfProduct: String) {
+        self.makePurchaseFor(productId: idOfProduct)
     }
     
     func presentNoInternet() {
@@ -55,10 +62,10 @@ extension CurrencyToConvertViewController: UITableViewDelegate, UITableViewDataS
         
         if section == 0 {
             label.textColor = #colorLiteral(red: 0.5294117647, green: 0.631372549, blue: 0.7725490196, alpha: 1)
-            label.text = "AVAILABLE"
+            label.text = localize(string: Constants.availableString)
         } else {
             label.textColor = #colorLiteral(red: 0.9215686275, green: 0.08235294118, blue: 0.231372549, alpha: 1)
-            label.text = "WORK IN PROGRESS"
+            label.text = localize(string: Constants.workInProgressString)
         }
         
         header.addSubview(label)
@@ -93,7 +100,7 @@ extension CurrencyToConvertViewController: UITableViewDelegate, UITableViewDataS
         
         if indexPath.section == 1 {
             unowned let weakSelf =  self
-            self.presentDonationAlertVC(from: weakSelf)
+            self.presentDonationAlertVC(from: weakSelf, with: "io.multy.estimationCurrencie50")
             logAnalytics(indexPath: indexPath)
         } else {
             self.navigationController?.popViewController(animated: true)
@@ -108,5 +115,11 @@ extension CurrencyToConvertViewController: UITableViewDelegate, UITableViewDataS
         //FIXME: add switch if here will be changing //see BlockchainsViewController
         let eventCode = donationForEUR + indexPath.row
         sendDonationAlertScreenPresentedAnalytics(code: eventCode)
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "CurrencyChooser"
     }
 }

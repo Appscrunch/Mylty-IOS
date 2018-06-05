@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = SeedPhraseWordPresenter
+
 class SeedPhraseWordPresenter: NSObject {
     var mainVC : SeedPhraseWordViewController?
     
@@ -36,7 +38,7 @@ class SeedPhraseWordPresenter: NSObject {
     
     func presentNextTripleOrContinue() {
         if self.countOfTaps == 3 {
-            self.mainVC?.nextWordBtn.setTitle("Continue", for: .normal)
+            self.mainVC?.nextWordBtn.setTitle(localize(string: Constants.continueString), for: .normal)
         }
         
         if self.countOfTaps == 0 {
@@ -47,7 +49,7 @@ class SeedPhraseWordPresenter: NSObject {
             self.mainVC?.blocksImage.image = #imageLiteral(resourceName: "04")
         } else
             if self.countOfTaps == 3 {
-                self.mainVC?.nextWordBtn.setTitle("Continue", for: .normal)
+                self.mainVC?.nextWordBtn.setTitle(localize(string: Constants.continueString), for: .normal)
                 self.mainVC?.blocksImage.image = #imageLiteral(resourceName: "05")
         }
         
@@ -65,5 +67,11 @@ class SeedPhraseWordPresenter: NSObject {
             }
             self.mainVC?.performSegue(withIdentifier: "backupSeedPhraseVC", sender: UIButton.self)
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Seed"
     }
 }

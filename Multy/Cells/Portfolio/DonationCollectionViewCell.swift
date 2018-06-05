@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = DonationCollectionViewCell
+
 class DonationCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var backgroundImg: UIImageView!
@@ -19,10 +21,10 @@ class DonationCollectionViewCell: UICollectionViewCell {
         switch index {
         case 0:
             self.backgroundImg.image = #imageLiteral(resourceName: "portfolioDonationImage")
-            self.midLbl.text = "Crypto portfolio"
+            self.midLbl.text = localize(string: Constants.cryptoPortfolioString)
         case 1:
             self.backgroundImg.image = #imageLiteral(resourceName: "chartsDonationImage")
-            self.midLbl.text = "Currencies charts"
+            self.midLbl.text = localize(string: Constants.currenciesChartsString)
         default: break
         }
     }
@@ -37,4 +39,10 @@ class DonationCollectionViewCell: UICollectionViewCell {
 //        }
     }
 
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
+    }
 }

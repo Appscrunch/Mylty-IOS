@@ -159,11 +159,7 @@ extension DataManager {
     
     func addWallet(params: Parameters, completion: @escaping (_ answer: NSDictionary?,_ error: Error?) -> ()) {
         apiManager.addWallet(params) { (responceDict, error) in
-            if error != nil {
-                completion(NSDictionary(), nil)
-            } else {
-                completion(nil, error)
-            }
+            completion(responceDict, error)
         }
     }
     

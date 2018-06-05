@@ -11,6 +11,7 @@ class StockExchangeRateRLM: Object {
     @objc dynamic var name = String()
 //    @objc dynamic var exchanges = Dictionary<String, Double>()
     @objc dynamic var btc2usd = NSNumber(value: 0) //Double//MARK: to be deleted
+    @objc dynamic var eth2usd = NSNumber(value: 0)
     @objc dynamic var date = Date()
     
     override class func primaryKey() -> String? {
@@ -36,6 +37,11 @@ class StockExchangeRateRLM: Object {
             if let btc2usd = exchanges["btc_usd"] as? NSNumber {
                 stock.btc2usd = btc2usd
             }
+            
+            if let eth2usd = exchanges["eth_usd"] as? NSNumber {
+                stock.eth2usd = eth2usd
+            }
+            
             if let usd2btc = exchanges["usd_btc"] as? NSNumber {
                 
             }

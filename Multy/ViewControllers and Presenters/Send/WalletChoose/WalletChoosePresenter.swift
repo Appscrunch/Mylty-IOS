@@ -11,10 +11,17 @@ class WalletChoosePresenter: NSObject {
     var transactionDTO = TransactionDTO()
     
     var walletsArr = List<UserWalletRLM>()
-    var selectedIndex: Int?
+    var filteredWalletArray = [UserWalletRLM]()
+    var selectedIndex: Int? {
+        didSet {
+            if selectedIndex != nil {
+                transactionDTO.choosenWallet = filteredWalletArray[selectedIndex!]
+            }
+        }
+    }
     
     func numberOfWallets() -> Int {
-        return self.walletsArr.count
+        return filteredWalletArray.count
     }
     
     func getWallets() {
@@ -22,15 +29,26 @@ class WalletChoosePresenter: NSObject {
             if err == nil {
                 // MARK: check this
                 self.walletsArr = acc!.wallets
+                self.filterWallets()
                 self.walletChoooseVC?.updateUI()
             }
         }
     }
     
+    func filterWallets() {
+        if transactionDTO.sendAddress != nil {
+            filteredWalletArray = walletsArr.filter{ DataManager.shared.isAddressValid(address: transactionDTO.sendAddress!, for: $0).isValid }
+        } else {
+            filteredWalletArray = walletsArr.filter{ _ in true }
+        }
+        
+        walletChoooseVC?.emptyDataSourceLabel.isHidden = (filteredWalletArray.count != 0)
+    }
+    
     func presentAlert(message : String?) {
         var alertMessage = String()
         if message == nil {
-            alertMessage = "Not enough amount on choosen wallet!\nYou can`t spend sum more than you have on the wallet!\nYour payment sum equals \(transactionDTO.sendAmount!.fixedFraction(digits: 8)) \(transactionDTO.blockchainType.fullName)"
+            alertMessage = "Not enough amount on choosen wallet!\nYou can`t spend sum more than you have on the wallet!\nYour payment sum equals \(transactionDTO.sendAmountString ?? "0,0") \(transactionDTO.blockchain!.fullName)"
         } else {
             alertMessage = message!
         }
@@ -41,5 +59,16 @@ class WalletChoosePresenter: NSObject {
         }))
         
         walletChoooseVC?.present(alert, animated: true, completion: nil)
+    }
+    
+    func destinationSegueString() -> String {
+        switch transactionDTO.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            return "sendBTCDetailsVC"
+        case BLOCKCHAIN_ETHEREUM:
+            return "sendETHDetailsVC"
+        default:
+            return ""
+        }
     }
 }

@@ -1,0 +1,40 @@
+/* 
+  Send.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";
+"SOMETHING WENT WRONG" = "Something went wrong";
+"NOT VALID ADDRESS" = "You entered not valid address for current blockchain.";
+"GO TO SETTINGS" = "Please go to the Settings -> Multy and allow camera usage";
+"VERY FAST" = "Very Fast";
+"FAST" = "Fast";
+"MEDIUM" = "Medium";
+"SLOW" = "Slow";
+"VERY SLOW" = "Very Slow";
+"CUSTOM" = "Custom";
+"PREDEFINED VALUE MESSAGE" = "You can use predefined value or set a custom one.";
+"PLEASE CHOOSE FEE RATE" = "Please choose Fee Rate.";
+"MORE THEN YOU HAVE" = "You trying to enter sum more then you have";
+"FEE RATE LESS THEN" = "Fee rate can not be less then";
+"SATOSHI PER BYTE" = "satoshi per byte";
+"FEE TOO HIGH" = "You fee is too high. Please enter normal fee amount!";
+"GAS PRICE LESS 1" = "Gas Price can not be less then 1 Gwei.";
+"SUCCESS" = "Succsess!";
+"DONE" = "Done!";
+"ERROR WHILE SENDING TX" = "Error while sending transaction. Please, try again!";
+"TRANSACTION ERROR" = "Transaction Error";
+"LOADING" = "Loading";
+"ACTIVE REQUESTS" = "Active Requests";
+"YOU DONT HAVE WALLETS" = "You don't have any wallets with ";
+"ENTER SATOSHI PER BYTE" = "Enter Satohi per byte here";
+"ENABLE BLUETOOTH ALERT TITLE" = "To enable Bluetooth, go to Settings";
+"SETTINGS ACTION TITLE" = "Settings";
+"COPY TO CLIPBOARD" = "Copy to clipboard";
+"SHARE" = "Share";
+"SAT/B" = "Sat/B";

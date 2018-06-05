@@ -51,7 +51,7 @@ extension DataManager {
         var binaryData = DataManager.shared.realmManager.account!.binaryDataString.createBinaryData()!
         
         
-        let addressData = core.createAddress(blockchain: transactionDTO.blockchainType,
+        let addressData = core.createAddress(blockchain: transactionDTO.blockchainType!,
                                              walletID: transactionDTO.choosenWallet!.walletID.uint32Value,
                                              addressID: UInt32(transactionDTO.choosenWallet!.addresses.count),
                                              binaryData: &binaryData)
@@ -112,8 +112,8 @@ extension DataManager {
         let _ = self.coreLibManager.createEtherTransaction(addressPointer: addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>,
                                                            sendAddress: sendAddress,
                                                            sendAmountString: sendAmountString,
-                                                           nonce: wallet.ethWallet.nonce.intValue,
-                                                           balanceAmount: "\(wallet.availableAmount())",
+                                                           nonce: wallet.ethWallet!.nonce.intValue,
+                                                           balanceAmount: "\(wallet.availableAmount)",
                                                            ethereumChainID: UInt32(4), //RINKEBY
                                                            gasPrice: gasPriceString,
                                                            gasLimit: gasLimitString)

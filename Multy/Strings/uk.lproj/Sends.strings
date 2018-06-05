@@ -1,0 +1,40 @@
+/* 
+  Send.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Попередження";
+"CANCEL" = "Скасувати";
+"ERROR" = "Помилка";
+"SOMETHING WENT WRONG" = "Щось пішло не так";
+"NOT VALID ADDRESS" = "Ви ввели неправильну адресу.";
+"GO TO SETTINGS" = "Дозвольте використовувати камеру в налаштуваннях. (Налаштування -> Multy)";
+"VERY FAST" = "Дуже швидко";
+"FAST" = "Швидко";
+"MEDIUM" = "Помірно";
+"SLOW" = "Повільно";
+"VERY SLOW" = "Дуже повільно";
+"CUSTOM" = "Користувача"; // FIX
+"PREDEFINED VALUE MESSAGE" = "Ви можете використовувати значення за замовчуванням або встановити своє значення.";
+"PLEASE CHOOSE FEE RATE" = "Будь ласка, виберіть вартість комісії за байт.";
+"MORE THEN YOU HAVE" = "Ви намагаєтеся ввести суму більшу, ніж у вас є на рахунку";
+"FEE RATE LESS THEN" = "Ставка комісії не може бути менше";
+"SATOSHI PER BYTE" = "сатоши за байт.";
+"FEE TOO HIGH" = "Ваша комісія занадто висока. Будь ласка, введіть меншу суму!";
+"GAS PRICE LESS 1" = "Ціна газу не може бути менше 1 Гвей.";
+"SUCCESS" = "Успішно!";
+"DONE" = "Готово!";
+"ERROR WHILE SENDING TX" = "Помилка при відправленні транзакції. Будь ласка, спробуйте ще раз!";
+"TRANSACTION ERROR" = "Помилка транзакції";
+"LOADING" = "Завантаження";
+"ACTIVE REQUESTS" = "Поточні запити";
+"YOU DONT HAVE WALLETS" = "У Вас немає гаманців з ";
+"ENTER SATOSHI PER BYTE" = "Введіть Сатоши за байт";
+"ENABLE BLUETOOTH ALERT TITLE" = "";
+"SETTINGS ACTION TITLE" = "";
+"COPY TO CLIPBOARD" = "Скопіювати в буфер обміну";
+"SHARE" = "Поділитися";
+"SAT/B" = "Сат/Б";

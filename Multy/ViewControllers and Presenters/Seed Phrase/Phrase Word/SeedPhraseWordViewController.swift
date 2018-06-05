@@ -7,7 +7,6 @@ import LTMorphingLabel
 import ZFRippleButton
 
 class SeedPhraseWordViewController: UIViewController, AnalyticsProtocol {
-
     @IBOutlet weak var nextWordBtn: ZFRippleButton!
     
     @IBOutlet weak var blocksImage: UIImageView!

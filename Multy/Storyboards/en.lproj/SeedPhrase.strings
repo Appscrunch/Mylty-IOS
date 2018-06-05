@@ -1,0 +1,69 @@
+
+/* Class = "UILabel"; text = "Seed Phrase"; ObjectID = "0Ht-P3-d6D"; */
+"0Ht-P3-d6D.text" = "Seed Phrase";
+
+/* Class = "UILabel"; text = "Check that no one is behind you"; ObjectID = "7Mk-vY-wxw"; */
+"7Mk-vY-wxw.text" = "Check that no one is behind you";
+
+/* Class = "UIButton"; normalTitle = "Try Again!"; ObjectID = "EcG-0i-Nr0"; */
+"EcG-0i-Nr0.normalTitle" = "Try Again!";
+
+/* Class = "UILabel"; text = "For security purpose we will show seed phrase in portions. Write down this words on paper and securely store it somewhere safe!"; ObjectID = "IHG-IF-sNd"; */
+"IHG-IF-sNd.text" = "For security purpose we will show seed phrase in portions. Write down this words on paper and securely store it somewhere safe!";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "IQj-ra-XgJ"; */
+"IQj-ra-XgJ.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "You have seen your Seed Phrase."; ObjectID = "Iur-Vu-aWk"; */
+"Iur-Vu-aWk.text" = "You have seen your Seed Phrase.";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "J88-uo-8qz"; */
+"J88-uo-8qz.normalTitle" = "Continue";
+
+/* Class = "UILabel"; text = "1 from 15"; ObjectID = "K1E-dc-1Bn"; */
+"K1E-dc-1Bn.text" = "1 from 15";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "Wey-AO-45o"; */
+"Wey-AO-45o.normalTitle" = "Continue";
+
+/* Class = "UILabel"; text = "Phrase Validation"; ObjectID = "YXe-ZO-gQe"; */
+"YXe-ZO-gQe.text" = "Phrase Validation";
+
+/* Class = "UILabel"; text = "Seed Phrase"; ObjectID = "aAL-4L-Z3p"; */
+"aAL-4L-Z3p.text" = "Seed Phrase";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "c2M-Lw-dYk"; */
+"c2M-Lw-dYk.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "In order to verify that you have written it correctly type words one by one on the next screen."; ObjectID = "hhR-En-7a2"; */
+"hhR-En-7a2.text" = "In order to verify that you have written it correctly type words one by one on the next screen.";
+
+/* Class = "UILabel"; text = "Seed Phrase"; ObjectID = "pf7-VK-HCy"; */
+"pf7-VK-HCy.text" = "Seed Phrase";
+
+/* Class = "UILabel"; text = "Show Seed Phrase again."; ObjectID = "piY-bH-vcx"; */
+"piY-bH-vcx.text" = "Show Seed Phrase again.";
+
+/* Class = "UIButton"; normalTitle = "Great!"; ObjectID = "rQ5-TK-TFt"; */
+"rQ5-TK-TFt.normalTitle" = "Great!";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "tKd-SS-isf"; */
+"tKd-SS-isf.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "Don't do screenshots"; ObjectID = "tNr-xh-HkC"; */
+"tNr-xh-HkC.text" = "Don't do screenshots";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "ubW-0G-FDq"; */
+"ubW-0G-FDq.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "Move away from windows and surveillance cameras"; ObjectID = "vvN-cn-dsq"; */
+"vvN-cn-dsq.text" = "Move away from windows and surveillance cameras";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "wTi-w9-E0X"; */
+"wTi-w9-E0X.normalTitle" = "Cancel";
+
+/* Class = "UIButton"; normalTitle = "Next Word"; ObjectID = "wV8-0l-POJ"; */
+"wV8-0l-POJ.normalTitle" = "Next Word";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "wpE-FL-wp8"; */
+"wpE-FL-wp8.normalTitle" = "Continue";

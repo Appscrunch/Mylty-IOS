@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = CustomTrasanctionFeeTableViewCell
+
 class CustomTrasanctionFeeTableViewCell: UITableViewCell {
 
     @IBOutlet weak var customFeeImage: UIImageView!
@@ -16,6 +18,7 @@ class CustomTrasanctionFeeTableViewCell: UITableViewCell {
     @IBOutlet weak var gasLimitValueLbl: UILabel!
     @IBOutlet weak var customTopConstraint: NSLayoutConstraint!
     
+    var blockchainType: BlockchainType?
     var value = 0
     
     override func awakeFromNib() {
@@ -27,12 +30,24 @@ class CustomTrasanctionFeeTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    func constructString() -> String {
+//        let sumInCrypto = (Double(value) / 100000000.0) * 225
+//        let sumInFiat = sumInCrypto * DataManager.shared.makeExchangeFor(blockchainType: blockchainType!)
+//        return "~ " + "\(sumInCrypto.fixedFraction(digits: 8)) BTC / \(sumInFiat.fixedFraction(digits: 2)) USD"
+        return "\(value) " + localize(string: Constants.satoshiPerByteShortString)
+    }
+    
     func setupUI() {
 //        self.middleLbl.isHidden = true
-        self.checkImg.isHidden = false
-//        self.toplbl.isHidden = false
+        checkImg.isHidden = false
+        toplbl.isHidden = false
+        toplbl.text = constructString()
 //        self.valuelbl.isHidden = false
 //        self.valuelbl.text = "\(Int(self.value))"
+    }
+    
+    func hideCustomPrice() {
+        toplbl.isHidden = true
     }
     
     func setupUIFor(gasPrice: Int?, gasLimit: Int?) {
@@ -56,5 +71,10 @@ class CustomTrasanctionFeeTableViewCell: UITableViewCell {
         self.toplbl.isHidden = true
         self.valuelbl.isHidden = true
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
+    }
 }

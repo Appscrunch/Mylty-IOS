@@ -3,17 +3,23 @@
 //See LICENSE for details
 
 import UIKit
+import StoreKit
+import SwiftyStoreKit
 
 private typealias AnalyticsDelegate = BlockchainsViewController
 private typealias CancelDelegate = BlockchainsViewController
 private typealias TableViewDelegate = BlockchainsViewController
 private typealias TableViewDataSource = BlockchainsViewController
+private typealias LocalizeDelegate = BlockchainsViewController
 
 class BlockchainsViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
     let presenter = BlockchainsPresenter()
+    
+    var stringInAppId = ""
+    var stringInAppIdBig = ""
     
     weak var delegate: ChooseBlockchainProtocol?
     
@@ -37,7 +43,7 @@ class BlockchainsViewController: UIViewController {
 
 extension CancelDelegate: CancelProtocol {
     func cancelAction() {
-        presentDonationVCorAlert()
+        self.makePurchaseFor(productId: self.stringInAppId)
     }
     
     func presentNoInternet() {
@@ -47,15 +53,13 @@ extension CancelDelegate: CancelProtocol {
 
 extension AnalyticsDelegate: AnalyticsProtocol {
     func logAnalytics(indexPath: IndexPath) {
-        var eventCode = donationForBTCLighting//see AnalyticsConstants
+        var eventCode = donationForBTCLighting // see AnalyticsConstants
         
         switch indexPath.row {
         case 0:
-            eventCode += 1
-        case 1:
-            eventCode += 0
+            break
         default:
-            eventCode += indexPath.row
+            eventCode += 1 + indexPath.row // since omitted ETH
         }
         
         sendDonationAlertScreenPresentedAnalytics(code: eventCode)
@@ -73,10 +77,10 @@ extension TableViewDelegate: UITableViewDelegate {
         
         if section == 0 {
             label.textColor = #colorLiteral(red: 0.5294117647, green: 0.631372549, blue: 0.7725490196, alpha: 1)
-            label.text = "AVAILABLE"
+            label.text = localize(string: Constants.availableString)
         } else {
             label.textColor = #colorLiteral(red: 0.9215686275, green: 0.08235294118, blue: 0.231372549, alpha: 1)
-            label.text = "WORK IN PROGRESS"
+            label.text = localize(string: Constants.workInProgressString)
         }
         
         header.addSubview(label)
@@ -92,8 +96,9 @@ extension TableViewDelegate: UITableViewDelegate {
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.section == 1 {
+            self.makeStingIdForInApp(indexPath: indexPath)
             unowned let weakSelf =  self
-            self.presentDonationAlertVC(from: weakSelf)
+            self.presentDonationAlertVC(from: weakSelf, with: stringInAppIdBig)
             logAnalytics(indexPath: indexPath)
         } else {
             let currencyObj = presenter.availableBlockchainArray[indexPath.row]
@@ -104,6 +109,30 @@ extension TableViewDelegate: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    func makeStingIdForInApp(indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0: stringInAppId = "io.multy.addingEthereum5"
+        case 1: stringInAppId = "io.multy.addingSteemit5"
+        case 2: stringInAppId = "io.multy.addingBCH5"
+        case 3: stringInAppId = "io.multy.addingLitecoin5"
+        case 4: stringInAppId = "io.multy.addingDash5"
+        case 5: stringInAppId = "io.multy.addingEthereumClassic5"
+        default: break
+        }
+    }
+    
+    func makeStingIdForBigInApp(indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0: stringInAppIdBig = "io.multy.addingEthereum50"
+        case 1: stringInAppIdBig = "io.multy.addingSteemit50"
+        case 2: stringInAppIdBig = "io.multy.addingBCH50"
+        case 3: stringInAppIdBig = "io.multy.addingLitecoin50"
+        case 4: stringInAppIdBig = "io.multy.addingDash50"
+        case 5: stringInAppIdBig = "io.multy.addingEthereumClassic50"
+        default: break
+        }
     }
 }
 
@@ -132,5 +161,11 @@ extension TableViewDataSource: UITableViewDataSource {
         }
         
         return chainCell
+    }
+}
+
+extension LocalizeDelegate: Localizable {    
+    var tableName: String {
+        return "CurrencyChooser"
     }
 }

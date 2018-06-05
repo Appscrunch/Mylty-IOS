@@ -1,0 +1,11 @@
+/* 
+  Contacts.strings
+  Multy
+
+  Created by Alex Pro on 5/31/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"ERROR" = "Error";
+"SOMETHING WENT WRONG" = "Something went wrong";
+"LOADING" = "Loading";

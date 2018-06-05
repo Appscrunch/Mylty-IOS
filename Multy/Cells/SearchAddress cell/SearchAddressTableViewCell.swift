@@ -54,13 +54,13 @@ class SearchAddressTableViewCell: UITableViewCell, AnalyticsProtocol {
     }
     
     @IBAction func addressBookAction(_ sender: Any) {
-        donationDelegate?.donate()
+        donationDelegate?.donate(idOfInApp: "io.multy.addingContacts5")
 //        sendAnalyticsEvent(screenName: screenSendTo, eventName: addressBookTap)
         sendDonationAlertScreenPresentedAnalytics(code: donationForContactSC)
     }
     
     @IBAction func wirelessScanAction(_ sender: Any) {
-        donationDelegate?.donate()
+        donationDelegate?.donate(idOfInApp: "io.multy.wirelessScan5")
 //        sendAnalyticsEvent(screenName: screenSendTo, eventName: wirelessScanTap)
         sendDonationAlertScreenPresentedAnalytics(code: donationForWirelessScanFUNC)
     }

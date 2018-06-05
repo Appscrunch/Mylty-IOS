@@ -1,0 +1,13 @@
+/* 
+  BlockchainChooser.strings
+  Multy
+
+  Created by Alex Pro on 5/29/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"AVAILABLE" = "ДОСТУПНО";
+"WORK IN PROGRESS" = "В РАЗРАБОТКЕ";
+"ERROR" = "Ошибка";
+"SOMETHING WENT WRONG" = "Что-то пошло не так";
+"LOADING" = "Загрузка";

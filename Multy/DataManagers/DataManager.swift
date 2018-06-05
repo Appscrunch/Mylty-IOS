@@ -43,7 +43,6 @@ class DataManager: NSObject {
         } else {
             return true
         }
-        
     }
     
     func findPrefixes(prefix: String) -> [String] {

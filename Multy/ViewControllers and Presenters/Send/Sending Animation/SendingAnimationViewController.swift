@@ -5,6 +5,8 @@
 import UIKit
 import ZFRippleButton
 
+private typealias LocalizeDelegate = SendingAnimationViewController
+
 class SendingAnimationViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet var backView: UIView!
@@ -23,6 +25,9 @@ class SendingAnimationViewController: UIViewController, AnalyticsProtocol {
         
         DispatchQueue.main.asyncAfter(deadline: when) {
             self.sendOK()
+        }
+        if chainId == nil {
+            return
         }
         sendAnalyticsEvent(screenName: "\(screenSendSuccessWithChain)\(chainId!)", eventName: "\(screenSendSuccessWithChain)\(chainId!)")
     }
@@ -52,7 +57,13 @@ class SendingAnimationViewController: UIViewController, AnalyticsProtocol {
     
     func sendOK() {
         self.sendingImage.image = #imageLiteral(resourceName: "completeIcon")
-        self.sendingLbl.text = "Succsess!"
+        self.sendingLbl.text = localize(string: Constants.successString)
         self.closeBtn.isHidden = false
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

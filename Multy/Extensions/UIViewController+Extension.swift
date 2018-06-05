@@ -3,6 +3,8 @@
 //See LICENSE for details
 
 import UIKit
+import StoreKit
+import SwiftyStoreKit
 
 private let swizzling: (AnyClass, Selector, Selector) -> () = { forClass, originalSelector, swizzledSelector in
     let originalMethod = class_getInstanceMethod(forClass, originalSelector)
@@ -16,6 +18,81 @@ private let swizzling: (AnyClass, Selector, Selector) -> () = { forClass, origin
                             method_getTypeEncoding(swizzledMethod!))
     } else {
         method_exchangeImplementations(originalMethod!, swizzledMethod!)
+    }
+}
+
+extension Localizable where Self: UIViewController, Self: Localizable {
+    func presentGoToBluetoothSettingsAlert() {
+        var bluetoothURLString : String?
+        if isIOS10OrHigher() == true {
+            bluetoothURLString = BluetoothSettingsURL_iOS10
+        } else if isIOS9OrHigher() {
+            bluetoothURLString = BluetoothSettingsURL_iOS9
+        }
+        
+        if bluetoothURLString != nil {
+            guard let bluetoothURL = URL(string: bluetoothURLString!) else {
+                return
+            }
+            
+            let alert = UIAlertController(title: localize(string: Constants.enableBluetoothAlertTitle), message: nil, preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default) {
+                UIAlertAction in
+            }
+            
+            let settingsAction = UIAlertAction(title: localize(string: Constants.settingsActionTitle), style: .default) { (action) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(bluetoothURL, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(bluetoothURL)
+                }
+            }
+            
+            alert.addAction(okAction)
+            alert.addAction(settingsAction)
+            
+            self.present(alert, animated: true, completion: nil)
+        } 
+    }
+    
+    func presentAlert(with message: String?) {
+        let alert = UIAlertController(title: localize(string: Constants.errorString), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func makePurchaseFor(productId: String) {
+        let loader = PreloaderView(frame: HUDFrame, text: localize(string: Constants.loadingString), image: #imageLiteral(resourceName: "walletHuge"))
+        view.addSubview(loader)
+        loader.show(customTitle: localize(string: Constants.loadingString))
+        self.getAvailableInAppBy(stringId: productId) { [unowned self] (product) in
+            if product == nil {
+                self.presentAlert(with: self.localize(string: Constants.somethingWentWrongString))
+                loader.hide()
+                return
+            }
+            SwiftyStoreKit.purchaseProduct(product!) { (result) in
+                loader.hide()
+                switch result {
+                case .success(let purchase):
+                    print("Purchase Success: \(purchase.productId)")
+                case .error(let error):
+                    switch error.code {
+                    case .unknown: print("Unknown error. Please contact support")
+                    case .clientInvalid: print("Not allowed to make the payment")
+                    case .paymentCancelled: break
+                    case .paymentInvalid: print("The purchase identifier was invalid")
+                    case .paymentNotAllowed: print("The device is not allowed to make the payment")
+                    case .storeProductNotAvailable: print("The product is not available in the current storefront")
+                    case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+                    case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+                    case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -39,6 +116,22 @@ extension UIViewController {
         let swizzledSelector = #selector(proj_viewWillAppear(animated:))
         swizzling(UIViewController.self, originalSelector, swizzledSelector)
     }()
+    
+    func presentNoInternetScreen() -> Bool {
+        if !(ConnectionCheck.isConnectedToNetwork()) {
+            if self.isKind(of: NoInternetConnectionViewController.self) || self.isKind(of: UIAlertController.self) {
+                return false
+            }
+            
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NoConnectionVC") as! NoInternetConnectionViewController
+            present(nextViewController, animated: true, completion: nil)
+            
+            return false
+        } else {
+            return true
+        }
+    }
     
     @objc func proj_viewWillAppear(animated: Bool) {
         proj_viewWillAppear(animated: animated)
@@ -90,13 +183,6 @@ extension UIViewController {
         return false
     }
     
-    func presentAlert(with message: String?) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     func presentDonationVCorAlert() {
         DataManager.shared.realmManager.fetchBTCWallets(isTestNet: false) { (wallets) in
             if wallets == nil || wallets?.count == 0 {
@@ -107,7 +193,7 @@ extension UIViewController {
             }
             
             for wallet in wallets! {
-                if wallet.availableAmount() > 0 && wallet.availableAmount() > minSatoshiInWalletForDonate {
+                if wallet.availableAmount > Int64(0) && wallet.availableAmount > Int64(minSatoshiInWalletForDonate) {
                     let message = "You have nothing to donate.\nRecharge your balance for any of your BTC wallets."  // no money no honey
                     self.donateOrAlert(isHaveNotEmptyWallet: true, message: message)
                     break
@@ -120,6 +206,7 @@ extension UIViewController {
         }
     }
     
+    //not used any more
     func donateOrAlert(isHaveNotEmptyWallet: Bool, message: String) {
         if isHaveNotEmptyWallet {
             (self.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: true)
@@ -150,12 +237,41 @@ extension UIViewController {
         return isViewLoaded && view.window != nil
     }
     
-    func presentDonationAlertVC(from cancelDelegate: CancelProtocol) {
+    func presentDonationAlertVC(from cancelDelegate: CancelProtocol, with idOfProduct: String) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let donatAlert = storyboard.instantiateViewController(withIdentifier: "donationAlert") as! DonationAlertViewController
         donatAlert.modalPresentationStyle = .overCurrentContext
         donatAlert.modalTransitionStyle = .crossDissolve
         donatAlert.cancelDelegate = cancelDelegate
+        donatAlert.idOfProduct = idOfProduct
         self.present(donatAlert, animated: true, completion: nil)
+    }
+    
+    func showHud(text: String) -> UIView {
+        let hud = ProgressHUD(text: text)
+        hud.tag = 999
+        self.view.addSubview(hud)
+        hud.blockUIandShowProgressHUD()
+        return hud
+    }
+    
+    func hideHud(view: ProgressHUD?) {
+        view?.unblockUIandHideProgressHUD()
+    }
+    
+    func getAvailableInAppBy(stringId: String, completion: @escaping (SKProduct?) -> ()) {
+        SwiftyStoreKit.retrieveProductsInfo([stringId]) { result in
+            if let product = result.retrievedProducts.first {
+                let priceString = product.localizedPrice!
+                print("Product: \(product.localizedDescription), price: \(priceString)")
+                completion(product)
+            } else if let invalidProductId = result.invalidProductIDs.first {
+                print("Invalid product identifier: \(invalidProductId)")
+                completion(nil)
+            } else {
+                print("Error: \(result.error)")
+                completion(nil)
+            }
+        }
     }
 }

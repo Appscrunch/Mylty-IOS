@@ -68,6 +68,8 @@ class SeedPhraseAboutViewController: UIViewController, AnalyticsProtocol {
             self.firstConstraint.constant = 25
             self.secondConstraint.constant = 25
             self.thirdConstraint.constant = 25
+        } else if screenHeight == heightOfFive {
+            self.firstConstraint.constant = 25
         }
     }
     

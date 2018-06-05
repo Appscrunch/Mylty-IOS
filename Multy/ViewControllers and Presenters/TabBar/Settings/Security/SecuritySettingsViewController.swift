@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = SecuritySettingsViewController
+
 class SecuritySettingsViewController: UIViewController, AnalyticsProtocol, CancelProtocol {
     
     @IBOutlet weak var seedLbl: UILabel!  // if backup not complete - text = "Backup Seed" - else - text = "View Seed Phrase"
@@ -78,7 +80,7 @@ class SecuritySettingsViewController: UIViewController, AnalyticsProtocol, Cance
     }
     
     func setupUi() {
-        UserPreferences.shared.getAndDecryptPin { (pin, err) in
+        UserPreferences.shared.getAndDecryptPin { [unowned self] (pin, err) in
             if pin == nil {
                 self.entranceTopConstraint.constant = 12
                 self.noneLbl.isHidden = false
@@ -89,9 +91,9 @@ class SecuritySettingsViewController: UIViewController, AnalyticsProtocol, Cance
                 self.warningImg.isHidden = true
             }
             if self.isNeedToBackup! {
-                self.seedLbl.text = "Backup Seed"
+                self.seedLbl.text = self.localize(string: Constants.backupSeedPhraseNeededString)
             } else {
-                self.seedLbl.text = "View Seed Phrase"
+                self.seedLbl.text = self.localize(string: Constants.viewSeedPhraseString)
             }
         }
     }
@@ -141,5 +143,10 @@ class SecuritySettingsViewController: UIViewController, AnalyticsProtocol, Cance
             destVC.cancelDelegate = self
         }
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Setting"
+    }
 }

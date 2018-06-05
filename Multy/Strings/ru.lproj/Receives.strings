@@ -1,0 +1,18 @@
+/* 
+  Receive.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Предупреждение";
+"CANCEL" = "Отменить";
+"ERROR" = "Ошибка";
+"SOMETHING WENT WRONG" = "Что-то пошло не так";
+"MAGICAL RECEIVE" = "Магическое получение";
+"SORRY" = "Извините";
+"LOADING" = "Загрузка";
+"RECEIVE" = "Получить";
+"ENABLE BLUETOOTH ALERT TITLE" = "Чтобы включить Bluetooth, перейдите в Настройки";
+"SETTINGS ACTION TITLE" = "Настройки";
