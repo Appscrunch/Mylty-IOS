@@ -5,6 +5,8 @@
 import UIKit
 import ZFRippleButton
 
+private typealias LocalizeDelegate = CheckWordsViewController
+
 class CheckWordsViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol {
 
     @IBOutlet weak var wordTF: UITextField!
@@ -19,7 +21,8 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
     @IBOutlet weak var constraintAfterTopLabel: NSLayoutConstraint!
     @IBOutlet weak var constraintAfterBricks: NSLayoutConstraint!
     
-    let progressHUD = ProgressHUD(text: "Restoring Wallets...")
+//    let progressHUD = ProgressHUD(text: "Restoring Wallets...")
+    let loader = PreloaderView(frame: HUDFrame, text: "Restoring Wallets", image: #imageLiteral(resourceName: "walletHuge"))
     
     var currentWordNumber = 1
     var isRestore = false
@@ -36,8 +39,10 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
     override func viewDidLoad() {
         super.viewDidLoad()
         self.swipeToBack()
-        self.view.addSubview(progressHUD)
-        progressHUD.hide()
+        
+        loader.setupUI(text: localize(string: Constants.restoringWalletsString), image: #imageLiteral(resourceName: "walletHuge"))
+        self.view.addSubview(loader)
+        loader.hide()
         
         if screenWidth < 325 {
             constraintTop.constant = 10
@@ -73,11 +78,11 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
         super.viewWillAppear(animated)
         self.wordTF.becomeFirstResponder()
         if self.isRestore {
-            self.titleLbl.text = "Restore Multy"
+            self.titleLbl.text = localize(string: Constants.restoreMultyString)
         }
         if self.isNeedToClean {
             self.currentWordNumber = 1
-            self.wordCounterLbl.text = "\(self.currentWordNumber) from 15"
+            self.wordCounterLbl.text = "\(self.currentWordNumber) \(localize(string: Constants.from15String))"
             self.view.isUserInteractionEnabled = true
             self.presenter.phraseArr.removeAll()
             bricksView.subviews.forEach({ $0.removeFromSuperview() })
@@ -122,7 +127,7 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
         
         if !self.wordTF.text!.isEmpty {
             self.presenter.phraseArr.append(wordArray.first!)
-            self.nextWordOrContinue.setTitle("Next Word", for: .normal)
+            self.nextWordOrContinue.setTitle(localize(string: Constants.nextWordString), for: .normal)
             
             wordTF.text = wordArray.first!
             nextWordOrContinue.isUserInteractionEnabled = false
@@ -139,12 +144,12 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
         bricksView.addSubview(BricksView(with: bricksView.bounds, and: currentWordNumber))
         
         if self.currentWordNumber == 15 {
-            self.nextWordOrContinue.setTitle("Continue", for: .normal)
+            self.nextWordOrContinue.setTitle(localize(string: Constants.continueString), for: .normal)
         }
         
         if self.currentWordNumber < 15 {
             self.currentWordNumber += 1
-            self.wordCounterLbl.text = "\(self.currentWordNumber) from 15"
+            self.wordCounterLbl.text = "\(self.currentWordNumber) \(localize(string: Constants.from15String))"
         } else {
             if self.isRestore {
                 self.presenter.auth(seedString: self.presenter.phraseArr.joined(separator: " "))
@@ -181,8 +186,8 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
     }
     
     @IBAction func cancelAction(_ sender: Any) {
-        let alert = UIAlertController(title: "Cancel", message: "Are you really want to cancel?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+        let alert = UIAlertController(title: localize(string: Constants.cancelString), message: localize(string: Constants.wantToCancelString), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localize(string: Constants.yesString), style: .default, handler: { (action) in
             self.sendAnalyticsEvent(screenName: screenRestoreSeed, eventName: cancelTap)
             if self.whereFrom != nil {
                 self.navigationController?.popToViewController(self.whereFrom!, animated: true)
@@ -190,7 +195,7 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
             }
             self.navigationController?.popToRootViewController(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "No", style: .default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: localize(string: Constants.noString), style: .default, handler: { (action) in
             alert.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
@@ -227,7 +232,7 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
             self.nextWordOrContinue.setTitle(wordArray.first!, for: .normal)
         } else {
             if isWordFinded {
-                self.nextWordOrContinue.setTitle(textAfterUpdate + " or " + textAfterUpdate + "..." , for: .normal)
+                self.nextWordOrContinue.setTitle(textAfterUpdate + " \(localize(string: Constants.orString)) " + textAfterUpdate + "..." , for: .normal)
             } else {
                 self.nextWordOrContinue.setTitle(textAfterUpdate + "..." , for: .normal)
             }
@@ -245,16 +250,10 @@ class CheckWordsViewController: UIViewController, UITextFieldDelegate, Analytics
             wrongVC.presenter.prevVC = self
         }
     }
-    
-    func presentAlert() {
-        let message = "You entered wrong word!"
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
-            
-        }))
-        
-        let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!
-        rootViewController.present(alert, animated: true, completion: nil)
-    }
 }
 
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Seed"
+    }
+}

@@ -4,6 +4,7 @@
 
 import Foundation
 
-protocol ReceiveSumTransferProtocol: class {
-    func transferSum(cryptoAmount: Double, cryptoCurrency: String, fiatAmount: Double, fiatName: String)
+@objc protocol ReceiveSumTransferProtocol: class {
+    @objc optional func transferSum(cryptoAmount: String, cryptoCurrency: String, fiatAmount: String, fiatName: String)
+    @objc optional func fundsReceived(_ amount: String,_ address: String)
 }

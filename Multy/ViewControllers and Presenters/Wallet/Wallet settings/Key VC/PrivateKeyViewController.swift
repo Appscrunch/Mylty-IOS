@@ -19,6 +19,10 @@ class PrivateKeyViewController: UIViewController {
         super.viewDidLoad()
         let appDel = UIApplication.shared.delegate as! AppDelegate
         appDel.presentedVC = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
         setupUI()
     }

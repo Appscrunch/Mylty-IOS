@@ -24,9 +24,10 @@ target 'Multy' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'Branch'
-  pod 'AURUnlockSlider'
-  
-#  pod 'BiometricAuthentication'
+  pod 'SwiftyStoreKit'
+  pod 'lottie-ios'
+  pod 'UPCarouselFlowLayout'
+
 
   target 'MultyTests' do
       inherit! :search_paths

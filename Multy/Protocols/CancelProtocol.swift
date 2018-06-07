@@ -4,7 +4,8 @@
 
 import Foundation
 
-protocol CancelProtocol: class {
+@objc protocol CancelProtocol: class {
     func cancelAction()
     func presentNoInternet()
+    @objc optional func donate50(idOfProduct: String)
 }

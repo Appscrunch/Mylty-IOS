@@ -4,8 +4,6 @@
 
 import Foundation
 
-extension _BigInt {
-    var btcString: String {
-        return self.toString().appendDelimeter(at: 8)
-    }
+struct BigIntSwift {
+    
 }

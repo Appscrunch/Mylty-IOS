@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = NoInternetConnectionViewController
+
 class NoInternetConnectionViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet var backView: UIView!
@@ -30,12 +32,15 @@ class NoInternetConnectionViewController: UIViewController, AnalyticsProtocol {
         if ConnectionCheck.isConnectedToNetwork() {
             self.dismiss(animated: true, completion: nil)
         } else {
-            let alert = UIAlertController(title: "No Internet Connection", message: "Please connect your device to the internet", preferredStyle: .alert)
+            let alert = UIAlertController(title: localize(string: Constants.noInternetString), message: localize(string: Constants.connectDeviceString), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
-    
+}
 
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
+    }
 }

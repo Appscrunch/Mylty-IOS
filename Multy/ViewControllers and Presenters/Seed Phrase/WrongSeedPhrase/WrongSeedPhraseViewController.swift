@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = WrongSeedPhraseViewController
+
 class WrongSeedPhraseViewController: UIViewController, AnalyticsProtocol {
     
     let presenter = WrongSeedPhrasePresenter()
@@ -24,8 +26,8 @@ class WrongSeedPhraseViewController: UIViewController, AnalyticsProtocol {
     @IBAction func cancelAction(_ sender : UIButton) {
         let allVCs = self.navigationController!.viewControllers
         
-        let alert = UIAlertController(title: "Cancel", message: "Are you really want to cancel?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+        let alert = UIAlertController(title: localize(string: Constants.cancelString), message: localize(string: Constants.wantToCancelString), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localize(string: Constants.yesString), style: .default, handler: { (action) in
             if allVCs.count > 5 {
                 let destinationVC = allVCs[allVCs.count - 6]
                 self.navigationController?.popToViewController(destinationVC, animated: true)
@@ -34,7 +36,7 @@ class WrongSeedPhraseViewController: UIViewController, AnalyticsProtocol {
             }
             self.sendAnalyticsEvent(screenName: screenFailRestore, eventName: cancelTap)
         }))
-        alert.addAction(UIAlertAction(title: "No", style: .default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: localize(string: Constants.noString), style: .default, handler: { (action) in
             alert.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
@@ -54,5 +56,11 @@ class WrongSeedPhraseViewController: UIViewController, AnalyticsProtocol {
             self.navigationController?.popToViewController(destinationVC, animated: true)
         }
         sendAnalyticsEvent(screenName: screenFailRestore, eventName: tryAgainTap)
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Seed"
     }
 }

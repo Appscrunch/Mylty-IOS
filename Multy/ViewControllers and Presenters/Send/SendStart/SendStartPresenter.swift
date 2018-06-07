@@ -4,21 +4,25 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = SendStartPresenter
+
 class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrProtocol, QrDataProtocol {
     
     var sendStartVC: SendStartViewController?
     var transactionDTO = TransactionDTO()
     var isFromWallet = false
     
+    var recentAddresses = [RecentAddressesRLM]() 
+    
     func cancelAction() {
-        if self.isFromWallet {
+//        if self.isFromWallet {
             self.sendStartVC?.navigationController?.popViewController(animated: true)
-        } else {
-            if let tbc = self.sendStartVC?.tabBarController as? CustomTabBarViewController {
-                tbc.setSelectIndex(from: 2, to: tbc.previousSelectedIndex)
-            }
-            self.sendStartVC?.navigationController?.popToRootViewController(animated: false)
-        }
+//        } else {
+//            if let tbc = self.sendStartVC?.tabBarController as? CustomTabBarViewController {
+//                tbc.setSelectIndex(from: 2, to: tbc.previousSelectedIndex)
+//            }
+//            self.sendStartVC?.navigationController?.popToRootViewController(animated: false)
+//        }
     }
     
     func presentNoInternet() {
@@ -43,46 +47,9 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
     }
   
     func qrData(string: String) {
-//        if sting.contains(":") {
-//            let separatedString = sting.components(separatedBy: ":")
-//            let blockchainName = separatedString[0]
-//            print(blockchainName)  // bitcoin
-//            if separatedString[1].contains("?") {
-//                let separatedAddress = separatedString[1].components(separatedBy: "?")[0]
-//                print(separatedAddress)  // wallet address
-//                let separatedAmount = separatedString[1].components(separatedBy: "?")[1]
-//                if separatedAmount.contains("amount") {
-//                    let sumInCrypto = separatedAmount.components(separatedBy: "=")[1]
-//                    print(sumInCrypto) // amount sum
-//                }
-//            } else {
-//                let separatedAddress = separatedString[1]
-//                print(separatedAddress) // wallet address
-//            }
-//        }
-        let array = string.components(separatedBy: CharacterSet(charactersIn: ":?="))
-        switch array.count {
-        case 1:                              // shit in qr
-            let messageFromQr = array[0]
-            self.transactionDTO.sendAddress = messageFromQr
-            print(messageFromQr)
-        case 2:                              // chain name + address
-//            let blockchainName = array[0]
-            let addressStr = array[1]
-//            print(blockchainName, addressStr)
-            self.transactionDTO.sendAddress = addressStr
-        case 4:                                // chain name + address + amount
-//            let blockchainName = array[0]
-            let addressStr = array[1]
-            let amount = array[3]
-//            print(blockchainName, addressStr, amount)
-            self.transactionDTO.sendAddress = addressStr
-            self.transactionDTO.sendAmount = (amount as NSString).doubleValue
-        default:
-            return
-        }
+        transactionDTO.update(from: string)
+        sendStartVC?.setTextToTV(address: transactionDTO.sendAddress!)
         self.sendStartVC?.modifyNextButtonMode()
-        self.sendStartVC?.updateUI()
     }
     
     func isValidCryptoAddress() -> Bool {
@@ -100,7 +67,7 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
     }
     
     func presentAlert(message: String) {
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         
         sendStartVC?.present(alert, animated: true, completion: nil)
@@ -111,7 +78,7 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
     }
     
     func destinationSegueString() -> String {
-        switch transactionDTO.blockchainType.blockchain {
+        switch transactionDTO.blockchainType!.blockchain {
         case BLOCKCHAIN_BITCOIN:
             return "sendBTCDetailsVC"
         case BLOCKCHAIN_ETHEREUM:
@@ -119,5 +86,36 @@ class SendStartPresenter: NSObject, CancelProtocol, SendAddressProtocol, GoToQrP
         default:
             return ""
         }
+    }
+    
+    func getAddresses() {
+        if transactionDTO.choosenWallet == nil {
+            RealmManager.shared.getRecentAddresses(for: nil, netType: nil) { (addresses, err) in
+                if addresses?.count != 0 {
+                    let arr = Array(addresses!)
+                    self.recentAddresses = arr
+                }
+                self.sendStartVC?.updateUI()
+            }
+        } else {
+            RealmManager.shared.getRecentAddresses(for: (transactionDTO.choosenWallet?.blockchainType.blockchain.rawValue)!,
+                                                   netType: (transactionDTO.choosenWallet?.blockchainType.net_type)!) { (addresses, err) in
+                if addresses?.count != 0 {
+                    let arr = Array(addresses!)
+                    self.recentAddresses = arr
+                }
+                self.sendStartVC?.updateUI()
+            }
+        }
+    }
+    
+    func numberOfaddresses() -> Int {
+        return self.recentAddresses.count
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

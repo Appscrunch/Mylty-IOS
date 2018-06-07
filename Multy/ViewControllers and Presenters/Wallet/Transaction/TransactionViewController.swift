@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = TransactionViewController
+
 class TransactionViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet weak var titleLbl: UILabel!
@@ -56,13 +58,65 @@ class TransactionViewController: UIViewController, AnalyticsProtocol {
         self.donationView.isHidden = true
         self.updateUI()
         self.sendAnalyticOnStrart()
+        
+        
+        let tapOnTo = UITapGestureRecognizer(target: self, action: #selector(tapOnToAddress))
+        walletToAddressLbl.isUserInteractionEnabled = true
+        walletToAddressLbl.addGestureRecognizer(tapOnTo)
+        
+        let tapOnFrom = UITapGestureRecognizer(target: self, action: #selector(tapOnFromAddress))
+        walletFromAddressLbl.isUserInteractionEnabled = true
+        walletFromAddressLbl.addGestureRecognizer(tapOnFrom)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (self.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: true)
     }
+    
+    @objc func tapOnToAddress(recog: UITapGestureRecognizer) {
+        tapFunction(recog: recog, labelFor: walletToAddressLbl)
+    }
+    
+    @objc func tapOnFromAddress(recog: UITapGestureRecognizer) {
+        tapFunction(recog: recog, labelFor: walletFromAddressLbl)
+    }
 
+    func tapFunction(recog: UITapGestureRecognizer, labelFor: UILabel) {
+        let tapLocation = recog.location(in: labelFor)
+        var lineNumber = Double(tapLocation.y / 16.5)
+        lineNumber.round(.towardZero)
+        var title = ""
+        if labelFor == walletFromAddressLbl {
+            title = presenter.histObj.txInputs[Int(lineNumber)].address
+        } else { // if walletToAddressLbl
+            title = presenter.histObj.txOutputs[Int(lineNumber)].address
+        }
+        
+        let actionSheet = UIAlertController(title: "", message: title, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.copyToClipboardString), style: .default, handler: { (action) in
+            UIPasteboard.general.string = title
+        }))
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.shareString), style: .default, handler: { (action) in
+            let objectsToShare = [title]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            activityVC.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                if !completed {
+                    // User canceled
+                    return
+                } else {
+                    if let appName = activityType?.rawValue {
+                        //                        self.sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(self.wallet!.chain)", eventName: "\(shareToAppWithChainTap)\(self.wallet!.chain)_\(appName)")
+                    }
+                }
+            }
+            activityVC.setPresentedShareDialogToDelegate()
+            self.present(activityVC, animated: true, completion: nil)
+        }))
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
     func checkHeightForScrollAvailability() {
 //        if screenHeight >= 667 {
 //            self.scrollView.isScrollEnabled = false
@@ -85,55 +139,87 @@ class TransactionViewController: UIViewController, AnalyticsProtocol {
     func checkForSendOrReceive() {
         if isIncoming {  // RECEIVE
             self.makeBackColor(color: self.presenter.receiveBackColor)
-            self.titleLbl.text = "Transaction Info"
+            self.titleLbl.text = localize(string: Constants.transactionInfoString)
         } else {                        // SEND
             self.makeBackColor(color: self.presenter.sendBackColor)
-            self.titleLbl.text = "Transaction Info"
+            self.titleLbl.text = localize(string: Constants.transactionInfoString)
             self.transactionImg.image = #imageLiteral(resourceName: "sendBigIcon")
         }
     }
     
     func updateUI() {
-        //Receive
+        //        BTC
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm, d MMMM yyyy"
         let cryptoSumInBTC = UInt64(truncating: presenter.histObj.txOutAmount).btcValue
-        if presenter.histObj.txStatus.intValue == TxStatus.MempoolIncoming.rawValue ||
-            presenter.histObj.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
-            self.dateLbl.text = dateFormatter.string(from: presenter.histObj.mempoolTime)
-        } else {
-            self.dateLbl.text = dateFormatter.string(from: presenter.histObj.blockTime)
-        }
-        self.noteLbl.text = "" // NOTE FROM HIST OBJ
-        self.constraintNoteFiatSum.constant = 10
-        let arrOfInputsAddresses = presenter.histObj.txInputs.map{ $0.address }.joined(separator: "\n")   // top address lbl
-//        self.transactionCurencyLbl.text = presenter.histObj.     // check currencyID
-        self.walletFromAddressLbl.text = arrOfInputsAddresses
-        self.personNameLbl.text = ""   // before we don`t have address book    OR    Wallet Name
-        let arrOfOutputsAddresses = presenter.histObj.txOutputs.map{ $0.address }.joined(separator: "\n")
-        self.walletToAddressLbl.text = arrOfOutputsAddresses
-        self.numberOfConfirmationLbl.text = makeConfirmationText()
-        self.blockchainImg.image = UIImage(named: presenter.blockchainType.iconString)
-        if isIncoming {
-            self.transctionSumLbl.text = "+\(cryptoSumInBTC.fixedFraction(digits: 8))"
-            self.sumInFiatLbl.text = "+\((cryptoSumInBTC * presenter.histObj.btcToUsd).fixedFraction(digits: 2)) USD"
-        } else {
-            let outgoingAmount = presenter.wallet.outgoingAmount(for: presenter.histObj).btcValue
-            self.transctionSumLbl.text = "-\(outgoingAmount.fixedFraction(digits: 8))"
-            self.sumInFiatLbl.text = "-\((outgoingAmount * presenter.histObj.btcToUsd).fixedFraction(digits: 2)) USD"
-            
-            if let donationAddress = arrOfOutputsAddresses.getDonationAddress(blockchainType: presenter.blockchainType) {
-                let donatOutPutObj = presenter.histObj.getDonationTxOutput(address: donationAddress)
-                if donatOutPutObj == nil {
-                    return
-                }
-                let btcDonation = (donatOutPutObj?.amount as! UInt64).btcValue
-                self.donationView.isHidden = false
-                self.constraintDonationHeight.constant = makeDonationConstraint()
-                self.donationCryptoSum.text = btcDonation.fixedFraction(digits: 8)
-                self.donationCryptoName.text = " BTC"
-                self.donationFiatSumAndName.text = "\((btcDonation * presenter.histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+        
+        switch self.presenter.wallet.blockchainType.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            if presenter.histObj.txStatus.intValue == TxStatus.MempoolIncoming.rawValue ||
+                presenter.histObj.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
+                self.dateLbl.text = dateFormatter.string(from: presenter.histObj.mempoolTime)
+            } else {
+                self.dateLbl.text = dateFormatter.string(from: presenter.histObj.blockTime)
             }
+            self.noteLbl.text = "" // NOTE FROM HIST OBJ
+            self.constraintNoteFiatSum.constant = 10
+            let arrOfInputsAddresses = presenter.histObj.txInputs.map{ $0.address }.joined(separator: "\n")   // top address lbl
+            //        self.transactionCurencyLbl.text = presenter.histObj.     // check currencyID
+            self.walletFromAddressLbl.text = arrOfInputsAddresses
+            self.personNameLbl.text = ""   // before we don`t have address book    OR    Wallet Name
+            let arrOfOutputsAddresses = presenter.histObj.txOutputs.map{ $0.address }.joined(separator: "\n")
+            self.walletToAddressLbl.text = arrOfOutputsAddresses
+            self.numberOfConfirmationLbl.text = makeConfirmationText()
+            self.blockchainImg.image = UIImage(named: presenter.blockchainType.iconString)
+            if isIncoming {
+                self.transctionSumLbl.text = "+\(cryptoSumInBTC.fixedFraction(digits: 8))"
+                self.sumInFiatLbl.text = "+\((cryptoSumInBTC * presenter.histObj.fiatCourseExchange).fixedFraction(digits: 2)) USD"
+            } else {
+                let outgoingAmount = presenter.wallet.outgoingAmount(for: presenter.histObj).btcValue
+                self.transctionSumLbl.text = "-\(outgoingAmount.fixedFraction(digits: 8))"
+                self.sumInFiatLbl.text = "-\((outgoingAmount * presenter.histObj.fiatCourseExchange).fixedFraction(digits: 2)) USD"
+                
+                if let donationAddress = arrOfOutputsAddresses.getDonationAddress(blockchainType: presenter.blockchainType) {
+                    let donatOutPutObj = presenter.histObj.getDonationTxOutput(address: donationAddress)
+                    if donatOutPutObj == nil {
+                        return
+                    }
+                    let btcDonation = (donatOutPutObj?.amount as! UInt64).btcValue
+                    self.donationView.isHidden = false
+                    self.constraintDonationHeight.constant = makeDonationConstraint()
+                    self.donationCryptoSum.text = btcDonation.fixedFraction(digits: 8)
+                    self.donationCryptoName.text = " BTC"
+                    self.donationFiatSumAndName.text = "\((btcDonation * presenter.histObj.fiatCourseExchange).fixedFraction(digits: 2)) USD"
+                }
+            }
+        case BLOCKCHAIN_ETHEREUM:
+            if presenter.histObj.txStatus.intValue == TxStatus.MempoolIncoming.rawValue ||
+                presenter.histObj.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
+                self.dateLbl.text = dateFormatter.string(from: presenter.histObj.blockTime)
+            } else {
+                self.dateLbl.text = dateFormatter.string(from: presenter.histObj.blockTime)
+            }
+            self.noteLbl.text = "" // NOTE FROM HIST OBJ
+            self.constraintNoteFiatSum.constant = 10
+            
+            self.transactionCurencyLbl.text = "ETH"     // check currencyID
+            self.walletFromAddressLbl.text = presenter.histObj.addressesArray.first
+            self.personNameLbl.text = ""   // before we don`t have address book    OR    Wallet Name
+            
+            self.walletToAddressLbl.text = presenter.histObj.addressesArray.last
+            self.numberOfConfirmationLbl.text = makeConfirmationText()
+            self.blockchainImg.image = UIImage(named: presenter.blockchainType.iconString)
+            if isIncoming {
+                let fiatAmountInWei = BigInt(presenter.histObj.txOutAmountString) * presenter.histObj.fiatCourseExchange
+                self.transctionSumLbl.text = "+" + BigInt(presenter.histObj.txOutAmountString).cryptoValueString(for: BLOCKCHAIN_ETHEREUM)
+                self.sumInFiatLbl.text = "+" + fiatAmountInWei.fiatValueString(for: BLOCKCHAIN_ETHEREUM) + " USD"
+            } else {
+                let fiatAmountInWei = BigInt(presenter.histObj.txOutAmountString) * presenter.histObj.fiatCourseExchange
+                self.transctionSumLbl.text = "-" + BigInt(presenter.histObj.txOutAmountString).cryptoValueString(for: BLOCKCHAIN_ETHEREUM)
+                self.sumInFiatLbl.text = "-" + fiatAmountInWei.fiatValueString(for: BLOCKCHAIN_ETHEREUM) + " USD"
+                
+            }
+        default: break
         }
     }
     
@@ -167,9 +253,9 @@ class TransactionViewController: UIViewController, AnalyticsProtocol {
         var textForConfirmations = ""
         switch presenter.histObj.confirmations {
         case 1:
-            textForConfirmations = "1 Confirmation"
-        default: // more than 6
-            textForConfirmations = "\(presenter.histObj.confirmations) Confirmations"
+            textForConfirmations = "1 \(localize(string: Constants.confirmationString))"
+        default: // not 1
+            textForConfirmations = "\(presenter.histObj.confirmations) \(localize(string: Constants.confirmationsString))"
         }
         
         return textForConfirmations
@@ -180,7 +266,14 @@ class TransactionViewController: UIViewController, AnalyticsProtocol {
             let blockchainVC = segue.destination as! ViewInBlockchainViewController
             blockchainVC.presenter.txId = presenter.histObj.txId
             blockchainVC.presenter.blockchainType = presenter.blockchainType
+            blockchainVC.presenter.blockchain = presenter.blockchain
+            blockchainVC.presenter.txHash = presenter.histObj.txHash
         }
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Wallets"
+    }
 }

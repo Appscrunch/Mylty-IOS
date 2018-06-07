@@ -5,6 +5,6 @@
 import Foundation
 
 protocol DonationProtocol: class {
-    func donate()
+    func donate(idOfInApp: String)
     func cancelDonation()
 }

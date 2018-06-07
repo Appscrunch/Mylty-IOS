@@ -14,12 +14,17 @@ class HistoryRLM: Object {
     }
     @objc dynamic var blockHeight = Int()
     @objc dynamic var blockTime = Date()
-    @objc dynamic var btcToUsd = Double()
+    @objc dynamic var fiatCourseExchange = Double()
     @objc dynamic var txFee: NSNumber = 0
     @objc dynamic var txHash = String()
     @objc dynamic var txId = String()
     var txInputs = List<TxHistoryRLM>()
     @objc dynamic var txOutAmount: NSNumber = 0
+    @objc dynamic var txOutAmountString = String()
+    
+    @objc dynamic var gasLimit: NSNumber = 0
+    @objc dynamic var gasPrice: NSNumber = 0
+    
     @objc dynamic var txOutId = Int()
     var txOutputs = List<TxHistoryRLM>()
     @objc dynamic var txOutScript = String()
@@ -36,6 +41,18 @@ class HistoryRLM: Object {
     
     override static func ignoredProperties() -> [String] {
         return ["addressesArray"]
+    }
+    
+    // FIXME: delete txOutAmount, only string values
+    func txAmount(for blockchain: Blockchain) -> String {
+        switch blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            return txOutAmount.doubleValue.fixedFraction(digits: 8)
+        case BLOCKCHAIN_ETHEREUM:
+            return txOutAmountString.appendDelimeter(at: 18)
+        default:
+            return ""
+        }
     }
     
     public class func initWithArray(historyArr: NSArray) -> List<HistoryRLM> {
@@ -79,14 +96,6 @@ class HistoryRLM: Object {
             hist.mempoolTime = NSDate(timeIntervalSince1970: (mempoolTime as! Double)) as Date
         }
         
-        if let rates = historyDict["stockexchangerate"] as? NSArray {
-            hist.exchangeRates = StockExchangeRateRLM.initWithArray(stockArray: rates)
-            if hist.exchangeRates.count > 0 {
-                hist.btcToUsd = hist.exchangeRates.first!.btc2usd.doubleValue
-            }
-        }
-        
-        
         if let txfee = historyDict["txfee"] {
             hist.txFee = txfee as! NSNumber
         }
@@ -102,9 +111,31 @@ class HistoryRLM: Object {
         if let txinputs = historyDict["txinputs"] {
             hist.txInputs = TxHistoryRLM.initWithArray(txHistoryArr: txinputs as! NSArray)
         }
+        
+        if let rates = historyDict["stockexchangerate"] as? NSArray {
+            hist.exchangeRates = StockExchangeRateRLM.initWithArray(stockArray: rates)
+            // BTC and ETH // FIXME: fix it later
+            if hist.exchangeRates.count > 0 {
+                if hist.txInputs.count > 0 {
+                    hist.fiatCourseExchange = hist.exchangeRates.first!.btc2usd.doubleValue
+                } else {
+                    hist.fiatCourseExchange = hist.exchangeRates.first!.eth2usd.doubleValue
+                }
+            }
+        }
 
-        if let txoutamount = historyDict["txoutamount"] {
-            hist.txOutAmount = txoutamount as! NSNumber
+        if let txoutamount = historyDict["txoutamount"] as? NSNumber {
+            hist.txOutAmount = txoutamount
+        } else if let txOutAmountString = historyDict["txoutamount"] as? String {
+            hist.txOutAmountString = txOutAmountString
+        }
+        
+        if let gasPrice = historyDict["gasprice"] as? NSNumber {
+            hist.gasPrice = gasPrice
+        }
+        
+        if let gasLimit = historyDict["gaslimit"] as? NSNumber {
+            hist.gasLimit = gasLimit
         }
         
         if let txoutid = historyDict["txoutid"] {
@@ -132,8 +163,17 @@ class HistoryRLM: Object {
             hist.walletInput = UserWalletRLM.initWithArray(walletsInfo: walletsinput)
         }
         
-        if let walletOutput = historyDict["walletsoutput"] as? NSArray{
+        if let walletOutput = historyDict["walletsoutput"] as? NSArray {
             hist.walletOutput = UserWalletRLM.initWithArray(walletsInfo: walletOutput)
+        }
+        
+        //ETH part
+        if let fromAddress = historyDict["from"] as? String {
+            hist.addressesArray.append(fromAddress)
+        }
+        
+        if let destinationAddress = historyDict["to"] as? String {
+            hist.addressesArray.append(destinationAddress)
         }
         
         return hist

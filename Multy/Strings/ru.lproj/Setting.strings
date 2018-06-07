@@ -1,0 +1,20 @@
+/* 
+  Settings.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Предупреждение";
+"CANCEL" = "Отменить";
+"ERROR" = "Ошибка";
+"SOMETHING WENT WRONG" = "Что-то пошло не так";
+"YES STRING" = "Да";
+"NO STRING" = "Нет";
+"BACKUP NEEDED" = "Восстановить Seed-фразу";
+"VIEW SEED PHRASE" = "Просмотреть Seed-фразу";
+"ARE YOU SURE" = "Вы уверены?";
+"REPEAT PIN-CODE" = "Повторите ваш PIN-код";
+"SORRY" = "Извините";
+"LOADING" = "Загрузка";

@@ -1,0 +1,22 @@
+/* 
+  Receive.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";
+"SOMETHING WENT WRONG" = "Something went wrong";
+"MAGICAL RECEIVE" = "Magical Receive";
+"SORRY" = "Sorry";
+"LOADING" = "Loading";
+"RECEIVE" = "Receive";
+"ENABLE BLUETOOTH ALERT TITLE" = "To enable Bluetooth, go to Settings";
+"SETTINGS ACTION TITLE" = "Settings";
+"GETTING WALLET" = "Getting Wallets...";
+"CANNOT CHOOSE EMPTY WALLET" = "You can not choose empty wallet. Please select wallet with some amount";
+"ENTER NON-ZERO AMOUNT" = "Please, enter non-zero amount!";
+"YOU CANT ENTER SUM" = "You can`t enter sum more than chain have";

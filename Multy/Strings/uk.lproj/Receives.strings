@@ -1,0 +1,22 @@
+/* 
+  Receive.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Попередження";
+"CANCEL" = "Скасувати";
+"ERROR" = "Помилка";
+"SOMETHING WENT WRONG" = "Щось пішло не так";
+"MAGICAL RECEIVE" = "Магічне отримання";
+"SORRY" = "Вибачте";
+"LOADING" = "Завантаження";
+"RECEIVE" = "Отримати";
+"ENABLE BLUETOOTH ALERT TITLE" = "";
+"SETTINGS ACTION TITLE" = "";
+"GETTING WALLET" = "Отримання гаманців...";
+"CANNOT CHOOSE EMPTY WALLET" = "Ви не можете вибрати порожній гаманець. Виберіть гаманець з деякою сумою";
+"ENTER NON-ZERO AMOUNT" = "Будь ласка, введіть ненульову кількість!";
+"YOU CANT ENTER SUM" = "Ви не можете ввести суму більше, ніж має наявність в мережі";

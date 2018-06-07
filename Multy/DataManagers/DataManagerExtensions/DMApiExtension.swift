@@ -93,7 +93,7 @@ extension DataManager {
                     params["userID"] = account?.userID
                     params["deviceID"] = account?.deviceID
                     params["deviceType"] = account?.deviceType
-                    params["pushToken"] = account?.pushToken
+                    params["pushToken"] = ApiManager.shared.pushToken
                     params["appVersion"] = self.appVersion()
                     
                     self.apiManager.userID = account!.userID
@@ -105,7 +105,7 @@ extension DataManager {
                         params["userID"] = self.getRootString(from: seedPhraseString).0
                         params["deviceID"] = "iOS \(UIDevice.current.name)"
                         params["deviceType"] = 1
-                        params["pushToken"] = UUID().uuidString
+                        params["pushToken"] = ApiManager.shared.pushToken
                         params["appVersion"] = self.appVersion()
                         
                         paramsDict = NSMutableDictionary(dictionary: params)
@@ -118,7 +118,7 @@ extension DataManager {
                         params["userID"] = self.getRootString(from: rootKey!).0
                         params["deviceID"] = "iOS \(UIDevice.current.name)"//UUID().uuidString
                         params["deviceType"] = 1
-                        params["pushToken"] = UUID().uuidString
+                        params["pushToken"] = ApiManager.shared.pushToken
                         params["appVersion"] = self.appVersion()
                         
                         paramsDict = NSMutableDictionary(dictionary: params)
@@ -159,11 +159,7 @@ extension DataManager {
     
     func addWallet(params: Parameters, completion: @escaping (_ answer: NSDictionary?,_ error: Error?) -> ()) {
         apiManager.addWallet(params) { (responceDict, error) in
-            if error != nil {
-                completion(NSDictionary(), nil)
-            } else {
-                completion(nil, error)
-            }
+            completion(responceDict, error)
         }
     }
     

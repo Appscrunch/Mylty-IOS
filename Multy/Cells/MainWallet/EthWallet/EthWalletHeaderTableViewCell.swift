@@ -12,6 +12,8 @@ class EthWalletHeaderTableViewCell: UITableViewCell, UICollectionViewDelegate {
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomViewLeading: NSLayoutConstraint!
+    @IBOutlet weak var bottomViewTrailing: NSLayoutConstraint!
     
     var mainVC: EthWalletViewController?
     
@@ -44,7 +46,13 @@ class EthWalletHeaderTableViewCell: UITableViewCell, UICollectionViewDelegate {
     }
     
     func setupUI() {
-        self.bottomView.roundCorners(corners: [.topLeft, .topRight], radius: 20)
+        let bound = CGRect(x: 0, y: 0, width: screenWidth, height: 20)
+        let path = UIBezierPath(roundedRect: bound, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 20, height: 20))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        self.bottomView.layer.mask = mask
+        
+//        self.bottomView.roundCorners(corners: [.topLeft, .topRight], radius: 20)
         if screenHeight == heightOfX {
             self.topConstraint.constant = 40
         }

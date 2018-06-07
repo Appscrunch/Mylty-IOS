@@ -5,6 +5,8 @@
 import UIKit
 import LTMorphingLabel
 
+private typealias LocalizeDelegate = PinCodeViewController
+
 class PinCodeViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol {
 
     @IBOutlet weak var pinTF: UITextField!
@@ -41,7 +43,7 @@ class PinCodeViewController: UIViewController, UITextFieldDelegate, AnalyticsPro
             if isRepeat == false {
                 self.view.isUserInteractionEnabled = false
 //                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-                    self.pinTextLbl.text = "Repeat your PIN-code"
+                    self.pinTextLbl.text = localize(string: Constants.repeatPINCodeString)
                     self.firstPass = self.pinTF.text! + string
                     self.clearAllCircles()
                     self.counter = 0
@@ -114,4 +116,10 @@ class PinCodeViewController: UIViewController, UITextFieldDelegate, AnalyticsPro
 //        self.viewWithCircles.layer.add(animation, forKey: "position")
 //    }
     
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Setting"
+    }
 }
