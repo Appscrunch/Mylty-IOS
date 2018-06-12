@@ -1,0 +1,32 @@
+/* 
+  Assets.strings
+  Multy
+
+  Created by Alex Pro on 5/29/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"BACKUP IS NEEDED" = "Backup is needed!";
+"RESTORE MULTY" = "Restore Multy";
+"CRYPTO PORTFOLIO" = "Crypto portfolio";
+"CURRENCIES CHARTS" = "Currencies charts";
+"WORK IN PROGRESS" = "(work in progress)";
+"GETTING WALLET" = "Getting Wallets...";
+"CREATING WALLET" = "Creating Wallet...";
+"JAILBROKEN DEVICE ALERT MESSAGE" = "Your Device is Jailbroken!\nSory, but we don`t support jailbroken devices.";
+"WE HAVE AN UPDATE" = "We have an update!";
+"UPDATE MULTY" = "Please update Multy from App Store";
+"GO TO UPDATE" = "Go to update";
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";
+"SOMETHING WENT WRONG" = "Something went wrong";
+"SORRY" = "Sorry";
+"NO INTERNET" = "No Internet Connection";
+"CONNECT DEVICE" = "Please connect your device to the internet";
+"LOADING" = "Loading";
+"CHECKING VERSION" = "Checking version";
+"USE TERMS OF SERVICE" = "In order to use Multy you have to accept Terms of Service. By pressing \"Accept\" you confirm that you have read, understood and agree to the following Terms of Service and that you have the right, power and authority to do so.";
+"AGREE WITH TERMS" = "I agree with Terms of Service and processing of my personal data according to the Multy Privacy Policy.";
+"ERROR WHILE CREATING WALLET" = "Error while creating wallet!";
+"WALLET NAME NOT EMPTY ALERT" = "Wallet name should be non empty";

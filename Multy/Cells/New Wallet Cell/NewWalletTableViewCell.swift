@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = NewWalletTableViewCell
+
 class NewWalletTableViewCell: UITableViewCell {
 
     @IBOutlet weak var topLineView: UIView!
@@ -32,7 +34,7 @@ class NewWalletTableViewCell: UITableViewCell {
         self.rigthSmallImage.isHidden = true
         self.topLineView.isHidden = true
         self.cellNameLbl.font = UIFont(name: "Avenir Next Medium", size: 16)
-        self.cellNameLbl.text = "Recent Addresses"
+        self.cellNameLbl.text = localize(string: Constants.recentAddressesString)
 //        self.makeTopCorners()
     }
     
@@ -51,3 +53,8 @@ class NewWalletTableViewCell: UITableViewCell {
     }
 }
 
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Wallets"
+    }
+}

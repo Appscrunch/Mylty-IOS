@@ -5,6 +5,8 @@
 import UIKit
 import AVFoundation
 
+private typealias LocalizeDelegate = QrScannerViewController
+
 class QrScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, UIGestureRecognizerDelegate, AnalyticsProtocol {
 
     let presenter = QrScannerPresenter()
@@ -106,15 +108,24 @@ class QrScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsD
     }
     
     func alertForGetNewPermission() {
-        let alert = UIAlertController(title: "Warning", message: "Please go to the Settings -> Multy and allow camera usage", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (_) in
-            self.cancel()
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: localize(string: Constants.goToSettingsString), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (_) in
+            let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+            if UIApplication.shared.canOpenURL(settingsUrl!) {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(settingsUrl!, options: [:], completionHandler: { (success) in
+                        self.cancel()
+                    })
+                } else {
+                    UIApplication.shared.openURL(settingsUrl!)
+                }
+            }
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
     func failed() {
-        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
+        let ac = UIAlertController(title: localize(string: Constants.scanningNotSupportedString), message: localize(string: Constants.deviceNotSupportingString), preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
@@ -128,7 +139,7 @@ class QrScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsD
             guard let stringValue = readableObject.stringValue else { return }
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             found(code: stringValue)
-            self.qrDelegate?.qrData(string: stringValue)
+            
             if self.presenter.isFast {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: {
                     self.dismiss(animated: true, completion: nil)
@@ -136,6 +147,8 @@ class QrScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsD
             } else {
                 self.navigationController?.popViewController(animated: true)
             }
+            
+            self.qrDelegate?.qrData(string: stringValue)
         }
         
         
@@ -152,10 +165,11 @@ class QrScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsD
     func addCancelBtn() {
         let btn = UIButton()
         btn.titleLabel?.textAlignment = .left
-        btn.setTitle("Cancel", for: .normal)
+        btn.setTitle(localize(string: Constants.cancelString), for: .normal)
         btn.setTitleColor(.white, for: .normal)
+        btn.contentHorizontalAlignment = .left
         btn.titleLabel?.font = UIFont(name: "Avenir-Next", size: 16)
-        btn.frame = CGRect(x: 20, y: 40, width: 70, height: 25)
+        btn.frame = CGRect(x: 20, y: 40, width: 140, height: 25)
         btn.addTarget(self, action: #selector(cancel), for: .touchUpInside)
         self.view.addSubview(btn)
     }
@@ -166,5 +180,11 @@ class QrScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsD
         } else {
             self.dismiss(animated: true, completion: nil)
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

@@ -1,0 +1,162 @@
+
+/* Class = "UILabel"; text = "Receive"; ObjectID = "0NQ-JU-0dt"; */
+"0NQ-JU-0dt.text" = "Получить";
+
+/* Class = "UILabel"; text = "Reference currency"; ObjectID = "12v-85-n0R"; */
+"12v-85-n0R.text" = "Валюта оценки";
+
+/* Class = "UILabel"; text = "We really appreciate your support of Multy. \nBy donating you help us to bring blockchain technology one step closer to ordinary life."; ObjectID = "4wW-01-khe"; */
+"4wW-01-khe.text" = "Мы очень ценим вашу поддержку Multy. \nСовершая пожертвования, вы помогаете нам привнести технологию блокчейн на шаг ближе в повседневную жизнь.";
+
+/* Class = "UIButton"; normalTitle = "Copy to clipboard"; ObjectID = "5Ai-kQ-3aX"; */
+"5Ai-kQ-3aX.normalTitle" = "Скопировать в буфер обмена";
+
+/* Class = "UILabel"; text = "Save"; ObjectID = "5Kf-Jl-SN9"; */
+"5Kf-Jl-SN9.text" = "Сохранить";
+
+/* Class = "UIButton"; normalTitle = "Share"; ObjectID = "7lc-uG-5by"; */
+"7lc-uG-5by.normalTitle" = "Поделиться";
+
+/* Class = "UIButton"; normalTitle = "View in Blockchain"; ObjectID = "9hc-Ew-5Gb"; */
+"9hc-Ew-5Gb.normalTitle" = "Просмотреть в Блокчейн";
+
+/* Class = "UILabel"; text = "Delete Wallet"; ObjectID = "Aso-Iw-43a"; */
+"Aso-Iw-43a.text" = "Удалить кошелек";
+
+/* Class = "UIButton"; normalTitle = "Copy to clipboard"; ObjectID = "Bop-ir-HSr"; */
+"Bop-ir-HSr.normalTitle" = "Скопировать в буфер обмена";
+
+/* Class = "UILabel"; text = "Thank you for donation!"; ObjectID = "Cpj-NZ-FYw"; */
+"Cpj-NZ-FYw.text" = "Спасибо за пожертвование!";
+
+/* Class = "UILabel"; text = "Exchange"; ObjectID = "EfB-Y5-mfS"; */
+"EfB-Y5-mfS.text" = "Биржа";
+
+/* Class = "UIButton"; normalTitle = "+"; ObjectID = "H37-Od-ZOG"; */
+"H37-Od-ZOG.normalTitle" = "+";
+
+/* Class = "UILabel"; text = "Send"; ObjectID = "Hot-OY-JJw"; */
+"Hot-OY-JJw.text" = "Отправить";
+
+/* Class = "UILabel"; text = "Transaction Info "; ObjectID = "I4U-wc-DLI"; */
+"I4U-wc-DLI.text" = "Информация о транзакции";
+
+/* Class = "UILabel"; text = "Cancel"; ObjectID = "LNF-Bk-Flz"; */
+"LNF-Bk-Flz.text" = "Отменить";
+
+/* Class = "UILabel"; text = "Send"; ObjectID = "MEL-UQ-OuZ"; */
+"MEL-UQ-OuZ.text" = "Отправить";
+
+/* Class = "UILabel"; text = "Send"; ObjectID = "Mep-2e-Twd"; */
+"Mep-2e-Twd.text" = "Отправить";
+
+/* Class = "UILabel"; text = "393.23 USD"; ObjectID = "Nai-av-9HA"; */
+"Nai-av-9HA.text" = "393.23 USD";
+
+/* Class = "UILabel"; text = "Private key allows you or anyone of you behave to spend your crypto assets. You should keep it secret!"; ObjectID = "O8U-E1-QhK"; */
+"O8U-E1-QhK.text" = "Приватный ключ позволяет вам или кому-либо другому перевести ваши криптоактивы на другой адрес. Вы должны хранить его в секрете!";
+
+/* Class = "UILabel"; text = "Wallet Name"; ObjectID = "Pec-Ig-cyA"; */
+"Pec-Ig-cyA.text" = "Название кошелька";
+
+/* Class = "UILabel"; text = "Close"; ObjectID = "Pia-6P-nnE"; */
+"Pia-6P-nnE.text" = "Закрыть";
+
+/* Class = "UILabel"; text = "Receive"; ObjectID = "QQI-dM-LqP"; */
+"QQI-dM-LqP.text" = "Получить";
+
+/* Class = "UILabel"; text = "+1 174.23 USD"; ObjectID = "Qh1-1f-JrE"; */
+"Qh1-1f-JrE.text" = "+1 174.23 USD";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "RgG-Y1-olV"; */
+"RgG-Y1-olV.normalTitle" = "Отменить";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "SDr-Di-etU"; */
+"SDr-Di-etU.text" = "BTC";
+
+/* Class = "UILabel"; text = "+0.0152 "; ObjectID = "UbC-Ss-oxD"; */
+"UbC-Ss-oxD.text" = "+0.0152 ";
+
+/* Class = "UILabel"; text = "SECURITY"; ObjectID = "WDy-PI-N1j"; */
+"WDy-PI-N1j.text" = "БЕЗОПАСНОСТЬ";
+
+/* Class = "UILabel"; text = "Tap the button to create funds request."; ObjectID = "WKN-uW-JbA"; */
+"WKN-uW-JbA.text" = "Нажмите кнопку, чтобы создать запрос на получение средств.";
+
+/* Class = "UILabel"; text = "Wallet Settings"; ObjectID = "YHK-vM-QZ6"; */
+"YHK-vM-QZ6.text" = "Настройки";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "ZiB-8K-BTa"; */
+"ZiB-8K-BTa.normalTitle" = "Отменить";
+
+/* Class = "UILabel"; text = "Address"; ObjectID = "a6T-5X-NVW"; */
+"a6T-5X-NVW.text" = "Адрес";
+
+/* Class = "UILabel"; text = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L"; ObjectID = "a6o-9x-tsS"; */
+"a6o-9x-tsS.text" = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L";
+
+/* Class = "UILabel"; text = "Show Private Keys"; ObjectID = "a8G-dc-Q0i"; */
+"a8G-dc-Q0i.text" = "Показать приватные ключи";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "aX4-lc-W97"; */
+"aX4-lc-W97.text" = "BTC";
+
+/* Class = "UILabel"; text = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L"; ObjectID = "atg-vC-ZHg"; */
+"atg-vC-ZHg.text" = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L";
+
+/* Class = "UILabel"; text = "Close"; ObjectID = "eaL-Cp-sF0"; */
+"eaL-Cp-sF0.text" = "Закрыть";
+
+/* Class = "UILabel"; text = "US Dollars / USD"; ObjectID = "fHs-YW-Q9Q"; */
+"fHs-YW-Q9Q.text" = "Доллары США / USD";
+
+/* Class = "UILabel"; text = "GENERAL"; ObjectID = "fjM-IC-HSe"; */
+"fjM-IC-HSe.text" = "ОБЩЕЕ";
+
+/* Class = "UILabel"; text = "Your extended private keys are all that is needed to access your bitcoin funds. Be sure to protect your private keys and store them only on secure devices."; ObjectID = "g5G-AX-W5l"; */
+"g5G-AX-W5l.text" = "Ваши приватные ключи - это все, что необходимо для доступа к вашим криптоактивам. Убедитесь, что ваши приватные ключи защищены и хранятся безопасно.";
+
+/* Class = "UILabel"; text = "3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K"; ObjectID = "hp0-QC-1aO"; */
+"hp0-QC-1aO.text" = "3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K";
+
+/* Class = "UILabel"; text = "0.052509  "; ObjectID = "jBc-LF-5Kf"; */
+"jBc-LF-5Kf.text" = "0.052509  ";
+
+/* Class = "UILabel"; text = "Receive"; ObjectID = "jdN-2j-5Y2"; */
+"jdN-2j-5Y2.text" = "Получить";
+
+/* Class = "UIButton"; normalTitle = "Share"; ObjectID = "k4a-bD-22T"; */
+"k4a-bD-22T.normalTitle" = "Поделиться";
+
+/* Class = "UIButton"; normalTitle = "Close"; ObjectID = "l3R-2J-VZZ"; */
+"l3R-2J-VZZ.normalTitle" = "Закрыть";
+
+/* Class = "UILabel"; text = "Remove this wallet from UI. Please note that we will be tracking wallet balance and notify you on incoming transactions."; ObjectID = "mzu-O0-HqV"; */
+"mzu-O0-HqV.text" = "Удалить этот кошелек из пользовательского интерфейса. Обратите внимание, что мы будем отслеживать баланс кошелька и уведомлять вас о входящих транзакциях.";
+
+/* Class = "UILabel"; text = "All Wallet Addresses"; ObjectID = "pPx-Xk-TEa"; */
+"pPx-Xk-TEa.text" = "Все адреса кошелька";
+
+/* Class = "UILabel"; text = "Tap the button to create funds request."; ObjectID = "paw-pK-SZo"; */
+"paw-pK-SZo.text" = "Нажмите кнопку, чтобы создать запрос на получение средств.";
+
+/* Class = "UILabel"; text = "83T28WCp4CiddJnDJJmKWvmmXJSP9L"; ObjectID = "rfk-4F-99R"; */
+"rfk-4F-99R.text" = "83T28WCp4CiddJnDJJmKWvmmXJSP9L";
+
+/* Class = "UILabel"; text = "Pay attention!"; ObjectID = "tqL-rh-vBW"; */
+"tqL-rh-vBW.text" = "Обратите внимание!";
+
+/* Class = "UILabel"; text = "Tap the button to create funds request."; ObjectID = "xHJ-KF-fDv"; */
+"xHJ-KF-fDv.text" = "Нажмите кнопку, чтобы создать запрос на получение средств.";
+
+/* Class = "UILabel"; text = "MY PRIVATE KEY:"; ObjectID = "xI1-Qo-90r"; */
+"xI1-Qo-90r.text" = "МОЙ ПРИВАТНЫЙ КЛЮЧ:";
+
+/* Class = "UILabel"; text = "Exchange"; ObjectID = "xJN-Va-bYy"; */
+"xJN-Va-bYy.text" = "Биржа";
+
+/* Class = "UILabel"; text = "Exchange"; ObjectID = "yXt-o3-N3I"; */
+"yXt-o3-N3I.text" = "Биржа";
+
+/* Class = "UILabel"; text = "Address has been copied to clipboard"; ObjectID = "ztv-dw-RMV"; */
+"ztv-dw-RMV.text" = "Адрес скопирован в буфер обмена";

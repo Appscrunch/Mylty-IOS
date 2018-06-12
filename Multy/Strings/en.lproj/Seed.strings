@@ -1,0 +1,22 @@
+/* 
+  Seed.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"RESTORE MULTY" = "Восстановить Multy";
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";
+"SOMETHING WENT WRONG" = "Something went wrong";
+"YES STRING" = "Yes";
+"NO STRING" = "No";
+"CONTINUE" = "Continue";
+"NEXT WORD" = "Next Word";
+"FROM 15" = "from 15";
+"OR" = "or";
+"WANT TO CANCEL" = "Are you really want to cancel?";
+"LOADING" = "Loading";
+"RESTORING WALLETS" = "Restoring Wallets";

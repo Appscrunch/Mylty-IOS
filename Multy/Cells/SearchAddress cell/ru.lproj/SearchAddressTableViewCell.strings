@@ -1,0 +1,24 @@
+
+/* Class = "UILabel"; text = "Send To"; ObjectID = "2LB-ni-Z7I"; */
+"2LB-ni-Z7I.text" = "Отправить";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "Fcx-Dp-aHk"; */
+"Fcx-Dp-aHk.text" = "(в разработке)";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "H6i-ex-qnj"; */
+"H6i-ex-qnj.text" = "(в разработке)";
+
+/* Class = "UILabel"; text = "Enter Address Here"; ObjectID = "QbG-g5-8Bu"; */
+"QbG-g5-8Bu.text" = "Введите адрес получателя";
+
+/* Class = "UILabel"; text = "Scan\nQR"; ObjectID = "TeX-eS-0iw"; */
+"TeX-eS-0iw.text" = "Scan\nQR";
+
+/* Class = "UILabel"; text = "Wireless \nScan"; ObjectID = "ahY-8F-kKp"; */
+"ahY-8F-kKp.text" = "Wireless \nScan";
+
+/* Class = "UITextField"; placeholder = "Search or Enter Address Here"; ObjectID = "cr8-Jx-Rfq"; */
+"cr8-Jx-Rfq.placeholder" = "Введите адрес получателя";
+
+/* Class = "UILabel"; text = "Contacts"; ObjectID = "lYY-Pk-EAu"; */
+"lYY-Pk-EAu.text" = "Контакты";

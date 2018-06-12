@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "250 000"; ObjectID = "6ok-u4-Rbz"; */
+"6ok-u4-Rbz.text" = "250 000";
+
+/* Class = "UILabel"; text = "GAS Limit -"; ObjectID = "SAt-rv-mZl"; */
+"SAt-rv-mZl.text" = "Лимит газа -";
+
+/* Class = "UILabel"; text = "250 000"; ObjectID = "SsI-fg-KGE"; */
+"SsI-fg-KGE.text" = "250 000";
+
+/* Class = "UILabel"; text = "Custom"; ObjectID = "gB4-5c-jHg"; */
+"gB4-5c-jHg.text" = "Пользовательская";
+
+/* Class = "UILabel"; text = "GAS Price -"; ObjectID = "l8f-sE-abq"; */
+"l8f-sE-abq.text" = "Цена газа -";

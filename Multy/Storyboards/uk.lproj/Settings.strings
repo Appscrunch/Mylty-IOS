@@ -1,0 +1,96 @@
+
+/* Class = "UILabel"; text = "Seed Phrase is a major point of your Multy account. \nIt’s absolutely unique and grant access your crypto assets. \nYou should keep it secret!"; ObjectID = "0tV-PC-G1E"; */
+"0tV-PC-G1E.text" = "Seed-фраза - центральний елемент вашого облікового запису Multy. \nВона абсолютно унікальна і відкриває доступ до ваших криптоактивів. \nВи повинні зберігати її в секреті!";
+
+/* Class = "UIButton"; normalTitle = "1"; ObjectID = "12e-gm-bgv"; */
+"12e-gm-bgv.normalTitle" = "1";
+
+/* Class = "UIButton"; normalTitle = "Reset All Data"; ObjectID = "15T-J1-Q2w"; */
+"15T-J1-Q2w.normalTitle" = "Стерти всі дані";
+
+/* Class = "UIButton"; normalTitle = "9"; ObjectID = "16o-y8-zbA"; */
+"16o-y8-zbA.normalTitle" = "9";
+
+/* Class = "UIButton"; normalTitle = "0"; ObjectID = "4ZY-SP-GsI"; */
+"4ZY-SP-GsI.normalTitle" = "0";
+
+/* Class = "UILabel"; text = "This function return the application to the initial state. \nAll information will be permanently removed. \nMake sure that Seed Phrase backup was successfully done!"; ObjectID = "8TC-xY-HA9"; */
+"8TC-xY-HA9.text" = "Ця функція повертає додаток в початковий стан. \nВся інформація буде видалена назавжди. \nПереконайтеся, що ви провели резервне копіювання Seed-фрази!";
+
+/* Class = "UIButton"; normalTitle = "Reset All Data"; ObjectID = "AUT-re-1ra"; */
+"AUT-re-1ra.normalTitle" = "Стерти всі дані";
+
+/* Class = "UILabel"; text = "View Seed Phrase"; ObjectID = "B4h-nl-CRV"; */
+"B4h-nl-CRV.text" = "Подивитися Seed-фразу";
+
+/* Class = "UILabel"; text = "Make a backup copy of the wallet before using this feature"; ObjectID = "Byc-KO-XkA"; */
+"Byc-KO-XkA.text" = "Установіть додаткове налаштування доступу до додатку Multy";
+
+/* Class = "UIButton"; normalTitle = "3"; ObjectID = "DZA-nt-dij"; */
+"DZA-nt-dij.normalTitle" = "3";
+
+/* Class = "UIButton"; normalTitle = "7"; ObjectID = "ECp-Kf-TNx"; */
+"ECp-Kf-TNx.normalTitle" = "7";
+
+/* Class = "UILabel"; text = "Are you sure?"; ObjectID = "Eh0-L1-ceI"; */
+"Eh0-L1-ceI.text" = "Ви впевнені?";
+
+/* Class = "UILabel"; text = "Security"; ObjectID = "FXE-eY-RwS"; */
+"FXE-eY-RwS.text" = "Безпека";
+
+/* Class = "UIButton"; normalTitle = "2"; ObjectID = "HXZ-mX-QWr"; */
+"HXZ-mX-QWr.normalTitle" = "2";
+
+/* Class = "UILabel"; text = "Change"; ObjectID = "KWO-wd-RWc"; */
+"KWO-wd-RWc.text" = "Задати";
+
+/* Class = "UILabel"; text = "Screen Lock"; ObjectID = "M2U-Us-ByT"; */
+"M2U-Us-ByT.text" = "Блокіровка экрану";
+
+/* Class = "UILabel"; text = "Use password"; ObjectID = "Mwv-ey-io5"; */
+"Mwv-ey-io5.text" = "Використовувати пароль";
+
+/* Class = "UILabel"; text = "Entrance settings"; ObjectID = "OFP-3F-XGz"; */
+"OFP-3F-XGz.text" = "Налаштування входу";
+
+/* Class = "UIButton"; normalTitle = "8"; ObjectID = "Q5P-Ni-MVF"; */
+"Q5P-Ni-MVF.normalTitle" = "8";
+
+/* Class = "UILabel"; text = "Enter Password"; ObjectID = "S7o-SM-GjY"; */
+"S7o-SM-GjY.text" = "Введіть пароль";
+
+/* Class = "UILabel"; text = "PIN-code"; ObjectID = "VdQ-St-UVy"; */
+"VdQ-St-UVy.text" = "PIN-код";
+
+/* Class = "UILabel"; text = "None"; ObjectID = "cer-xN-RHi"; */
+"cer-xN-RHi.text" = "Вимк.";
+
+/* Class = "UIButton"; normalTitle = "5"; ObjectID = "eMC-C7-cMe"; */
+"eMC-C7-cMe.normalTitle" = "5";
+
+/* Class = "UIButton"; normalTitle = "6"; ObjectID = "eOc-vI-lxb"; */
+"eOc-vI-lxb.normalTitle" = "6";
+
+/* Class = "UILabel"; text = "PIN-code"; ObjectID = "gcx-NH-dQH"; */
+"gcx-NH-dQH.text" = "PIN-код";
+
+/* Class = "UILabel"; text = "Set your PIN-code"; ObjectID = "gmB-qd-u4D"; */
+"gmB-qd-u4D.text" = "Встановити PIN-код";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "jvC-aj-crZ"; */
+"jvC-aj-crZ.normalTitle" = "Скасувати";
+
+/* Class = "UIButton"; normalTitle = "4"; ObjectID = "kRW-Ja-Vf1"; */
+"kRW-Ja-Vf1.normalTitle" = "4";
+
+/* Class = "UILabel"; text = "By reseting all your data you will lose all your wallets and accounts on this device"; ObjectID = "pNa-A7-eEe"; */
+"pNa-A7-eEe.text" = "Скинувши всі ваші дані, ви втратите всі свої гаманці і облікові записи на цьому пристрої";
+
+/* Class = "UILabel"; text = "Biometric identification"; ObjectID = "ta5-0S-Je8"; */
+"ta5-0S-Je8.text" = "ідентифікація";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "tsO-57-6kh"; */
+"tsO-57-6kh.normalTitle" = "Скасувати";
+
+/* Class = "UILabel"; text = "Set up additional step for accessing your Multy application."; ObjectID = "vTZ-vM-ZUC"; */
+"vTZ-vM-ZUC.text" = "Установіть додаткове налаштування доступу до додатку Multy.";

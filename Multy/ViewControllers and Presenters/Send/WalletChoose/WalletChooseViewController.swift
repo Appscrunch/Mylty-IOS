@@ -4,25 +4,41 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = WalletChooseViewController
+
 class WalletChooseViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var emptyDataSourceLabel: UILabel!
+    @IBOutlet weak var qrAmountLbl: UILabel!
     
     let presenter = WalletChoosePresenter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        emptyDataSourceLabel.text = localize(string: Constants.youDontHaveWalletString) + presenter.transactionDTO.sendAddress!.addressBlockchainValue.shortName
+        
         self.swipeToBack()
         self.registerCell()
         (self.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: true)
         self.presenter.walletChoooseVC = self
         self.presenter.getWallets()
+        self.checkAmountFromQr()
         sendAnalyticsEvent(screenName: screenSendFrom, eventName: screenSendFrom)
     }
     
     func registerCell() {
         let walletCell = UINib(nibName: "WalletTableViewCell", bundle: nil)
         self.tableView.register(walletCell, forCellReuseIdentifier: "walletCell")
+    }
+    
+    func checkAmountFromQr() {
+        if presenter.transactionDTO.sendAmountString != nil && presenter.transactionDTO.sendAmountString != "" {
+            qrAmountLbl.text = "Amount from QR: \(presenter.transactionDTO.sendAmountString ?? "") \(presenter.transactionDTO.blockchain?.shortName ?? "")"
+        } else {
+            qrAmountLbl.isHidden = true
+        }
     }
 
     @IBAction func backAction(_ sender: Any) {
@@ -34,7 +50,11 @@ class WalletChooseViewController: UIViewController, AnalyticsProtocol {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "sendBTCDetailsVC" {
             let detailsVC = segue.destination as! SendDetailsViewController
-            presenter.transactionDTO.choosenWallet = self.presenter.walletsArr[self.presenter.selectedIndex!]
+            presenter.transactionDTO.choosenWallet = presenter.filteredWalletArray[presenter.selectedIndex!]
+            detailsVC.presenter.transactionDTO = presenter.transactionDTO
+        } else if segue.identifier == "sendETHDetailsVC" {
+            let detailsVC = segue.destination as! EthSendDetailsViewController
+            presenter.transactionDTO.choosenWallet = presenter.filteredWalletArray[presenter.selectedIndex!]
             detailsVC.presenter.transactionDTO = presenter.transactionDTO
         }
     }
@@ -57,7 +77,7 @@ extension WalletChooseViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let walletCell = self.tableView.dequeueReusableCell(withIdentifier: "walletCell") as! WalletTableViewCell
         walletCell.arrowImage.image = nil
-        walletCell.wallet = self.presenter.walletsArr[indexPath.row]
+        walletCell.wallet = presenter.filteredWalletArray[indexPath.row]
         walletCell.fillInCell()
         
         return walletCell
@@ -68,38 +88,41 @@ extension WalletChooseViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if presenter.walletsArr[indexPath.row].availableAmount() == 0 {
-            presenter.presentAlert(message: "You have no available funds")
+        if presenter.filteredWalletArray[indexPath.row].isThereAvailableAmount() == false {
+            presenter.presentAlert(message: localize(string: Constants.noFundsString))
             
             return
         }
         
-        if presenter.transactionDTO.sendAmount != nil {
-            if presenter.walletsArr[indexPath.row].sumInCrypto < presenter.transactionDTO.sendAmount! {
+        if presenter.transactionDTO.sendAmountString != nil {
+            if presenter.filteredWalletArray[indexPath.row].isThereEnoughAmount(presenter.transactionDTO.sendAmountString!) == false {
                 presenter.presentAlert(message: nil)
                 
                 return
             }
         }
         
-        let isValidDTO = DataManager.shared.isAddressValid(address: presenter.transactionDTO.sendAddress!, for: self.presenter.walletsArr[indexPath.row])
+        let isValidDTO = DataManager.shared.isAddressValid(address: presenter.transactionDTO.sendAddress!, for: presenter.filteredWalletArray[indexPath.row])
         
         if !isValidDTO.isValid {
-            presenter.presentAlert(message: "You entered not valid address for current blockchain.")
+            presenter.presentAlert(message: localize(string: Constants.notValidAddressString))
             
             return
         }
         
         self.presenter.selectedIndex = indexPath.row
-        self.performSegue(withIdentifier: "sendBTCDetailsVC", sender: Any.self)
-//        let storyboard = UIStoryboard(name: "Send", bundle: nil)   //need to send transactionDTO
-//        let ethDetailsVC = storyboard.instantiateViewController(withIdentifier: "EthSendDetails")
-//        self.navigationController?.pushViewController(ethDetailsVC, animated: true)
+        self.performSegue(withIdentifier: presenter.destinationSegueString(), sender: Any.self)
         
-        sendAnalyticsEvent(screenName: screenSendFrom, eventName: "\(walletWithChainTap)\(presenter.walletsArr[indexPath.row].chain)")
+        sendAnalyticsEvent(screenName: screenSendFrom, eventName: "\(walletWithChainTap)\(presenter.filteredWalletArray[indexPath.row].chain)")
     }
     
     func updateUI() {
         self.tableView.reloadData()
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

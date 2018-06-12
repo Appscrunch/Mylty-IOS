@@ -1,0 +1,85 @@
+
+/* Class = "UILabel"; text = "Cancel"; ObjectID = "7Et-dH-d2P"; */
+"7Et-dH-d2P.text" = "Cancel";
+
+/* Class = "UILabel"; text = "Receiving"; ObjectID = "7ol-yG-FZr"; */
+"7ol-yG-FZr.text" = "Receiving";
+
+/* Class = "UILabel"; text = "$"; ObjectID = "8Fl-G0-iLU"; */
+"8Fl-G0-iLU.text" = "$";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "B7w-Pg-fzt"; */
+"B7w-Pg-fzt.text" = "USD";
+
+/* Class = "UILabel"; text = "1.1234 BTC"; ObjectID = "CH8-SA-hb6"; */
+"CH8-SA-hb6.text" = "1.1234 BTC";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "CTc-56-hc2"; */
+"CTc-56-hc2.text" = "BTC";
+
+/* Class = "UILabel"; text = "Request summ"; ObjectID = "Cyh-TI-NTq"; */
+"Cyh-TI-NTq.text" = "Request sum";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "F0n-7y-x9F"; */
+"F0n-7y-x9F.text" = "BTC";
+
+/* Class = "UILabel"; text = "1 233$"; ObjectID = "Gny-Pb-20j"; */
+"Gny-Pb-20j.text" = "1 233$";
+
+/* Class = "UIButton"; normalTitle = "Generate New Address"; ObjectID = "L7R-G0-LAB"; */
+"L7R-G0-LAB.normalTitle" = "Generate New Address";
+
+/* Class = "UIButton"; normalTitle = "Magic Receive"; ObjectID = "OZc-YB-CB7"; */
+"OZc-YB-CB7.normalTitle" = "Magical Receive";
+
+/* Class = "UILabel"; text = " "; ObjectID = "PBS-bB-1y6"; */
+"PBS-bB-1y6.text" = " ";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "Qf6-To-A5V"; */
+"Qf6-To-A5V.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "Select Wallet:"; ObjectID = "RHs-Mt-eGo"; */
+"RHs-Mt-eGo.text" = "Select Wallet:";
+
+/* Class = "UILabel"; text = "Request Summ"; ObjectID = "SJp-d1-7t5"; */
+"SJp-d1-7t5.text" = "Request Sum";
+
+/* Class = "UIButton"; normalTitle = "Request summ"; ObjectID = "SXI-5J-BlV"; */
+"SXI-5J-BlV.normalTitle" = "Request sum";
+
+/* Class = "UILabel"; text = "3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K"; ObjectID = "TcM-XW-eXl"; */
+"TcM-XW-eXl.text" = "3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K";
+
+/* Class = "UILabel"; text = "1 174.23"; ObjectID = "WPa-6H-9ZB"; */
+"WPa-6H-9ZB.text" = "1 174.23";
+
+/* Class = "UILabel"; text = "0 "; ObjectID = "YpJ-0B-C3z"; */
+"YpJ-0B-C3z.text" = "0 ";
+
+/* Class = "UILabel"; text = "0.0"; ObjectID = "eGl-ZA-fcR"; */
+"eGl-ZA-fcR.text" = "0.0";
+
+/* Class = "UILabel"; text = "0.0152"; ObjectID = "fc4-7b-wBs"; */
+"fc4-7b-wBs.text" = "0.0152";
+
+/* Class = "UILabel"; text = "Receive"; ObjectID = "hSx-Am-TJ1"; */
+"hSx-Am-TJ1.text" = "Receive";
+
+/* Class = "UILabel"; text = "Address Book"; ObjectID = "l1V-0X-Hje"; */
+"l1V-0X-Hje.text" = "Address Book";
+
+/* Class = "UILabel"; text = "Receive"; ObjectID = "lpd-w8-Ylh"; */
+"lpd-w8-Ylh.text" = "Receive";
+
+/* Class = "UITextField"; placeholder = "0.0"; ObjectID = "qZH-gm-lpy"; */
+"qZH-gm-lpy.placeholder" = "0.0";
+
+/* Class = "UILabel"; text = "Share"; ObjectID = "rdV-eB-dDp"; */
+"rdV-eB-dDp.text" = "Share";
+
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "roV-FV-zns"; */
+"roV-FV-zns.normalTitle" = "Done";
+
+"jAI-11-Odr.text" = "Bluetooth is not enabled";
+
+"vkW-AP-0og.text" = "Please Check your Bluetooth connection";

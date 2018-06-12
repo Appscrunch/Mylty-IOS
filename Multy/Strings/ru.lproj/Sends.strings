@@ -1,0 +1,57 @@
+/* 
+  Send.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Предупреждение";
+"CANCEL" = "Отменить";
+"ERROR" = "Ошибка";
+"SOMETHING WENT WRONG" = "Что-то пошло не так";
+"NOT VALID ADDRESS" = "Вы ввели неверный адрес.";
+"GO TO SETTINGS" = "Разрешите использование камеры в настройках. (Настройки -> Multy)";
+"VERY FAST" = "Очень быстро";
+"FAST" = "Быстро";
+"MEDIUM" = "Умеренно";
+"SLOW" = "Медленно";
+"VERY SLOW" = "Очень медленно";
+"CUSTOM" = "Пользовательская"; // "Выставить вручную";
+"PREDEFINED VALUE MESSAGE" = "Вы можете использовать значение по умолчанию или установить свое значение.";
+"PLEASE CHOOSE FEE RATE" = "Пожалуйста, выберите стоимость комиссии за байт.";
+"MORE THEN YOU HAVE" = "Вы пытаетесь ввести сумму больше, чем у вас есть на счету";
+"FEE RATE LESS THEN" = "Ставка комиссии не может быть меньше";
+"SATOSHI PER BYTE" = "сатоши за байт.";
+"FEE TOO HIGH" = "Ваша комиссия слишком высокая. Пожалуйста, введите сумму поменьше!";
+"GAS PRICE LESS 1" = "Цена газа не может быть меньше 1 Гвей.";
+"SUCCESS" = "Успешно!";
+"DONE" = "Готово!";
+"ERROR WHILE SENDING TX" = "Ошибка при отправлении транзакции. Пожалуйста, попробуйте еще раз!";
+"TRANSACTION ERROR" = "Ошибка транзакции";
+"LOADING" = "Загрузка";
+"ACTIVE REQUESTS" = "Текущие запросы";
+"YOU DONT HAVE WALLETS" = "У Вас нет кошельков с ";
+"ENTER SATOSHI PER BYTE" = "Введите сатоши за байт";
+"ENABLE BLUETOOTH ALERT TITLE" = "Чтобы включить Bluetooth, перейдите в Настройки";
+"SETTINGS ACTION TITLE" = "Настройки";
+"COPY TO CLIPBOARD" = "Скопировать в буфер обмена";
+"SHARE" = "Поделиться";
+"SAT/B" = "Сат/Б";
+"SEND TIP" = "Hold and Swipe для отправки";
+"YOU ENTERED TOO SMALL AMOUNT" = "Вы ввели слишком малое количество!";
+"YOU ARE TRYING SPEND MORE THEN HAVE" = "Вы пытаетесь потратить больше чем имеете.";
+"UPDATING" = "Обновление...";
+"SENDING" = "Отправка...";
+"SEND TIP" = "Hold and Drag";
+"SCANNING NOT SUPPORTED" = "Сканирование не поддерживается";
+"DEVICE NOT SUPPORT" = "Ваше устройство не поддерживает сканирование кода. Пожалуйста, используйте устройство с камерой.";
+"NOT ENOUGH AMOUNT" = "Недостаточно суммы на выбранном кошельке! \nВы не можете потратить больше, чем имеется кошельке! \nВаша сумма платежа равна";
+"PLEASE CHOOSE GAS PRICE" = "Пожалуйста, выберите цену на газ.";
+"YOU CAN USE PREDEFINED VALUE" = "Вы можете использовать значение по умолчанию или задать новое значение.";
+"TRY TO SEND ZERO" = "Вы пытаетесь отправить 0.0";
+"ENTER CORRECT VALUE" = "Пожалуйста, введите правильное значение";
+"NO FUNDS" = "У вас нет доступных средств";
+"YOU CANT SPEND MORE THEN FEE AND DONATION" = "Вы не можете потратить больше, чем имеется кошельке! Не забывайте о комиссии и пожертвовании. Ваша комиссия - ";
+"YOU CANT SPEND MORE THEN FEE" = "Вы не можете потратить больше, чем имеется кошельке! Не забывайте о комиссии. Ваша комиссия - ";
+"AND DONATION " = ",\nпожертвование - ";

@@ -1,0 +1,57 @@
+/* 
+  Send.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"WARNING" = "Попередження";
+"CANCEL" = "Скасувати";
+"ERROR" = "Помилка";
+"SOMETHING WENT WRONG" = "Щось пішло не так";
+"NOT VALID ADDRESS" = "Ви ввели неправильну адресу.";
+"GO TO SETTINGS" = "Дозвольте використовувати камеру в налаштуваннях. (Налаштування -> Multy)";
+"VERY FAST" = "Дуже швидко";
+"FAST" = "Швидко";
+"MEDIUM" = "Помірно";
+"SLOW" = "Повільно";
+"VERY SLOW" = "Дуже повільно";
+"CUSTOM" = "Користувача"; // FIX
+"PREDEFINED VALUE MESSAGE" = "Ви можете використовувати значення за замовчуванням або встановити своє значення.";
+"PLEASE CHOOSE FEE RATE" = "Будь ласка, виберіть вартість комісії за байт.";
+"MORE THEN YOU HAVE" = "Ви намагаєтеся ввести суму більшу, ніж у вас є на рахунку";
+"FEE RATE LESS THEN" = "Ставка комісії не може бути менше";
+"SATOSHI PER BYTE" = "сатоши за байт.";
+"FEE TOO HIGH" = "Ваша комісія занадто висока. Будь ласка, введіть меншу суму!";
+"GAS PRICE LESS 1" = "Ціна газу не може бути менше 1 Гвей.";
+"SUCCESS" = "Успішно!";
+"DONE" = "Готово!";
+"ERROR WHILE SENDING TX" = "Помилка при відправленні транзакції. Будь ласка, спробуйте ще раз!";
+"TRANSACTION ERROR" = "Помилка транзакції";
+"LOADING" = "Завантаження";
+"ACTIVE REQUESTS" = "Поточні запити";
+"ENABLE BLUETOOTH ALERT TITLE" = "Щоб включити Bluetooth, перейдіть в Настроювання";
+"SETTINGS ACTION TITLE" = "Настроювання";
+"YOU DONT HAVE WALLETS" = "У Вас немає гаманців з ";
+"ENTER SATOSHI PER BYTE" = "Введіть Сатоши за байт";
+"COPY TO CLIPBOARD" = "Скопіювати в буфер обміну";
+"SHARE" = "Поділитися";
+"SAT/B" = "Сат/Б";
+"SEND TIP" = "Hold and Swipe щоб відправити";
+"YOU ENTERED TOO SMALL AMOUNT" = "Ви ввели занадто малу суму!";
+"YOU ARE TRYING SPEND MORE THEN HAVE" = "Ви намагаєтеся витратити більше ніж маєте.";
+"UPDATING" = "Оновлення...";
+"SENDING" = "Відправка...";
+"SEND TIP" = "Hold and Drag";
+"SCANNING NOT SUPPORTED" = "Сканування не підтримує";
+"DEVICE NOT SUPPORT" = "Ваш пристрій не підтримує сканування коду. Будь ласка, використовуйте пристрій з камерою.";
+"NOT ENOUGH AMOUNT" = "Недостатньо суми на обраному гаманці! \nВи не можете витратити більше, ніж є гаманці! \nВаша сума платежу дорівнює";
+"PLEASE CHOOSE GAS PRICE" = "Будь ласка, виберіть ціну на газ.";
+"YOU CAN USE PREDEFINED VALUE" = "Ви можете використовувати значення за замовчуванням або задати нове значення.";
+"TRY TO SEND ZERO" = "Ви намагаєтеся відправити";
+"ENTER CORRECT VALUE" = "Будь ласка, введіть правильне значення";
+"NO FUNDS" = "У вас немає доступних засобів";
+"YOU CANT SPEND MORE THEN FEE AND DONATION" = "Ви не можете витратити більше, ніж є гаманці!\nНе забувайте про комісію та пожертвування. Ваша комісія - ";
+"YOU CANT SPEND MORE THEN FEE" = "Ви не можете витратити більше, ніж є гаманці! Не забывайте о комиссии. Ваша комісія - ";
+"AND DONATION " = ",\nпожертвування - ";

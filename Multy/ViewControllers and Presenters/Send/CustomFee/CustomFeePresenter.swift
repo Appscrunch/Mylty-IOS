@@ -8,6 +8,6 @@ class CustomFeePresenter: NSObject {
 
     var customFeeVC: CustomFeeViewController?
     
-    var chainId: NSNumber?
+    var blockchainType: BlockchainType?
     
 }

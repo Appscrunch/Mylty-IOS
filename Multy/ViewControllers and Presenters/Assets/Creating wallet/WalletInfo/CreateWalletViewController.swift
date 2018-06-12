@@ -9,6 +9,7 @@ private typealias TableViewDataSource = CreateWalletViewController
 private typealias TableViewDelegate = CreateWalletViewController
 private typealias TextFieldDelegate = CreateWalletViewController
 private typealias ChooseBlockchainDelegate = CreateWalletViewController
+private typealias LocalizeDelegate = CreateWalletViewController
 
 class CreateWalletViewController: UIViewController, AnalyticsProtocol {
 
@@ -17,16 +18,17 @@ class CreateWalletViewController: UIViewController, AnalyticsProtocol {
     @IBOutlet weak var createBtn: ZFRippleButton!
     
     var presenter = CreateWalletPresenter()
-    let progressHUD = ProgressHUD(text: "Creating Wallet...")
+//    let progressHUD = ProgressHUD(text: "Creating Wallet...")
+    let loader = PreloaderView(frame: HUDFrame, text: "Creating Wallet...", image: #imageLiteral(resourceName: "walletHuge"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.swipeToBack()
         self.hideKeyboardWhenTappedAround()
         self.tableView.tableFooterView = nil
-        self.view.addSubview(progressHUD)
-        progressHUD.hide()
-        
+        loader.show(customTitle: Constants.creatingWalletString)
+        self.view.addSubview(loader)
+        loader.hide()
         self.presenter.mainVC = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)),
@@ -45,7 +47,6 @@ class CreateWalletViewController: UIViewController, AnalyticsProtocol {
     }
     
     @IBAction func cancleAction(_ sender: Any) {
-        sendAnalyticsEvent(screenName: screenCreateWallet, eventName: cancelTap)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -53,21 +54,45 @@ class CreateWalletViewController: UIViewController, AnalyticsProtocol {
         let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! CreateWalletNameTableViewCell
         if let text = cell.walletNameTF.text {
             if text.trimmingCharacters(in: .whitespaces).count == 0 {
-                presentAlert(with: "Wallet name should not be empty!")
+                presentAlert(with: localize(string: Constants.walletNameAlertString))
                 
                 return
             }
         } else {
-            presentAlert(with: "Wallet name should not be empty!")
+            presentAlert(with: localize(string: Constants.walletNameAlertString))
             
             return
         }
         
-        progressHUD.show()
+        loader.show(customTitle: localize(string: Constants.creatingWalletString))
         presenter.createNewWallet { (dict) in
             print(dict!)
         }
         sendAnalyticsEvent(screenName: screenCreateWallet, eventName: createWalletTap)
+    }
+    
+    func openNewlyCreatedWallet() {
+        let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
+        var walletVC = UIViewController()
+        
+        switch presenter.createdWallet.blockchainType.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            let vc = storyboard.instantiateViewController(withIdentifier: "WalletMainID") as! BTCWalletViewController
+            vc.presenter.wallet = presenter.createdWallet
+            vc.presenter.account = presenter.account
+            
+            walletVC = vc
+        case BLOCKCHAIN_ETHEREUM:
+            let vc = storyboard.instantiateViewController(withIdentifier: "EthWalletID") as! EthWalletViewController
+            vc.presenter.wallet = presenter.createdWallet
+            vc.presenter.account = presenter.account
+            
+            walletVC = vc
+        default:
+            return
+        }
+        
+        navigationController?.pushViewController(walletVC, animated: true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -151,7 +176,7 @@ extension TableViewDataSource: UITableViewDataSource {
         let cell2 = blockchainCell == nil ? self.tableView.dequeueReusableCell(withIdentifier: "cell2") as! CreateWalletBlockchainTableViewCell : blockchainCell!
         cell2.blockchainLabel.text = presenter.selectedBlockchainType.fullName + " ∙ " + presenter.selectedBlockchainType.shortName
         
-        if presenter.selectedBlockchainType.net_type != 0 {
+        if presenter.selectedBlockchainType.isMainnet == false {
             cell2.blockchainLabel.text! += "  Testnet"
         }
         
@@ -189,5 +214,11 @@ extension TextFieldDelegate: UITextFieldDelegate {
         } else {
             return false
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
     }
 }

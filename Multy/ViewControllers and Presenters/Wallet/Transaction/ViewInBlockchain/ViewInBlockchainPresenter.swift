@@ -8,5 +8,7 @@ class ViewInBlockchainPresenter: NSObject {
 
     var blockchainVC: ViewInBlockchainViewController?
     var blockchainType: BlockchainType?
+    var blockchain: Blockchain?
     var txId: String?
+    var txHash: String?
 }

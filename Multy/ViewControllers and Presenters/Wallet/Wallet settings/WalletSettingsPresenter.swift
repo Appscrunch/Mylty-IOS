@@ -17,12 +17,12 @@ class WalletSettingsPresenter: NSObject {
             return
         }
         
-        walletSettingsVC?.progressHUD.text = "Deleting Wallet"
-        walletSettingsVC?.progressHUD.show()
+//        walletSettingsVC?.loader.text = "Deleting Wallet"
+        walletSettingsVC?.loader.show(customTitle: walletSettingsVC!.localize(string: Constants.deletingString))
         
         DataManager.shared.realmManager.getAccount { (acc, err) in
             guard acc != nil else {
-                self.walletSettingsVC?.progressHUD.hide()
+                self.walletSettingsVC?.loader.hide()
                 
                 return
             }
@@ -31,15 +31,15 @@ class WalletSettingsPresenter: NSObject {
                                                        networkID:   self.wallet!.chainType,
                                                        walletIndex: self.wallet!.walletID,
                                                        completion: { (answer, err) in
-                self.walletSettingsVC?.progressHUD.hide()
+                self.walletSettingsVC?.loader.hide()
                 self.walletSettingsVC?.navigationController?.popToRootViewController(animated: true)
             })
         }
     }
     
     func changeWalletName() {
-        walletSettingsVC?.progressHUD.text = "Changing name"
-        walletSettingsVC?.progressHUD.show()
+//        walletSettingsVC?.progressHUD.text = "Changing name"
+        walletSettingsVC?.loader.show(customTitle: walletSettingsVC!.localize(string: Constants.updatingString))
         
         DataManager.shared.getAccount { (account, error) in
             DataManager.shared.changeWalletName(currencyID:self.wallet!.chain,
@@ -47,7 +47,7 @@ class WalletSettingsPresenter: NSObject {
                                                 walletID: self.wallet!.walletID,
                                                 newName: self.walletSettingsVC!.walletNameTF.text!.trimmingCharacters(in: .whitespaces)) { (dict, error) in
                 print(dict)
-                self.walletSettingsVC?.progressHUD.hide()
+                self.walletSettingsVC?.loader.hide()
                 self.walletSettingsVC!.navigationController?.popViewController(animated: true)
             }
         }

@@ -3,9 +3,10 @@
 //See LICENSE for details
 
 import UIKit
-import AURUnlockSlider
 
-class SendFinishViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol, AURUnlockSliderDelegate {
+private typealias LocalizeDelegate = SendFinishViewController
+
+class SendFinishViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var topView: UIView!
@@ -20,14 +21,14 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     @IBOutlet weak var noteTF: UITextField!
     
     @IBOutlet weak var walletNameLbl: UILabel!
-    @IBOutlet weak var walletCryptoSumAndCurrencyLbl: UILabel!
+//    @IBOutlet weak var walletCryptoSumAndCurrencyLbl: UILabel!
     @IBOutlet weak var walletFiatSumAndCurrencyLbl: UILabel!
+    @IBOutlet weak var walletsAddressesLbl: UILabel!
     
     @IBOutlet weak var transactionSpeedNameLbl: UILabel!
-    @IBOutlet weak var transactionSpeedTimeLbl: UILabel!
+//    @IBOutlet weak var transactionSpeedTimeLbl: UILabel!
     @IBOutlet weak var transactionFeeCostLbl: UILabel! // exp: 0.002 BTC / 1.54 USD
     
-    @IBOutlet weak var sendBtn: UIButton!
     
     @IBOutlet weak var arr1: UIImageView!
     @IBOutlet weak var arr2: UIImageView!
@@ -35,24 +36,27 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     @IBOutlet var arrCollection: [UIImageView]!
     
     @IBOutlet weak var btnTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var slideView: UIView!
+    @IBOutlet weak var slideLabel: UILabel!
+    @IBOutlet weak var slideColorView: UIView!
     
     let presenter = SendFinishPresenter()
     var imageArr = [#imageLiteral(resourceName: "slideToSend1"),#imageLiteral(resourceName: "slideToSend2"),#imageLiteral(resourceName: "slideToSend3")]
     var timer: Timer?
     
-    let label = UILabel(frame: CGRect(x: 33, y: 22, width: 50, height: 20))     //test
-    var unlockSlider: AURUnlockSlider?
+    var startSlideX: CGFloat = 0.0
+    var finishSlideX: CGFloat = screenWidth - 33
+    var isAnimateEnded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.swipeToBack()
-        self.fixUIForX()
+//        self.fixUIForX()
         self.presenter.sendFinishVC = self
         self.hideKeyboardWhenTappedAround()
         self.presenter.makeEndSum()
 
         self.noteTF.delegate = self
-        
         
         self.setupUI()
         sendAnalyticsEvent(screenName: "\(screenSendSummaryWithChain)\(presenter.transactionDTO.choosenWallet!.chain)",
@@ -60,108 +64,168 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     }
     
     override func viewDidLayoutSubviews() {
-        if self.scrollView.contentSize.height != 0.0 {
-            createSlideView()
+        slideColorView.applyGradient(withColours: [UIColor(ciColor: CIColor(red: 0/255, green: 178/255, blue: 255/255)),
+                                                   UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
+                                     gradientOrientation: .horizontal)
+        
+        if screenHeight == heightOfX {
+            if slideColorView.frame.width == screenWidth && slideColorView.frame.maxY < screenHeight - 80 {
+                btnTopConstraint.constant = btnTopConstraint.constant + (screenHeight - slideColorView.frame.maxY - 80)
+            }
+        } else {
+            if slideColorView.frame.width == screenWidth && slideColorView.frame.maxY < screenHeight - 20 {
+                btnTopConstraint.constant = btnTopConstraint.constant + (screenHeight - slideColorView.frame.maxY - 20)
+            }
         }
-        sendBtn.applyGradient(withColours: [UIColor(ciColor: CIColor(red: 0/255, green: 178/255, blue: 255/255)),
-                                            UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
-                              gradientOrientation: .horizontal)
     }
     
     func setupUI() {
         let shadowColor = #colorLiteral(red: 0.6509803922, green: 0.6941176471, blue: 0.7764705882, alpha: 0.5)
-        self.topView.setShadow(with: shadowColor)
-        self.middle.setShadow(with: shadowColor)
-        self.bottom.setShadow(with: shadowColor)
-        self.cryptoImage.image = UIImage(named: presenter.transactionDTO.blockchainType.iconString)
-        let exchangeCourse = presenter.transactionDTO.choosenWallet!.exchangeCourse
-        self.cryptoSumLbl.text = "\(presenter.transactionDTO.sendAmount?.fixedFraction(digits: 8) ?? "0.0")"
-        self.cryptoNamelbl.text = "\(self.presenter.cryptoName ?? "BTC")"
-        self.fiatSumAndCurrancyLbl.text = "\(self.presenter.sumInFiat?.fixedFraction(digits: 2) ?? "0.0") \(self.presenter.fiatName ?? "USD")"
-        self.addressLbl.text = presenter.transactionDTO.sendAddress
-        self.walletNameLbl.text = presenter.transactionDTO.choosenWallet?.name
+        topView.setShadow(with: shadowColor)
+        middle.setShadow(with: shadowColor)
+        bottom.setShadow(with: shadowColor)
+        cryptoImage.image = UIImage(named: presenter.transactionDTO.blockchainType!.iconString)
         
-        self.walletCryptoSumAndCurrencyLbl.text = "\(presenter.transactionDTO.choosenWallet?.sumInCrypto.fixedFraction(digits: 8) ?? "0.0") \(presenter.transactionDTO.choosenWallet?.cryptoName ?? "")"
-        let fiatSum = ((presenter.transactionDTO.choosenWallet?.sumInCrypto)! * exchangeCourse).fixedFraction(digits: 2)
-        self.walletFiatSumAndCurrencyLbl.text = "\(fiatSum) \(presenter.transactionDTO.choosenWallet?.fiatName ?? "")"
-        self.transactionFeeCostLbl.text = "\((presenter.transactionDTO.transaction?.transactionRLM?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(presenter.transactionDTO.transaction?.transactionRLM?.cryptoName ?? "")/\((presenter.transactionDTO.transaction?.transactionRLM?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(presenter.transactionDTO.transaction?.transactionRLM?.fiatName ?? "")"
-        self.transactionSpeedNameLbl.text = "\(presenter.transactionDTO.transaction?.transactionRLM?.speedName ?? "") "
-        self.transactionSpeedTimeLbl.text =  "\(presenter.transactionDTO.transaction?.transactionRLM?.speedTimeString ?? "")"
-        if self.view.frame.height == 736 {
-            self.btnTopConstraint.constant = 105
-        }
+        cryptoSumLbl.text = presenter.sumInCryptoString
+        cryptoNamelbl.text = presenter.cryptoName
+        fiatSumAndCurrancyLbl.text = "\(presenter.sumInFiatString) \(presenter.fiatName)"
+        addressLbl.text = presenter.transactionDTO.sendAddress
+        walletNameLbl.text = presenter.transactionDTO.choosenWallet?.name
+        
+        
+        walletsAddressesLbl.text = presenter.transactionDTO.choosenWallet!.stringAddressesWithSpendableOutputs()
+        let fiatSum = presenter.transactionDTO.choosenWallet!.sumInFiatString
+        walletFiatSumAndCurrencyLbl.text = "\(presenter.transactionDTO.choosenWallet!.sumInCryptoString) \(presenter.transactionDTO.choosenWallet!.cryptoName)" + " / " + "\(fiatSum) \(presenter.transactionDTO.choosenWallet!.fiatName)"
+        transactionFeeCostLbl.text = "\(presenter.feeAmountInCryptoString) \(presenter.cryptoName)/\(presenter.feeAmountInFiatString) \(presenter.fiatName)"
+        transactionSpeedNameLbl.text = "\(presenter.transactionDTO.transaction?.transactionRLM?.speedName ?? "") "
+//        transactionSpeedTimeLbl.text =  "\(presenter.transactionDTO.transaction?.transactionRLM?.speedTimeString ?? "")"
+//        if view.frame.height == 736 {
+//            btnTopConstraint.constant = 105
+//        }
         
         animate()
+        
+        startSlideX = slideView.frame.origin.x
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(slideToSend))
+        slideView.isUserInteractionEnabled = true
+        slideView.addGestureRecognizer(gestureRecognizer)
+        
+        let tapOnTo = UITapGestureRecognizer(target: self, action: #selector(tapOnToAddress))
+        addressLbl.isUserInteractionEnabled = true
+        addressLbl.addGestureRecognizer(tapOnTo)
+        
+        let tapOnFrom = UITapGestureRecognizer(target: self, action: #selector(tapOnFromAddress))
+        walletsAddressesLbl.isUserInteractionEnabled = true
+        walletsAddressesLbl.addGestureRecognizer(tapOnFrom)
     }
     
-    func createSlideView() {
-        self.unlockSlider = AURUnlockSlider(frame: self.presenter.makeFrameForSlider())
-        unlockSlider!.delegate = self
-        
-        unlockSlider!.sliderText = "Slide to Send"
-        unlockSlider!.sliderTextColor = UIColor.white
-        unlockSlider!.sliderTextFont = UIFont(name: "AvenirNext-Medium", size: 18.0)!
-        unlockSlider!.sliderBackgroundColor = UIColor.clear
-        
-        
-        label.text = "ABC"  //test
-        label.textColor = UIColor.white     //test
-        
-//        unlockSlider.addSubview(label)
-        if self.view.subviews.contains(unlockSlider!) {
-            unlockSlider!.removeFromSuperview()
-        }
-        self.scrollView.addSubview(unlockSlider!) //view.addSubview(unlockSlider)
+    @objc func tapOnToAddress(recog: UITapGestureRecognizer) {
+        tapFunction(recog: recog, labelFor: addressLbl)
     }
+    
+    @objc func tapOnFromAddress(recog: UITapGestureRecognizer) {
+        tapFunction(recog: recog, labelFor: walletsAddressesLbl)
+    }
+    
+    func tapFunction(recog: UITapGestureRecognizer, labelFor: UILabel) {
+        let tapLocation = recog.location(in: labelFor)
+        var lineNumber = Double(tapLocation.y / 16.5)
+        lineNumber.round(.towardZero)
+        var title = ""
+        if labelFor == walletsAddressesLbl {
+            title = presenter.transactionDTO.choosenWallet!.addressesWithSpendableOutputs()[Int(lineNumber)]
+        } else { // if walletToAddressLbl
+            title = presenter.transactionDTO.sendAddress!
+        }
+        
+        let actionSheet = UIAlertController(title: "", message: title, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.copyToClipboardString), style: .default, handler: { (action) in
+            UIPasteboard.general.string = title
+        }))
+        actionSheet.addAction(UIAlertAction(title: localize(string: Constants.shareString), style: .default, handler: { (action) in
+            let objectsToShare = [title]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            activityVC.completionWithItemsHandler = {(activityType: UIActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                if !completed {
+                    // User canceled
+                    return
+                } else {
+                    if let appName = activityType?.rawValue {
+                        //                        self.sendAnalyticsEvent(screenName: "\(screenWalletWithChain)\(self.wallet!.chain)", eventName: "\(shareToAppWithChainTap)\(self.wallet!.chain)_\(appName)")
+                    }
+                }
+            }
+            activityVC.setPresentedShareDialogToDelegate()
+            self.present(activityVC, animated: true, completion: nil)
+        }))
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    @IBAction func slideToSend(_ gestureRecognizer: UIPanGestureRecognizer) {
+        let translation = gestureRecognizer.translation(in: self.view)
+        if isAnimateEnded {
+            return
+        }
+        if slideView.frame.maxX + translation.x >= finishSlideX {
+            UIView.animate(withDuration: 0.3) {
+                self.isAnimateEnded = true
+                self.slideView.frame.origin.x = self.finishSlideX - self.slideView.frame.width
+//                self.view.isUserInteractionEnabled = false
+                self.nextAction(Any.self)
+            }
+            return
+        }
+        
+        gestureRecognizer.view!.center = CGPoint(x: slideView.center.x + translation.x, y: slideView.center.y)
+        gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+        
+        if gestureRecognizer.view!.frame.maxX < screenWidth / 2 {
+            UIView.animate(withDuration: 0.3) {
+                self.slideLabel.alpha = 0.5
+            }
+        } else if gestureRecognizer.view!.frame.maxX > screenWidth / 2 {
+            UIView.animate(withDuration: 0.3) {
+                self.slideLabel.alpha = 0
+            }
+        }
+        
+        if gestureRecognizer.state == .ended {
+            if gestureRecognizer.view!.frame.origin.x < screenWidth - 100 {
+                slideToStart()
+            }
+        }
+    }
+    
+    func slideToStart() {
+        UIView.animate(withDuration: 0.3) {
+            self.slideView.frame.origin.x = self.startSlideX
+            self.slideLabel.alpha = 1.0
+            self.isAnimateEnded = false
+        }
+    }
+    
     
     func animate() {
-        self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.decrease), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.decrease), userInfo: nil, repeats: true)
         RunLoop.current.add(self.timer!, forMode: RunLoopMode.commonModes)
     }
     
     @objc func decrease() {
-        if label.textColor == UIColor.white {
-            UIView.transition(with: label, duration: 1.0, options: .transitionCrossDissolve, animations: {() -> Void in
-                self.label.textColor = UIColor.red
-            }, completion: {(_ finished: Bool) -> Void in
-            })
-        } else {
-            UIView.transition(with: label, duration: 1.0, options: .transitionCrossDissolve, animations: {() -> Void in
-                self.label.textColor = UIColor.white
-            }, completion: {(_ finished: Bool) -> Void in
-            })
-        }
-        
-        if self.arrCollection[0].image == imageArr[0] {
-//            self.arrCollection[0].image = imageArr[2]
-            UIView.transition(with: self.arrCollection[0], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[0].image = self.imageArr[2] }, completion: nil)
-//            self.arrCollection[1].image = imageArr[0]
-            UIView.transition(with: self.arrCollection[1], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[1].image = self.imageArr[0] }, completion: nil)
-//            self.arrCollection[2].image = imageArr[1]
-            UIView.transition(with: self.arrCollection[2], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[2].image = self.imageArr[1] }, completion: nil)
-        } else if self.arrCollection[0].image == imageArr[2] {
-//            self.arrCollection[0].image = imageArr[1]
-            UIView.transition(with: self.arrCollection[0], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[0].image = self.imageArr[1] }, completion: nil)
-//            self.arrCollection[1].image = imageArr[2]
-            UIView.transition(with: self.arrCollection[1], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[1].image = self.imageArr[2] }, completion: nil)
-//            self.arrCollection[2].image = imageArr[0]
-            UIView.transition(with: self.arrCollection[2], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[2].image = self.imageArr[0] }, completion: nil)
-        } else if self.arrCollection[0].image == imageArr[1] {
-//            self.arrCollection[0].image = imageArr[0]
-            UIView.transition(with: self.arrCollection[0], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[0].image = self.imageArr[0] }, completion: nil)
-//            self.arrCollection[1].image = imageArr[1]
-            UIView.transition(with: self.arrCollection[1], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[1].image = self.imageArr[2] }, completion: nil)
-//            self.arrCollection[2].image = imageArr[2]
-            UIView.transition(with: self.arrCollection[2], duration: 1, options: .transitionCrossDissolve, animations: { self.arrCollection[2].image = self.imageArr[2] }, completion: nil)
+        if self.arr1.image == imageArr[0]  {
+            UIView.transition(with: self.arrCollection[0], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr1.image = self.imageArr[2] }, completion: nil)
+            UIView.transition(with: self.arrCollection[1], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr2.image = self.imageArr[0] }, completion: nil)
+            UIView.transition(with: self.arrCollection[2], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr3.image = self.imageArr[1] }, completion: nil)
+        } else if self.arr1.image == imageArr[2] {
+            UIView.transition(with: self.arrCollection[0], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr1.image = self.imageArr[1] }, completion: nil)
+            UIView.transition(with: self.arrCollection[1], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr2.image = self.imageArr[2] }, completion: nil)
+            UIView.transition(with: self.arrCollection[2], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr3.image = self.imageArr[0] }, completion: nil)
+        } else if self.arr1.image == imageArr[1] {
+            UIView.transition(with: self.arrCollection[0], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr1.image = self.imageArr[0] }, completion: nil)
+            UIView.transition(with: self.arrCollection[1], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr2.image = self.imageArr[1] }, completion: nil)
+            UIView.transition(with: self.arrCollection[2], duration: 0.1, options: .transitionCrossDissolve, animations: { self.arr3.image = self.imageArr[2] }, completion: nil)
         }
     }
-    
-    func unlockSliderDidUnlock(_ slider: AURUnlockSlider) {
-//        self.presentAlert()
-        self.nextAction(Any.self)
-    }
-    
-    
     
     @IBAction func backAction(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
@@ -178,13 +242,16 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     }
     
     @IBAction func nextAction(_ sender: Any) {
+        self.createRecentAddress()
         let wallet = presenter.transactionDTO.choosenWallet!
+        let newAddress = wallet.shouldCreateNewAddressAfterTransaction ? presenter.transactionDTO.transaction!.newChangeAddress! : ""
+        
         let newAddressParams = [
             "walletindex"   : wallet.walletID.intValue,
-            "address"       : presenter.transactionDTO.transaction!.newChangeAddress!,
+            "address"       : newAddress,
             "addressindex"  : wallet.addresses.count,
             "transaction"   : presenter.transactionDTO.transaction!.rawTransaction!,
-            "ishd"          : NSNumber(booleanLiteral: true)
+            "ishd"          : NSNumber(booleanLiteral: wallet.shouldCreateNewAddressAfterTransaction)
             ] as [String : Any]
         
         let params = [
@@ -193,21 +260,14 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
             "payload"   : newAddressParams
             ] as [String : Any]
         
-        
         DataManager.shared.sendHDTransaction(transactionParameters: params) { (dict, error) in
             print("---------\(dict)")
             
             if error != nil {
-                self.unlockSlider = nil
-                self.scrollView.subviews.last?.removeFromSuperview()
-                self.scrollView.reloadInputViews()
-                self.createSlideView()
-                self.scrollView.reloadInputViews()
-                self.view.reloadInputViews()
-                
                 self.presentAlert()
-//                self.unlockSlider.layoutSubviews()
                 print("sendHDTransaction Error: \(error)")
+                self.slideToStart()
+                self.view.isUserInteractionEnabled = true
                 self.sendAnalyticsEvent(screenName: "\(screenSendAmountWithChain)\(self.presenter.transactionDTO.choosenWallet!.chain)", eventName: transactionErrorFromServer)
                 return
             }
@@ -221,6 +281,12 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
         }
     }
 
+    func createRecentAddress() {
+        RealmManager.shared.writeOrUpdateRecentAddress(blockchainType: presenter.transactionDTO.blockchainType!,
+                                                       address: presenter.transactionDTO.sendAddress!,
+                                                       date: Date())
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -228,8 +294,8 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     }
     
     func presentAlert() {
-        let message = "Error while sending transaction. Please, try again!"
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let message = localize(string: Constants.errorSendingTxString)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
             
         }))
@@ -238,9 +304,9 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
     }
     
     func fixUIForX() {
-        if screenHeight == heightOfX {
-            self.btnTopConstraint.constant = 110
-        }
+//        if screenHeight == heightOfX {
+//            self.btnTopConstraint.constant = 100
+//        }
     }
     
     
@@ -249,5 +315,11 @@ class SendFinishViewController: UIViewController, UITextFieldDelegate, Analytics
             let sendAnimationVC = segue.destination as! SendingAnimationViewController
             sendAnimationVC.chainId = presenter.transactionDTO.choosenWallet!.chain as? Int
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

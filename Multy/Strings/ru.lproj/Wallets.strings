@@ -1,0 +1,30 @@
+/* 
+  Wallet.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"BACKUP IS NEEDED" = "Требуется резервное копирование!";
+"WARNING" = "Предупреждение";
+"CANCEL" = "Отменить";
+"ERROR" = "Ошибка";
+"SOMETHING WENT WRONG" = "Что-то пошло не так";
+"WALLET NAME NOT EMPTY ALERT" = "Имя кошелька не должно быть пустым";
+"WALLET AMOUNT ALERT" = "Сумма криптовалют должна быть пустой";
+"DELETE WALLET WARNING" = "Вы действительно хотите удалить кошелек?";
+"YES STRING" = "Да";
+"NO STRING" = "Нет";
+"COPY TO CLIPBOARD" = "Скопировать в буфер обмена";
+"SHARE" = "Поделиться";
+"TRANSACTION INFO" = "Информация о транзакции";
+"CONFIRMATION" = "Подтверждение";
+"CONFIRMATIONS" = "Подтверждений";
+"RECENT ADDRESSES" = "Последние адреса";
+"LOADING" = "Загрузка";
+"UNABLE SEND" = "Невозможно отправить транзакцию";
+"UPDATING" = "Обновление...";
+"DELETING" = "Удаление...";
+"GETTING WALLET" = "Получение кошельков...";
+"NO FUNDS" = "У вас нет доступных средств";

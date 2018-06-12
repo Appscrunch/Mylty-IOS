@@ -18,17 +18,15 @@ class AssetsPresenter: NSObject {
     
     var account : AccountRLM? {
         didSet {
-            print("")
-//            fetchTickets()
-//            getTransInfo()
-//            getWalletVerbose()
-//            getWalletOutputs()
-            
             backupActivity()
-            
+            self.assetsVC?.tableView.alwaysBounceVertical = true
             if self.assetsVC!.isVisible() {
-                (self.assetsVC!.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: account == nil)
+                if self.assetsVC!.isOnWindow() {
+                    (self.assetsVC!.tabBarController as! CustomTabBarViewController).changeViewVisibility(isHidden: account == nil)
+                }
             }
+            
+            wallets = account?.wallets.sorted(byKeyPath: "lastActivityTimestamp", ascending: false)
             
             self.assetsVC?.view.isUserInteractionEnabled = true
             if !assetsVC!.isSocketInitiateUpdating && self.assetsVC!.tabBarController!.viewControllers![0].childViewControllers.count == 1 {
@@ -43,6 +41,8 @@ class AssetsPresenter: NSObject {
         }
     }
     
+    var wallets: Results<UserWalletRLM>?
+    
     func backupActivity() {
         if account != nil {
             self.assetsVC?.backupView?.isHidden = account!.isSeedPhraseSaved()
@@ -56,7 +56,7 @@ class AssetsPresenter: NSObject {
         DataManager.shared.getAccount { (acc, err) in
             self.unlockUI()
             if acc == nil {
-                self.assetsVC?.progressHUD.show()
+//                self.assetsVC?.progressHUD.show()
                 DataManager.shared.auth(rootKey: nil) { (account, error) in
                     self.unlockUI()
                     guard account != nil else {
@@ -65,7 +65,7 @@ class AssetsPresenter: NSObject {
                     
                     DispatchQueue.main.async {
                         self.account = account
-                        DataManager.shared.socketManager.start()
+                        
                         self.getWalletsVerbose(completion: {_ in })
                     }
                 }
@@ -75,12 +75,12 @@ class AssetsPresenter: NSObject {
                     if acc != nil {
                         self.account = acc
                         self.getWalletsVerbose(completion: {_ in})
-                        DataManager.shared.socketManager.start()
+//                        DataManager.shared.socketManager.start()
                     }
                 })
             }
-            
-            self.assetsVC?.progressHUD.hide()
+            DataManager.shared.socketManager.start()
+//            self.assetsVC?.progressHUD.hide()
         }
     }
     
@@ -88,7 +88,7 @@ class AssetsPresenter: NSObject {
         self.assetsVC?.view.isUserInteractionEnabled = false
         DataManager.shared.auth(rootKey: nil) { (account, error) in
             self.assetsVC?.view.isUserInteractionEnabled = true
-            self.assetsVC?.progressHUD.hide()
+//            self.assetsVC?.progressHUD.hide()
             guard account != nil else {
                 return
             }
@@ -101,41 +101,23 @@ class AssetsPresenter: NSObject {
         }
     }
     
-    func updateWalletsInfo() {
-        self.blockUI()
+    func updateWalletsInfo(isInternetAvailable: Bool) {
         DataManager.shared.getAccount { (acc, err) in
-            self.unlockUI()
             if acc != nil {
+//                self.blockUI()
                 self.account = acc
-                self.getWalletsVerbose(completion: {_ in })
+                if isInternetAvailable == false {
+//                    self.unlockUI()
+                }
+                self.getWalletsVerbose(completion: { (_) in
+                    self.unlockUI()
+                })
             }
         }
     }
     
     func isWalletExist() -> Bool {
-        return !(account == nil || account?.wallets.count == 0)
-    }
-    
-    func openCreateWalletPopup() {
-        let actionSheet = UIAlertController(title: Constants.AssetsScreen.createOrImportWalletString,
-                                            message: nil,
-                                            preferredStyle: UIAlertControllerStyle.actionSheet)
-        
-        actionSheet.addAction(UIAlertAction(title: Constants.AssetsScreen.createWalletString,
-                                            style: .default,
-                                            handler: { (result : UIAlertAction) -> Void in
-            self.assetsVC?.performSegue(withIdentifier: Constants.Storyboard.createWalletVCSegueID,
-                                        sender: Any.self)
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: "Import wallet",
-                                            style: .default,
-                                            handler: { (result: UIAlertAction) -> Void in
-            //go to import wallet
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
-        self.assetsVC?.present(actionSheet, animated: true, completion: nil)
+        return !(account == nil || wallets?.count == 0)
     }
     
     func registerCells() {
@@ -148,36 +130,11 @@ class AssetsPresenter: NSObject {
         let newWalletCell = UINib.init(nibName: "NewWalletTableViewCell", bundle: nil)
         self.assetsVC?.tableView.register(newWalletCell, forCellReuseIdentifier: "newWalletCell")
     }
-    
-//    func updateExchangeCourse() {
-//        DataManager.shared.getExhanchgeCourse((account?.token)!) { (dict, err) in
-//            
-//        }
-//    }
-    
-    //////////////////////////////////////////////////////////////////////
-    //test
-    
-    func getTransInfo() {
-        DataManager.shared.apiManager.getTransactionInfo(transactionString: "d83a5591585f05dc367d5e68579ece93240a6b4646133a38106249cadea53b77") { (transDict, error) in
-                                                            guard transDict != nil else {
-                                                                return
-                                                            }
-                                                            
-                                                            print(transDict)
-        }
-    }
-    
-    func getWalletOutputs() {
-        DataManager.shared.getWalletOutputs(currencyID: 0, address: account!.wallets[0].address) { (dict, error) in
-            print("getWalletOutputs: \(dict)")
-        }
-    }
-    
+
     func getWalletsVerbose(completion: @escaping (_ flag: Bool) -> ()) {
-        blockUI()
+//        blockUI()
         DataManager.shared.getWalletsVerbose() { (walletsArrayFromApi, err) in
-            self.unlockUI()
+//            self.unlockUI()
             if err != nil {
                 return
             } else {
@@ -185,14 +142,8 @@ class AssetsPresenter: NSObject {
                 print("afterVerbose:rawdata: \(walletsArrayFromApi)")
                 DataManager.shared.realmManager.updateWalletsInAcc(arrOfWallets: walletsArr, completion: { (acc, err) in
                     self.account = acc
-                    
                     print("wallets: \(acc?.wallets)")
-                    
                     completion(true)
-                    
-//                    DataManager.shared.getAccount(completion: { (acc, err) in
-//                        print("afterVerbose: \(acc!)")
-//                    })
                 })
             }
         }
@@ -210,11 +161,8 @@ class AssetsPresenter: NSObject {
                 print("afterVerboseForSockets:rawdata: \(walletsArrayFromApi)")
                 DataManager.shared.realmManager.updateWalletsInAcc(arrOfWallets: walletsArr, completion: { (acc, err) in
                     self.account = acc
-                    
                     print("wallets: \(acc?.wallets)")
-                    
                     completion(true)
-                    
                     DataManager.shared.getAccount(completion: { (acc, err) in
                         print("afterVerbose: \(acc!)")
                     })
@@ -224,18 +172,22 @@ class AssetsPresenter: NSObject {
     }
     
     func getWalletViewController(indexPath: IndexPath) -> UIViewController {
-        let wallet = account?.wallets[indexPath.row - 2]
+        if wallets == nil {
+            return UIViewController()
+        }
+        
+        let wallet = wallets?[indexPath.row - 2]
         let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
         assetsVC?.sendAnalyticsEvent(screenName: screenMain, eventName: "\(walletOpenWithChainTap)\(wallet!.chain)")
         
-        switch wallet!.chain.uint32Value {
-        case BLOCKCHAIN_BITCOIN.rawValue:
+        switch wallet!.blockchainType.blockchain {
+        case BLOCKCHAIN_BITCOIN:
             let vc = storyboard.instantiateViewController(withIdentifier: "WalletMainID") as! BTCWalletViewController
             vc.presenter.wallet = wallet
             vc.presenter.account = account
             
             return vc
-        case BLOCKCHAIN_ETHEREUM.rawValue:
+        case BLOCKCHAIN_ETHEREUM:
             let vc = storyboard.instantiateViewController(withIdentifier: "EthWalletID") as! EthWalletViewController
             vc.presenter.wallet = wallet
             vc.presenter.account = account
@@ -247,14 +199,90 @@ class AssetsPresenter: NSObject {
     }
     
     func blockUI() {
-        assetsVC!.progressHUD.blockUIandShowProgressHUD()
+//        assetsVC!.loader.show(customTitle: assetsVC?.localize(string: Constants.gettingWalletString))
+//        assetsVC!.progressHUD.blockUIandShowProgressHUD()
         assetsVC?.tableView.isUserInteractionEnabled = false
-        assetsVC?.tabBarController?.view.isUserInteractionEnabled = false
+//        assetsVC?.tabBarController?.view.isUserInteractionEnabled = false
     }
     
     func unlockUI() {
-        assetsVC!.progressHUD.unblockUIandHideProgressHUD()
+//        assetsVC!.loader.hide()
+//        assetsVC!.progressHUD.unblockUIandHideProgressHUD()
         assetsVC?.tableView.isUserInteractionEnabled = true
-        assetsVC?.tabBarController?.view.isUserInteractionEnabled = true
+//        assetsVC?.tabBarController?.view.isUserInteractionEnabled = true
+        assetsVC?.refreshControl.endRefreshing()
+    }
+    
+    func makeAuth(completion: @escaping (_ answer: String) -> ()) {
+        if self.account != nil {
+            return
+        }
+        
+        DataManager.shared.auth(rootKey: nil) { (account, error) in
+            //            self.assetsVC?.view.isUserInteractionEnabled = true
+            //            self.assetsVC?.progressHUD.hide()
+            guard account != nil else {
+                return
+            }
+            self.account = account
+            DataManager.shared.socketManager.start()
+            completion("ok")
+        }
+    }
+    
+    func createFirstWallets(blockchianType: BlockchainType, completion: @escaping (_ answer: String?,_ error: Error?) -> ()) {
+        var binData : BinaryData = account!.binaryDataString.createBinaryData()!
+        let createdWallet = UserWalletRLM()
+        //MARK: topIndex
+        let currencyID = blockchianType.blockchain.rawValue
+        let networkID = blockchianType.net_type
+        var currentTopIndex = account!.topIndexes.filter("currencyID = \(currencyID) AND networkID == \(networkID)").first
+        
+        if currentTopIndex == nil {
+            //            mainVC?.presentAlert(with: "TopIndex error data!")
+            currentTopIndex = TopIndexRLM.createDefaultIndex(currencyID: NSNumber(value: currencyID), networkID: NSNumber(value: networkID), topIndex: NSNumber(value: 0))
+        }
+        
+        let dict = DataManager.shared.createNewWallet(for: &binData, blockchain: blockchianType, walletID: currentTopIndex!.topIndex.uint32Value)
+        
+        createdWallet.chain = NSNumber(value: currencyID)
+        createdWallet.chainType = NSNumber(value: networkID)
+        createdWallet.name = "My First \(blockchianType.shortName) Wallet"
+        createdWallet.walletID = NSNumber(value: dict!["walletID"] as! UInt32)
+        createdWallet.addressID = NSNumber(value: dict!["addressID"] as! UInt32)
+        createdWallet.address = dict!["address"] as! String
+        
+        if createdWallet.blockchainType.blockchain == BLOCKCHAIN_ETHEREUM {
+            createdWallet.ethWallet = ETHWallet()
+            createdWallet.ethWallet?.balance = "0"
+            createdWallet.ethWallet?.nonce = NSNumber(value: 0)
+            createdWallet.ethWallet?.pendingWeiAmountString = "0"
+        }
+        
+        let params = [
+            "currencyID"    : currencyID,
+            "networkID"     : networkID,
+            "address"       : createdWallet.address,
+            "addressIndex"  : createdWallet.addressID,
+            "walletIndex"   : createdWallet.walletID,
+            "walletName"    : createdWallet.name
+            ] as [String : Any]
+        
+        guard assetsVC!.presentNoInternetScreen() else {
+            self.assetsVC?.loader.hide()
+            
+            return
+        }
+        
+        DataManager.shared.addWallet(params: params) { [unowned self] (dict, error) in
+            self.assetsVC?.loader.hide()
+            if error == nil {
+                self.assetsVC!.sendAnalyticsEvent(screenName: screenCreateWallet, eventName: cancelTap)
+                completion("ok", nil)
+            } else {
+                self.assetsVC?.presentAlert(with: self.assetsVC!.localize(string: Constants.errorWhileCreatingWalletString))
+                completion(nil, nil)
+            }
+        }
     }
 }

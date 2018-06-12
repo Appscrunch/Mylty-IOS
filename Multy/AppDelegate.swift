@@ -5,8 +5,10 @@
 import UIKit
 import RealmSwift
 import Firebase
+import FirebaseMessaging
 import Branch
 import UserNotifications
+import SwiftyStoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -37,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //executes after screenshot
         }
         
-        performFirstEnterFlow()
+        self.storeKit()
         DataManager.shared.realmManager.getAccount { (acc, err) in
             DataManager.shared.realmManager.fetchCurrencyExchange { (currencyExchange) in
                 if currencyExchange != nil {
@@ -45,12 +47,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             isNeedToAutorise = acc != nil
-
+            DataManager.shared.apiManager.userID = acc == nil ? "" : acc!.userID
             //MAKR: Check here isPin option from NSUserDefaults
-            UserPreferences.shared.getAndDecryptPin(completion: { [weak self] (code, err) in
+            UserPreferences.shared.getAndDecryptPin(completion: { (code, err) in
                 if code != nil && code != "" {
                     isNeedToAutorise = true
-                    self!.authorization(isNeedToPresentBiometric: true)
+                    let appDel = UIApplication.shared.delegate as! AppDelegate
+                    appDel.authorization(isNeedToPresentBiometric: true)
                 }
             })
         }
@@ -65,10 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // for debug and development only
         Branch.getInstance().setDebug()
-        // listener for Branch Deep Link data
         Branch.getInstance().initSession(launchOptions: launchOptions) { [weak self] (params, error) in
-            // do stuff with deep link data (nav to page, display content, etc)
-//            print(params as? [String: AnyObject] ?? {})
             if error == nil {
                 let dictFormLink = params! as NSDictionary
                 if (dictFormLink["address"] != nil) {
@@ -76,14 +76,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         if acc == nil {
                             return
                         }
-                        var amountFromLink = 0.0
                         
-                        let chainNameFromLink = (dictFormLink["address"] as! String).split(separator: ":").first
-                        let addressFromLink = (dictFormLink["address"] as! String).split(separator: ":").last
+                        //FIXME: amountFromLink pass as String
+                        var amountFromLink: String?
+                        let deepLinkAddressInfoArray = (dictFormLink["address"] as! String).split(separator: ":")
+                        
+                        let chainNameFromLink = deepLinkAddressInfoArray.first
+                        let addressFromLink = deepLinkAddressInfoArray.last
                         if let amount = dictFormLink["amount"] as? String {
-                            amountFromLink = amount.doubleValue
+                            amountFromLink = amount
                         } else if let number = dictFormLink["amount"] as? NSNumber {
-                            amountFromLink = number.doubleValue
+                            amountFromLink = "\(number)"
                         } else {
                             print("\n\n\nAmount from deepLink not parsed!\n\n\n")
                         }
@@ -91,17 +94,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         let storyboard = UIStoryboard(name: "Send", bundle: nil)
                         let sendStartVC = storyboard.instantiateViewController(withIdentifier: "sendStart") as! SendStartViewController
                         sendStartVC.presenter.transactionDTO.sendAddress = "\(addressFromLink ?? "")"
-                        sendStartVC.presenter.transactionDTO.sendAmount = amountFromLink
+                        sendStartVC.presenter.transactionDTO.sendAmountString = amountFromLink
+                        switch chainNameFromLink {
+                        case "ethereum":
+                            sendStartVC.presenter.transactionDTO.blockchainType?.blockchain = BLOCKCHAIN_ETHEREUM
+                        default: break   //by default create tr for bitcoin
+                        }
                         ((self!.window?.rootViewController as! CustomTabBarViewController).selectedViewController as! UINavigationController).pushViewController(sendStartVC, animated: false)
                         sendStartVC.performSegue(withIdentifier: "chooseWalletVC", sender: (Any).self)
                     })
-//                    self.window?.rootViewController?.navigationController?.pushViewController(sendStartVC, animated: false)
-//                    let chooseWalletVC = WalletChoooseViewController()
-//                    self.window?.rootViewController?.navigationController?.pushViewController(chooseWalletVC, animated: true)
                 }
             }
         }
         
+        if UserDefaults.standard.value(forKey: "isTermsAccept") != nil {
+            self.registerPush()
+        }
         let filePathOpt = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist")
         if let filePath = filePathOpt, let options = FirebaseOptions(contentsOfFile: filePath) {
             FirebaseApp.configure(options: options)
@@ -113,23 +121,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Respond to URI scheme links
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-//        // pass the url to the handle deep link call
-//        let branchHandled = Branch.getInstance().application(application,
-//                                                             open: url,
-//                                                             sourceApplication: sourceApplication,
-//                                                             annotation: annotation
-//        )
-//        if (!branchHandled) {
-//            // If not handled by Branch, do other deep link routing for the Facebook SDK, Pinterest SDK, etc
-//        }
-//
-//        // do other deep link routing for the Facebook SDK, Pinterest SDK, etc
         return true
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         // handler for URI Schemes (depreciated in iOS 9.2+, but still used by some apps)
         Branch.getInstance().application(app, open: url, options: options)
+        
+        DataManager.shared.getAccount(completion: { (acc, err) in
+            if acc == nil {
+                return
+            }
+            var addressStr = ""
+            var amountFromQr: String?
+            let array = url.absoluteString.components(separatedBy: CharacterSet(charactersIn: ":?="))
+            switch array.count {
+            case 1:                              // shit in qr
+                let messageFromQr = array[0]
+                print(messageFromQr)
+            case 2:                              // chain name + address
+                addressStr = array[1]
+            case 4:                                // chain name + address + amount
+                addressStr = array[1]
+                amountFromQr = array[3]
+            default: break
+            }
+            
+            let storyboard = UIStoryboard(name: "Send", bundle: nil)
+            let sendStartVC = storyboard.instantiateViewController(withIdentifier: "sendStart") as! SendStartViewController
+            sendStartVC.presenter.transactionDTO.sendAddress = "\(addressStr)"
+            sendStartVC.presenter.transactionDTO.sendAmountString = amountFromQr
+            ((self.window?.rootViewController as! CustomTabBarViewController).selectedViewController as! UINavigationController).pushViewController(sendStartVC, animated: false)
+            sendStartVC.performSegue(withIdentifier: "chooseWalletVC", sender: (Any).self)
+        })
+        
+        
         return true
     }
     
@@ -140,11 +166,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-    
-    
-    
-    
-    
 
     func applicationWillResignActive(_ application: UIApplication) {
         DataManager.shared.finishRealmSession()
@@ -166,13 +187,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.authorization(isNeedToPresentBiometric: false)
                 }
             })
-
-            
         }
         
         DataManager.shared.realmManager.updateCurrencyExchangeRLM(curExchange: DataManager.shared.currencyExchange)
 //        UserDefaults.standard.set(exchangeCourse, forKey: "exchangeCourse")
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is ter4minated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
@@ -201,6 +220,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     receiveVC.amountTF.becomeFirstResponder()
                 } else if let amountVC = vcOnScren as? SendAmountViewController {
                     amountVC.amountTF.becomeFirstResponder()
+                } else if let amountVC = vcOnScren as? SendAmountEthViewController {
+                    amountVC.amountTF.becomeFirstResponder()
                 }
             }
             isActiveFirstTime = false
@@ -213,38 +234,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        UserDefaults.standard.set(exchangeCourse, forKey: "exchangeCourse")
         DataManager.shared.finishRealmSession()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-    
-    
-    func performFirstEnterFlow() {
-        guard self.window != nil && self.window?.rootViewController != nil else {
-            return
-        }
-        
-        let assetVC = self.window?.rootViewController?.childViewControllers[0].childViewControllers[0] as! AssetsViewController
-        switch isDeviceJailbroken() {
-        case true:
-            assetVC.presenter.isJailed = true
-        case false:
-            assetVC.presenter.isJailed = false
-            DataManager.shared.getServerConfig { (hardVersion, softVersion, err) in
-                let dictionary = Bundle.main.infoDictionary!
-                let buildVersion = (dictionary["CFBundleVersion"] as! NSString).integerValue
-                
-                //MARK: change > to <
-                if err != nil || buildVersion >= hardVersion! {
-                    assetVC.isFlowPassed = true
-                    assetVC.viewDidLoad()
-                    assetVC.presentTermsOfService()
-//                    assetVC.viewWillAppear(false)
-                    let _ = UserPreferences.shared
-                    self.saveMkVersion()
-                } else {
-                    assetVC.presentUpdateAlert()
-                }
-                
-            }
-        }
     }
     
     func saveMkVersion(){
@@ -292,6 +281,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.sharedDialog?.dismiss(animated: true, completion: nil)
         }
     }
+    
+    func storeKit() {
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    if purchase.needsFinishTransaction {
+                        // Deliver content from server, then:
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                // Unlock content
+                case .failed, .purchasing, .deferred:
+                    break // do nothing
+                }
+            }
+        }
+    }
 
 //    func realmConfig () {
 //        let config = Realm.Configuration(
@@ -321,9 +327,17 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
         print(remoteMessage.appData)
     }
     
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        print(notification.description)
+    }
+    
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        let token = Messaging.messaging().fcmToken
-        print("FCM token: \(token ?? "")")
+//        let token = Messaging.messaging().fcmToken
+        print("FCM token: \(fcmToken)")
+        ApiManager.shared.pushToken = fcmToken
+        DataManager.shared.getAccount { (acc, err) in
+            Messaging.messaging().subscribe(toTopic: "btcTransactionUpdate-\(acc?.userID ?? "userId is empty")")  //userID
+        }
     }
     
     func registerPush() {
@@ -336,12 +350,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
                 completionHandler: {_, _ in })
 //             For iOS 10 data message (sent via FCM
             Messaging.messaging().delegate = self
+            Messaging.messaging().isAutoInitEnabled = true
         } else {
             let settings: UIUserNotificationSettings =
                 UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             self.application!.registerUserNotificationSettings(settings)
         }
         self.application!.registerForRemoteNotifications()
+        if Messaging.messaging().fcmToken != nil {
+            ApiManager.shared.pushToken = Messaging.messaging().fcmToken as! String
+        }
     }
 }
 

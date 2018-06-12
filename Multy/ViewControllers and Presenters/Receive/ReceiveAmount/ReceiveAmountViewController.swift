@@ -5,6 +5,8 @@
 import UIKit
 import ZFRippleButton
 
+private typealias LocalizeDelegate = ReceiveAmountViewController
+
 class ReceiveAmountViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var amountTF: UITextField!
@@ -19,14 +21,12 @@ class ReceiveAmountViewController: UIViewController, UITextFieldDelegate {
     
     let presenter = ReceiveAmountPresenter()
     
-    var sumInCrypto = 0.0
-    var sumInFiat = 0.0
+//    var sumInCrypto = 0.0
+    var sumInCryptoString = "0.0"
+//    var sumInFiat = 0.0
+    var sumInFiatString = "0.0"
     
-    var blockchain = BlockchainType.create(currencyID: 0, netType: 0) {
-        didSet {
-            cryptoName = blockchain.shortName
-        }
-    }
+    var blockchainType = BlockchainType.create(currencyID: 0, netType: 0)
     
     var isCrypto = true
     
@@ -39,104 +39,112 @@ class ReceiveAmountViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.swipeToBack()
-        self.presenter.receiveAmountVC = self
+        swipeToBack()
+        presenter.receiveAmountVC = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)),
                                                name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
-        self.currencyNameLbl.text = self.cryptoName
-        self.tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        self.fixForIpad()
+        cryptoName = blockchainType.shortName
+        tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        fixForIpad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.sumInCrypto != 0.0 {
-            self.amountTF.text = self.sumInCrypto.fixedFraction(digits: 8)
+        if sumInCryptoString.doubleValue != 0.0 {
+            amountTF.text = sumInCryptoString
         }
-        self.sumLbl.text = self.sumInCrypto.fixedFraction(digits: 8)
-        self.currencyNameLbl.text = self.cryptoName
-        self.bottomSumLbl.text = self.sumInFiat.fixedFraction(digits: 2)
-        self.bottomCurrencyNameLbl.text = self.fiatName
+        sumLbl.text = sumInCryptoString
+        currencyNameLbl.text = cryptoName
+        bottomSumLbl.text = sumInCryptoString.fiatValueString(for: blockchainType)
+        bottomCurrencyNameLbl.text = fiatName
         
-        self.amountTF.becomeFirstResponder()
+        amountTF.becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.doneBtn.applyGradient(withColours: [UIColor(ciColor: CIColor(red: 0/255, green: 178/255, blue: 255/255)),
-                                                 UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
-                                   gradientOrientation: .horizontal)
+        doneBtn.applyGradient(withColours: [UIColor(ciColor: CIColor(red: 0/255, green: 178/255, blue: 255/255)),
+                                            UIColor(ciColor: CIColor(red: 0/255, green: 122/255, blue: 255/255))],
+                              gradientOrientation: .horizontal)
     }
     
     @IBAction func cancelAction(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func changeAction(_ sender: Any) {
-        if self.isCrypto {
-            if self.sumInFiat != 0.0 {
-                self.amountTF.text = "\(self.sumInFiat.fixedFraction(digits: 2))"
+        if isCrypto {
+            if sumInFiatString.doubleValue != 0.0 {
+                amountTF.text = sumInFiatString
             } else {
-                self.amountTF.text = ""
+                amountTF.text = ""
             }
-            self.bottomSumLbl.text = "\(self.sumInCrypto.fixedFraction(digits: 8)) "
-            self.bottomCurrencyNameLbl.text = self.currencyNameLbl.text?.uppercased()
-            self.sumLbl.text = "\(self.sumInFiat.fixedFraction(digits: 2))"
-            self.currencyNameLbl.text = self.fiatName
+            bottomSumLbl.text = sumInCryptoString + " "
+            bottomCurrencyNameLbl.text = currencyNameLbl.text?.uppercased()
+            sumLbl.text = sumInFiatString
+            currencyNameLbl.text = fiatName
         } else {
-            if self.sumInCrypto != 0.0 {
-                self.amountTF.text = "\(self.sumInCrypto.fixedFraction(digits: 8)) "
+            if sumInCryptoString.doubleValue != 0.0 {
+                amountTF.text = sumInCryptoString + " "
             } else {
-                self.amountTF.text = ""
+                amountTF.text = ""
             }
-            self.sumLbl.text = "\(self.sumInCrypto.fixedFraction(digits: 8)) "
-            self.currencyNameLbl.text = self.cryptoName
-            self.bottomSumLbl.text = "\(sumInFiat.fixedFraction(digits: 2)) "
-            self.bottomCurrencyNameLbl.text = self.fiatName
+            sumLbl.text = sumInCryptoString + " "
+            currencyNameLbl.text = cryptoName
+            bottomSumLbl.text = sumInFiatString + " "
+            bottomCurrencyNameLbl.text = fiatName
         }
         
-        self.amountTF.text = self.amountTF.text?.replacingOccurrences(of: ".", with: ",")
-        self.bottomSumLbl.text = self.bottomSumLbl.text?.replacingOccurrences(of: ".", with: ",")
-        self.sumLbl.text = self.sumLbl.text?.replacingOccurrences(of: ".", with: ",")
-        if self.amountTF.text!.contains(" ") {
-            self.amountTF.text = self.amountTF.text?.replacingOccurrences(of: " ", with: "")  //delete space after exchange action
+        amountTF.text = amountTF.text?.replacingOccurrences(of: ".", with: ",")
+        bottomSumLbl.text = bottomSumLbl.text?.replacingOccurrences(of: ".", with: ",")
+        sumLbl.text = sumLbl.text?.replacingOccurrences(of: ".", with: ",")
+        if amountTF.text!.contains(" ") {
+            amountTF.text = amountTF.text?.replacingOccurrences(of: " ", with: "")  //delete space after exchange action
         }
         
-        self.isCrypto = !self.isCrypto
+        isCrypto = !isCrypto
     }
     
     @IBAction func doneAction(_ sender: Any) {
-        self.delegate?.transferSum(cryptoAmount: self.sumInCrypto, cryptoCurrency: self.cryptoName, fiatAmount: self.sumInFiat, fiatName: self.fiatName)
-        self.navigationController?.popViewController(animated: true)
+        if sumInCryptoString.convertCryptoAmountStringToMinimalUnits(in: blockchainType.blockchain) == Int64(0) {
+            presentAlert(with: localize(string: Constants.enterNonZeroAmountString))
+            
+            return
+        }
+        
+        delegate?.transferSum!(cryptoAmount: sumInCryptoString, cryptoCurrency: cryptoName, fiatAmount: sumInFiatString, fiatName: fiatName)
+        navigationController?.popViewController(animated: true)
     }
    
     @objc func keyboardWillShow(_ notification : Notification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let inset : UIEdgeInsets = UIEdgeInsetsMake(64, 0, keyboardSize.height, 0)
-            self.constraintBtnBottom.constant = inset.bottom
+            constraintBtnBottom.constant = inset.bottom
         }
     }
     
     func presentWarning(message: String) {
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         switch isCrypto{
         case true:
-            if ((self.amountTF.text! + string) as NSString).doubleValue > self.presenter.getMaxValueOfChain(curency: BLOCKCHAIN_BITCOIN) {
-                self.presentWarning(message: "You can`t enter sum more than chain have")
+            if ((amountTF.text! + string) as NSString).doubleValue > presenter.getMaxValueOfChain(curency: blockchainType.blockchain) {
+                presentWarning(message: localize(string: Constants.youCantEnterSumString))
+                
                 return false
             }
         case false:
-            let exchangeCourse = DataManager.shared.makeExchangeFor(blockchainType: blockchain)
-            if ((self.amountTF.text! + string) as NSString).doubleValue/exchangeCourse > self.presenter.getMaxValueOfChain(curency: BLOCKCHAIN_BITCOIN) {
-                self.presentWarning(message: "You can`t enter sum more than chain have")
+            let exchangeCourse = DataManager.shared.makeExchangeFor(blockchainType: blockchainType)
+            if ((amountTF.text! + string) as NSString).doubleValue/exchangeCourse > presenter.getMaxValueOfChain(curency: blockchainType.blockchain) {
+                presentWarning(message: localize(string: Constants.youCantEnterSumString))
+                
                 return false
             }
         }
@@ -195,21 +203,20 @@ class ReceiveAmountViewController: UIViewController, UITextFieldDelegate {
         return newLength <= self.maxLengthForSum
     }
     
-    
     func saveTfValue() {
-        let exchangeCourse = DataManager.shared.makeExchangeFor(blockchainType: blockchain)
-        if self.isCrypto {
-            self.sumInCrypto = self.sumLbl.text!.convertStringWithCommaToDouble()
-            self.sumInFiat = self.sumInCrypto * exchangeCourse
-            self.sumInFiat = Double(round(100*self.sumInFiat)/100)
-            self.bottomSumLbl.text = "\(self.sumInFiat.fixedFraction(digits: 2)) "
-            self.bottomCurrencyNameLbl.text = self.fiatName
+        let exchangeCourse = DataManager.shared.makeExchangeFor(blockchainType: blockchainType)
+        if isCrypto {
+            sumInCryptoString = sumLbl.text!
+            sumInFiatString = sumInCryptoString.fiatValueString(for: blockchainType)
+            bottomSumLbl.text = sumInFiatString + " "
+            bottomCurrencyNameLbl.text = fiatName
         } else {
-            self.sumInFiat = self.sumLbl.text!.convertStringWithCommaToDouble()
-            self.sumInCrypto = self.sumInFiat / exchangeCourse
-            self.sumInCrypto = Double(round(100000000*self.sumInCrypto)/100000000 )
-            self.bottomSumLbl.text = "\(self.sumInCrypto.fixedFraction(digits: 8)) "
-            self.bottomCurrencyNameLbl.text = self.cryptoName
+            sumInFiatString = sumLbl.text!
+            let sumInFiat = sumInFiatString.convertStringWithCommaToDouble()
+            let sumInCrypto = sumInFiat / exchangeCourse
+            sumInCryptoString = sumInCrypto.fixedFraction(digits: 8)
+            bottomSumLbl.text = sumInCryptoString + " "
+            bottomCurrencyNameLbl.text = cryptoName
         }
     }
     
@@ -217,6 +224,12 @@ class ReceiveAmountViewController: UIViewController, UITextFieldDelegate {
         if screenHeight == heightOfiPad {
             self.btnTopConstraint.constant = 10
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Receives"
     }
 }
 

@@ -7,6 +7,7 @@ import ZFRippleButton
 
 private typealias TableViewDelegate = SendDetailsViewController
 private typealias TableViewDataSource = SendDetailsViewController
+private typealias LocalizeDelegate = SendDetailsViewController
 
 class SendDetailsViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol {
 
@@ -33,9 +34,13 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
     var maxLengthForSum = 12
     
     var isCustom = false
+//    let progressHUD = ProgressHUD(text: "Updating fee rates...")
+    let loader = PreloaderView(frame: HUDFrame, text: "Updating rates", image: #imageLiteral(resourceName: "walletHuge"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(loader)
+        loader.show(customTitle: localize(string: Constants.updatingString)) // "Updating rates"
         self.swipeToBack()
         self.tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         self.hideKeyboardWhenTappedAround()
@@ -45,9 +50,14 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
         self.setupShadow()
         self.setupDonationUI()
         
-        presenter.requestFee()
+        if self.presenter.selectedIndexOfSpeed == nil {
+            presenter.selectedIndexOfSpeed = 2
+            tableView.reloadData()
+//            self.tableView.selectRow(at: [0,2], animated: false, scrollPosition: .none)
+//            self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: [0,2])
+        }
         
-        presenter.getWalletVerbose()
+        presenter.requestFee()
         
         presenter.getData()
         
@@ -72,10 +82,6 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
         
         if screenHeight == heightOfX {
             bottomBtnConstraint.constant = 0
-        }
-        if self.presenter.selectedIndexOfSpeed == nil {
-            self.tableView.selectRow(at: [0,2], animated: false, scrollPosition: .none)
-            self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: [0,2])
         }
     }
     
@@ -103,11 +109,12 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
     @IBAction func backAction(_ sender: Any) {
         presenter.transactionDTO.transaction!.donationDTO = nil
         presenter.transactionDTO.transaction!.transactionRLM = nil
-        presenter.transactionDTO.transaction!.customFee = nil
+        presenter.transactionDTO.transaction?.customFee = presenter.customFee
         
-        self.navigationController?.popViewController(animated: true)
-        sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(self.presenter.transactionDTO.choosenWallet!.chain)", eventName: closeTap)
+        navigationController?.popViewController(animated: true)
+        sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(presenter.transactionDTO.choosenWallet!.chain)", eventName: closeTap)
     }
+    
     @IBAction func cancelAction(_ sender: Any) {
         self.tabBarController?.selectedIndex = 0
         self.navigationController?.popToRootViewController(animated: false)
@@ -123,7 +130,7 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
             self.presenter.createTransaction(index: self.presenter.selectedIndexOfSpeed!)
             self.presenter.checkMaxAvailable()
         } else {
-            let alert = UIAlertController(title: "Please choose Fee Rate.", message: "You can use predefined one or set a custom value.", preferredStyle: .alert)
+            let alert = UIAlertController(title: localize(string: Constants.pleaseChooseFeeRate), message: localize(string: Constants.predefinedValueMessageString), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
@@ -216,7 +223,7 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
     }
     
     func presentWarning(message: String) {
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -224,7 +231,7 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if (string != "," || string != ".") && ((self.donationTF.text! + string) as NSString).doubleValue > presenter.transactionDTO.choosenWallet!.sumInCrypto {
             if string != "" {
-                self.presentWarning(message: "You trying to enter sum more then you have")
+                self.presentWarning(message: localize(string: Constants.moreThenYouHaveString))
                 return false
             }
         }
@@ -261,6 +268,7 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
             self.saveDonationSum(string: string)
         }
         sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(self.presenter.transactionDTO.choosenWallet!.chain)", eventName: donationChanged)
+        
         return newLength <= self.maxLengthForSum
     }
     
@@ -281,8 +289,8 @@ class SendDetailsViewController: UIViewController, UITextFieldDelegate, Analytic
     //end
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "sendAmountVC" {
-            let sendAmountVC = segue.destination as! SendAmountViewController
+        if segue.identifier == "sendEthVC" {
+            let sendAmountVC = segue.destination as! SendAmountEthViewController
             
             presenter.transactionDTO.transaction!.donationDTO = presenter.donationObj
             presenter.transactionDTO.transaction!.transactionRLM = presenter.transactionObj
@@ -316,43 +324,19 @@ extension TableViewDelegate: UITableViewDelegate {
         }
         
         if indexPath.row != 5 {
-            if self.isCustom {
-                let customCell = self.tableView.cellForRow(at: [0,5]) as! CustomTrasanctionFeeTableViewCell
-                customCell.reloadUI()
-            }
-            var cells = self.tableView.visibleCells
-            cells.removeLast()
-            let trueCells = cells as! [TransactionFeeTableViewCell]
-            if trueCells[indexPath.row].checkMarkImage.isHidden == false {
-                trueCells[indexPath.row].checkMarkImage.isHidden = true
-                self.presenter.selectedIndexOfSpeed = nil
-                
-                return
-            }
-            for cell in trueCells {
-                cell.checkMarkImage.isHidden = true
-            }
-            trueCells[indexPath.row].checkMarkImage.isHidden = false
-            self.presenter.selectedIndexOfSpeed = indexPath.row
+            presenter.selectedIndexOfSpeed = indexPath.row
+            presenter.updateCellsVisibility()
         } else {
-            self.isCustom = true
+            isCustom = true
             let storyboard = UIStoryboard(name: "Send", bundle: nil)
             let customVC = storyboard.instantiateViewController(withIdentifier: "customVC") as! CustomFeeViewController
-            customVC.presenter.chainId = self.presenter.transactionDTO.choosenWallet!.chain
-            customVC.delegate = self.presenter
-            customVC.rate = Int(self.presenter.customFee)
-            customVC.previousSelected = self.presenter.selectedIndexOfSpeed
-            self.presenter.selectedIndexOfSpeed = indexPath.row
-            self.navigationController?.pushViewController(customVC, animated: true)
-            
-            var cells = self.tableView.visibleCells
-            cells.removeLast()
-            let trueCells = cells as! [TransactionFeeTableViewCell]
-            for cell in trueCells {
-                cell.checkMarkImage.isHidden = true
-            }
+            customVC.presenter.blockchainType = self.presenter.transactionDTO.choosenWallet!.blockchainType
+            customVC.delegate = presenter
+            customVC.rate = Int(presenter.customFee)
+            customVC.previousSelected = presenter.selectedIndexOfSpeed
+            presenter.selectedIndexOfSpeed = indexPath.row
+            navigationController?.pushViewController(customVC, animated: true)
         }
-        
     }
 }
 
@@ -367,16 +351,25 @@ extension TableViewDataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row != 5 {
-            let transactionCell = self.tableView.dequeueReusableCell(withIdentifier: "transactionCell") as! TransactionFeeTableViewCell
-            transactionCell.feeRate = self.presenter.feeRate
+            let transactionCell = tableView.dequeueReusableCell(withIdentifier: "transactionCell") as! TransactionFeeTableViewCell
+            transactionCell.feeRate = presenter.feeRate
             transactionCell.blockchainType = self.presenter.transactionDTO.blockchainType
             transactionCell.makeCellBy(indexPath: indexPath)
             
             return transactionCell
         } else {
-            let customFeeCell = self.tableView.dequeueReusableCell(withIdentifier: "customFeeCell") as! CustomTrasanctionFeeTableViewCell
-            
+            let customFeeCell = tableView.dequeueReusableCell(withIdentifier: "customFeeCell") as! CustomTrasanctionFeeTableViewCell
+            customFeeCell.blockchainType = presenter.transactionDTO.blockchainType
+            customFeeCell.value = UInt64(presenter.customFee)
+            customFeeCell.setupUI()
+
             return customFeeCell
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

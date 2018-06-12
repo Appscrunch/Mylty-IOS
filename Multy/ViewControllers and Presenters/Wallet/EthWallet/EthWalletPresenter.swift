@@ -9,17 +9,26 @@ class EthWalletPresenter: NSObject {
     
     var topCellHeight = CGFloat(0)
     
-    var blockedAmount = UInt64(0)
+    var isTherePendingAmount = false
     var wallet : UserWalletRLM? {
         didSet {
+            isTherePendingAmount = wallet!.ethWallet?.pendingWeiAmountString != "0"
             mainVC?.titleLbl.text = self.wallet?.name
-            mainVC?.tableView.reloadRows(at: [[0, 0]], with: .none)
-            blockedAmount = wallet!.calculateBlockedAmount()
+            mainVC?.collectionView.reloadData()
+            if isUpdateBySocket != nil && isUpdateBySocket == true {
+                mainVC?.makeConstantsForAnimation()
+            }
         }
     }
     var account : AccountRLM?
+    var isUpdateBySocket: Bool?
     
     var transactionsArray = [TransactionRLM]()
+    var isThereAvailableAmount: Bool {
+        get {
+            return wallet!.ethWallet!.balance != "0"
+        }
+    }
     
     var historyArray = [HistoryRLM]() {
         didSet {
@@ -52,6 +61,9 @@ class EthWalletPresenter: NSObject {
         
         let transactionPendingCell = UINib.init(nibName: "TransactionPendingCell", bundle: nil)
         self.mainVC?.tableView.register(transactionPendingCell, forCellReuseIdentifier: "TransactionPendingCellID")
+        
+        let headerCollectionCell = UINib.init(nibName: "EthWalletHeaderCollectionViewCell", bundle: nil)
+        self.mainVC?.collectionView.register(headerCollectionCell, forCellWithReuseIdentifier: "MainWalletCollectionViewCellID")
     }
     
     func fixConstraints() {
@@ -67,8 +79,12 @@ class EthWalletPresenter: NSObject {
     }
     
     func isTherePendingMoney(for indexPath: IndexPath) -> Bool {
-        return wallet!.blockedAmount(for: historyArray[indexPath.row - 1]) > 0
+        let transaction = historyArray[indexPath.row]
+        
+        return transaction.txStatus.intValue == TxStatus.MempoolIncoming.rawValue
     }
+    
+    
     
     func getNumberOfPendingTransactions() -> Int {
         var count = 0
@@ -83,26 +99,39 @@ class EthWalletPresenter: NSObject {
     }
     
     
+    func blockUI() {
+        self.mainVC?.spiner.startAnimating()
+        
+//        self.mainVC?.view.isUserInteractionEnabled = false
+//        mainVC?.loader.show(customTitle: "Updating")
+
+    }
+    
+    func unlockUI() {
+        self.mainVC?.spiner.stopAnimating()
+        self.mainVC?.spiner.isHidden = true
+//        self.mainVC?.view.isUserInteractionEnabled = true
+//        self.mainVC?.loader.hide()
+    }
+    
     func getHistoryAndWallet() {
+//        blockUI()
         DataManager.shared.getOneWalletVerbose(walletID: wallet!.walletID, blockchain: BlockchainType.create(wallet: wallet!)) { (wallet, error) in
             if wallet != nil {
                 self.wallet = wallet
             }
-        }
-        
-        DataManager.shared.getTransactionHistory(currencyID: wallet!.chain, networkID: wallet!.chainType, walletID: wallet!.walletID) { (histList, err) in
-            if err == nil && histList != nil {
-                self.mainVC!.refreshControl.endRefreshing()
-                self.mainVC!.tableView.isUserInteractionEnabled = true
-                self.mainVC!.tableView.contentOffset.y = 0
-                //                self.mainVC!.tableView.contentOffset =
-                self.historyArray = histList!.sorted(by: { $0.blockTime > $1.blockTime })
-                print("transaction history:\n\(histList)")
-                self.mainVC!.isSocketInitiateUpdating = false
+            DataManager.shared.getTransactionHistory(currencyID: self.wallet!.chain, networkID: self.wallet!.chainType, walletID: self.wallet!.walletID) { (histList, err) in
+                //            self.unlockUI()
+                self.mainVC?.spiner.stopAnimating()
+                if err == nil && histList != nil {
+                    //                self.mainVC!.refreshControl.endRefreshing()
+                    //                self.mainVC!.tableView.isUserInteractionEnabled = true
+                    //                self.mainVC!.tableView.contentOffset.y = 0
+                    //                self.mainVC!.tableView.contentOffset =
+                    self.historyArray = histList!.sorted(by: { $0.blockTime > $1.blockTime })
+                    self.mainVC!.isSocketInitiateUpdating = false
+                }
             }
-            
-            //            self.mainVC?.progressHUD.hide()
-            //            self.mainVC?.updateUI()
         }
     }
 }

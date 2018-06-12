@@ -1,0 +1,22 @@
+/* 
+  SeedPhrase.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"RESTORE MULTY" = "Восстановить Multy";
+"WARNING" = "Предупреждение";
+"CANCEL" = "Отменить";
+"ERROR" = "Ошибка";
+"SOMETHING WENT WRONG" = "Что-то пошло не так";
+"YES STRING" = "Да";
+"NO STRING" = "Нет";
+"CONTINUE" = "Далее";
+"NEXT WORD" = "Следующее слово";
+"FROM 15" = "из 15";
+"OR" = "или";
+"WANT TO CANCEL" = "Вы действительно хотите отменить?";
+"LOADING" = "Загрузка";
+"RESTORING WALLETS" = "Восстановление кошельков";

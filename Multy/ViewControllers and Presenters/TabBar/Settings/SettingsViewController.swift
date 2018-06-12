@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = SettingsViewController
+
 class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtocol {
 
     @IBOutlet weak var pinSwitch: UISwitch!
@@ -21,9 +23,10 @@ class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtoco
     @IBOutlet weak var pushSwitch: UISwitch!
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    //@IBOutlet weak var copyBtnWidthConstraint: NSLayoutConstraint!
     
     let presenter = SettingsPresenter()
-    let authVC = SecureViewController()
+//    let authVC = SecureViewController()
     
     var pinStr: String?
     
@@ -86,24 +89,24 @@ class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtoco
         }
     }
     
-    @IBAction func onSwitch(_ sender: Any) {
-        if !pinSwitch.isOn {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.disablePin), name: Notification.Name("canDisablePin"), object: nil)
-                pinSwitch.isOn = true
-                authVC.modalPresentationStyle = .overCurrentContext
-                self.present(authVC, animated: true, completion: nil)
-        } else {
-            if self.presenter.canEvaluatePolicy() {
-                UserPreferences.shared.writeCipheredPinMode(mode: 1)
-            } else {
-                pinSwitch.isOn = false
-                let message = "Biometric authentication is not configured on your device"
-                let alert = UIAlertController(title: "Sorry", message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
+//    @IBAction func onSwitch(_ sender: Any) {
+//        if !pinSwitch.isOn {
+//                NotificationCenter.default.addObserver(self, selector: #selector(self.disablePin), name: Notification.Name("canDisablePin"), object: nil)
+//                pinSwitch.isOn = true
+//                authVC.modalPresentationStyle = .overCurrentContext
+//                self.present(authVC, animated: true, completion: nil)
+//        } else {
+//            if self.presenter.canEvaluatePolicy() {
+//                UserPreferences.shared.writeCipheredPinMode(mode: 1)
+//            } else {
+//                pinSwitch.isOn = false
+//                let message = "Biometric authentication is not configured on your device"
+//                let alert = UIAlertController(title: localize(string: Constants.sorryString), message: message, preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
+//                self.present(alert, animated: true, completion: nil)
+//            }
+//        }
+//    }
     
     @IBAction func showOrHideCopy(_ sender: UIButton, event: UIEvent) {
         if self.copyBtn.alpha == 0.0 {
@@ -241,5 +244,11 @@ class SettingsViewController: UIViewController, AnalyticsProtocol, CancelProtoco
     func makeVersion() {
         self.topVersionLbl.text = "Multy Ctypto Wallet v.\(appVersion()).\(buildVersion())"
         self.botVersionLbl.text = "Git tag: \(getGitTag())\nGit branch name: \(getGitBranch())\nGit commit hash: \(getGitCommitHash())\n\nCore version: \(getCoreLibVersion())\n\nEnvironment: \(apiUrl)"
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Setting"
     }
 }

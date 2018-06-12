@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = DonationSendPresenter
+
 class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol {
 
     var mainVC: DonationSendViewController?
@@ -30,7 +32,7 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
             selectedIndexOfSpeed = 2
         }
         let cell = self.mainVC?.tableView.cellForRow(at: [0, selectedIndexOfSpeed!]) as! CustomTrasanctionFeeTableViewCell
-        cell.value = (firstValue)!
+        cell.value = UInt64(firstValue!)
         cell.setupUIFor(gasPrice: nil, gasLimit: nil)
         self.mainVC?.isTransactionSelected = true
         self.customFee = UInt64(firstValue!)
@@ -82,7 +84,7 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
         transaction.transaction?.customFee = self.customFee
         
         DataManager.shared.createAndSendDonationTransaction(transactionDTO: transaction) { [unowned self] (answer, err) in
-            self.mainVC?.progressHud.unblockUIandHideProgressHUD()
+            self.mainVC?.loader.show(customTitle: self.localize(string: Constants.sendingString))
             let errMessage = "Can't send a donation. Please check that donation sum is not too small(> 5000 Satoshi) and wallet`s balance is sufficient."
             if err != nil {
                 if answer != nil {
@@ -95,7 +97,7 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
             self.mainVC?.view.isUserInteractionEnabled = true
             if err != nil {
                 let alert = UIAlertController(title: "Error", message: errMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: self.localize(string: Constants.cancelString), style: .cancel, handler: nil))
                 self.mainVC?.present(alert, animated: true, completion: nil)
                 return
             } else {
@@ -113,5 +115,11 @@ class DonationSendPresenter: NSObject, CustomFeeRateProtocol, SendWalletProtocol
             sendSuccessVC.chainId = transaction.choosenWallet?.chain as? Int
             self.mainVC?.navigationController?.pushViewController(sendSuccessVC, animated: true)
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

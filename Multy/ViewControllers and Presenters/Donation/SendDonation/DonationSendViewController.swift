@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = DonationSendViewController
+
 class DonationSendViewController: UIViewController, UITextFieldDelegate, AnalyticsProtocol {
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -34,7 +36,8 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
     
     var countSymbolsAfterComma = 0
     
-    let progressHud = ProgressHUD(text: "Sending...")
+//    let progressHud = ProgressHUD(text: "Sending...")
+    let loader = PreloaderView(frame: HUDFrame, text: "Sending", image: #imageLiteral(resourceName: "walletHuge"))
     
     var isTransactionSelected = false
     var isDefaultValueSet = false
@@ -44,8 +47,8 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
     override func viewDidLoad() {
         super.viewDidLoad()
         self.swipeToBack()
-        self.view.addSubview(progressHud)
-        self.progressHud.hide()
+        loader.setupUI(text: localize(string: Constants.sendingString), image: #imageLiteral(resourceName: "walletHuge"))
+        self.view.addSubview(loader)
         self.hideKeyboardWhenTappedAround()
         self.presenter.mainVC = self
         self.registerCells()
@@ -109,7 +112,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
     
     @IBAction func sendAction(_ sender: Any) {
         self.view.isUserInteractionEnabled = false
-        self.progressHud.blockUIandShowProgressHUD()
+        self.loader.show(customTitle: localize(string: Constants.sendingString))
         self.presenter.createAndSendTransaction()
         sendDonationScreenPressSendAnalytics()
     }
@@ -183,7 +186,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
         let walletsVC = storyboard.instantiateViewController(withIdentifier: "ReceiveStart") as! ReceiveStartViewController
         walletsVC.presenter.isNeedToPop = true
         walletsVC.sendWalletDelegate = self.presenter
-        walletsVC.titleText = "Send Donation From"
+        walletsVC.titleTextKey = "Send Donation From"
         walletsVC.whereFrom = self
         walletsVC.presenter.walletsArr = presenter.btcWallets
         self.navigationController?.pushViewController(walletsVC, animated: true)
@@ -207,7 +210,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
     }
     
     func presentWarning(message: String) {
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -238,7 +241,7 @@ class DonationSendViewController: UIViewController, UITextFieldDelegate, Analyti
         }
         
         if (self.donationTF.text! + string).convertStringWithCommaToDouble() > self.presenter.maxAvailable {
-            self.presentWarning(message: "You trying to enter sum more then you have")
+            self.presentWarning(message: localize(string: Constants.moreThenYouHaveString))
             return false
         }
         
@@ -341,7 +344,7 @@ extension DonationSendViewController: UITableViewDelegate, UITableViewDataSource
             let storyboard = UIStoryboard(name: "Send", bundle: nil)
             let customVC = storyboard.instantiateViewController(withIdentifier: "customVC") as! CustomFeeViewController
 //            customVC.presenter.chainId = self.presenter.transactionDTO.choosenWallet!.chain
-            customVC.presenter.chainId = 0
+            customVC.presenter.blockchainType = BlockchainType(blockchain: BLOCKCHAIN_BITCOIN, net_type: 0)
             customVC.delegate = self.presenter
             customVC.rate = Int(self.presenter.customFee)
             self.presenter.selectedIndexOfSpeed = indexPath.row
@@ -359,5 +362,11 @@ extension DonationSendViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
     }
 }

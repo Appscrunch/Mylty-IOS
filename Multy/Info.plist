@@ -15,28 +15,46 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0.3</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>Multy</string>
+			<string>io.multy</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>ethereum</string>
+				<string>bitcoin</string>
 				<string>multy</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>App-prefs</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>prefs</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>38</string>
+	<string>47</string>
 	<key>GIT_BRANCH_NAME</key>
-	<string>MUL-1266_Slide_to_send</string>
+	<string>ETH_Bet_test</string>
 	<key>GIT_COMMIT_HASH</key>
-	<string>a27d2e9</string>
+	<string>3023939</string>
 	<key>GIT_TAG_NAME</key>
-	<string>Release-26-dirty</string>
+	<string>iTunesConnect-BUILD-dirty</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -62,8 +80,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We use that to find other Multy</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) camera use</string>
+	<string>Multy needs to scan payment request QR code.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Needs to authorize user</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

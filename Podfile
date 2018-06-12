@@ -12,7 +12,7 @@ target 'Multy' do
   pod 'LTMorphingLabel'
   pod 'ZFRippleButton'
   pod 'ButtonProgressBar-iOS'
-  pod 'CryptoSwift'
+  pod 'CryptoSwift', '~> 0.9.0'
   pod 'SecurityExtensions'
   pod 'GGLInstanceID'
   pod 'Alamofire'
@@ -24,9 +24,10 @@ target 'Multy' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'Branch'
-  pod 'AURUnlockSlider'
-  
-#  pod 'BiometricAuthentication'
+  pod 'SwiftyStoreKit'
+  pod 'lottie-ios'
+  pod 'UPCarouselFlowLayout'
+
 
   target 'MultyTests' do
       inherit! :search_paths

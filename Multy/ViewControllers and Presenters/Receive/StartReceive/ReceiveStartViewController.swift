@@ -5,6 +5,8 @@
 import UIKit
 import ZFRippleButton
 
+private typealias LocalizeDelegate = ReceiveStartViewController
+
 class ReceiveStartViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet weak var tableView: UITableView!
@@ -14,17 +16,21 @@ class ReceiveStartViewController: UIViewController, AnalyticsProtocol {
     
     weak var sendWalletDelegate: SendWalletProtocol?
     
-    var titleText = "Receive"
+    var titleTextKey = Constants.receiveString
     
     var whereFrom: UIViewController?
     
+    let loader = PreloaderView(frame: HUDFrame, text: "", image: #imageLiteral(resourceName: "walletHuge"))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(loader)
         self.swipeToBack()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarController?.tabBar.isHidden = true
         self.tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        self.titleLbl.text = self.titleText
+        self.titleLbl.text = localize(string: titleTextKey)
         
         self.presenter.receiveStartVC = self
         self.registerCells()
@@ -85,15 +91,16 @@ extension ReceiveStartViewController: UITableViewDelegate, UITableViewDataSource
         walletCell.arrowImage.image = nil
         walletCell.wallet = self.presenter.walletsArr[indexPath.row]
         walletCell.fillInCell()
+        
         return walletCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.presenter.selectedIndex = indexPath.row
         if self.presenter.isNeedToPop == true {
-            if self.whereFrom != nil && self.presenter.walletsArr[indexPath.row].availableAmount() == 0 {
-                let message = "You can not choose empty wallet. Please select wallet with some amount"
-                let alert = UIAlertController(title: "Sorry", message: message, preferredStyle: .alert)
+            if self.whereFrom != nil && self.presenter.walletsArr[indexPath.row].availableAmount.isZero {
+                let message = localize(string: Constants.cannotChooseEmptyWalletString)
+                let alert = UIAlertController(title: localize(string: Constants.sorryString), message: message, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 shakeView(viewForShake: self.tableView.cellForRow(at: indexPath)!)
@@ -125,5 +132,11 @@ extension ReceiveStartViewController: UITableViewDelegate, UITableViewDataSource
             let receiveDetails = segue.destination as! ReceiveAllDetailsViewController
             receiveDetails.presenter.wallet = self.presenter.walletsArr[self.presenter.selectedIndex!]
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Receives"
     }
 }

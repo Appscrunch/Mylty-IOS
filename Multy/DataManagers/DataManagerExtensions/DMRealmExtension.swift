@@ -81,4 +81,9 @@ extension DataManager {
     func spendableOutputSum(outputs: [SpendableOutputRLM]) -> UInt64 {
         return realmManager.spendableOutputSum(outputs: outputs)
     }
+    
+    func updateToken(_ token: String) {
+        let tokenData = ["token" : token] as NSDictionary;
+        realmManager.updateAccount(tokenData) { (_, _) in }
+    }
 }

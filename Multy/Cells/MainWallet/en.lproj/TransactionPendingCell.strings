@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "28.052509 (BTC)"; ObjectID = "38G-n5-RHc"; */
+"38G-n5-RHc.text" = "28.052509 (BTC)";
+
+/* Class = "UILabel"; text = "Locked funds"; ObjectID = "5lz-Rj-P4L"; */
+"5lz-Rj-P4L.text" = "Locked funds";
+
+/* Class = "UILabel"; text = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L"; ObjectID = "LUD-jm-sHC"; */
+"LUD-jm-sHC.text" = "83T28WCp4Cu5LQiddJnDJJmKWvmmXJSP9L";
+
+/* Class = "UILabel"; text = "200.34 USD"; ObjectID = "VKt-WA-8se"; */
+"VKt-WA-8se.text" = "200.34 USD";
+
+/* Class = "UILabel"; text = "Pending..."; ObjectID = "Wkg-xt-4Vz"; */
+"Wkg-xt-4Vz.text" = "Pending...";
+
+/* Class = "UILabel"; text = "(200.34) USD"; ObjectID = "mUH-JS-GfD"; */
+"mUH-JS-GfD.text" = "(200.34) USD";
+
+/* Class = "UILabel"; text = "0.05250889 BTC"; ObjectID = "nb2-JT-vh4"; */
+"nb2-JT-vh4.text" = "0.05250889 BTC";

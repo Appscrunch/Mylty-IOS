@@ -1,0 +1,30 @@
+/* 
+  Wallet.strings
+  Multy
+
+  Created by Alex Pro on 5/30/18.
+  Copyright © 2018 Idealnaya rabota. All rights reserved.
+*/
+
+"BACKUP IS NEEDED" = "Backup is needed!";
+"WARNING" = "Warning";
+"CANCEL" = "Cancel";
+"ERROR" = "Error";
+"SOMETHING WENT WRONG" = "Something went wrong";
+"WALLET NAME NOT EMPTY ALERT" = "Wallet name should be non empty";
+"WALLET AMOUNT ALERT" = "Cryptocurrency amount should be empty";
+"DELETE WALLET WARNING" = "Do you really want to delete this wallet?";
+"YES STRING" = "Yes";
+"NO STRING" = "No";
+"COPY TO CLIPBOARD" = "Copy to clipboard";
+"SHARE" = "Share";
+"TRANSACTION INFO" = "Transaction Info";
+"CONFIRMATION" = "Confirmation";
+"CONFIRMATIONS" = "Confirmations";
+"RECENT ADDRESSES" = "Recent Addresses";
+"LOADING" = "Loading";
+"UNABLE SEND" = "Не вдається відправити транзакцію";
+"UPDATING" = "Updating...";
+"DELETING" = "Deleting...";
+"GETTING WALLET" = "Getting Wallets...";
+"NO FUNDS" = "You have no available funds";

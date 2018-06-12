@@ -5,10 +5,13 @@
 import UIKit
 import Firebase
 
+private typealias LocalizeDelegate = CreateWalletPresenter
+
 class CreateWalletPresenter: NSObject {
     weak var mainVC: CreateWalletViewController?
     var account : AccountRLM?
     var selectedBlockchainType = BlockchainType.create(currencyID: 0, netType: 0)
+    let createdWallet = UserWalletRLM()
 //
     func makeAuth(completion: @escaping (_ answer: String) -> ()) {
         if self.account != nil {
@@ -54,23 +57,50 @@ class CreateWalletPresenter: NSObject {
         
         let dict = DataManager.shared.createNewWallet(for: &binData, blockchain: selectedBlockchainType, walletID: currentTopIndex!.topIndex.uint32Value)
         let cell = mainVC?.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! CreateWalletNameTableViewCell
+        
+        createdWallet.chain = NSNumber(value: currencyID)
+        createdWallet.chainType = NSNumber(value: networkID)
+        createdWallet.name = cell.walletNameTF.text ?? "Wallet"
+        createdWallet.walletID = NSNumber(value: dict!["walletID"] as! UInt32)
+        createdWallet.addressID = NSNumber(value: dict!["addressID"] as! UInt32)
+        createdWallet.address = dict!["address"] as! String
+        
+        if createdWallet.blockchainType.blockchain == BLOCKCHAIN_ETHEREUM {
+            createdWallet.ethWallet = ETHWallet()
+            createdWallet.ethWallet?.balance = "0"
+            createdWallet.ethWallet?.nonce = NSNumber(value: 0)
+            createdWallet.ethWallet?.pendingWeiAmountString = "0"
+        }
+        
         let params = [
             "currencyID"    : currencyID,
             "networkID"     : networkID,
-            "address"       : dict!["address"] as! String,
-            "addressIndex"  : dict!["addressID"] as! UInt32,
-            "walletIndex"   : dict!["walletID"] as! UInt32,
-            "walletName"    : cell.walletNameTF.text ?? "Wallet"
+            "address"       : createdWallet.address,
+            "addressIndex"  : createdWallet.addressID,
+            "walletIndex"   : createdWallet.walletID,
+            "walletName"    : createdWallet.name
             ] as [String : Any]
         
-        DataManager.shared.addWallet(params: params) { (dict, error) in
+        guard mainVC!.presentNoInternetScreen() else {
+            self.mainVC?.loader.hide()
+            
+            return
+        }
+        
+        DataManager.shared.addWallet(params: params) { [unowned self] (dict, error) in
+            self.mainVC?.loader.hide()
             if error == nil {
-                print(dict as Any)
-                self.mainVC?.cancleAction(UIButton())
+                self.mainVC!.sendAnalyticsEvent(screenName: screenCreateWallet, eventName: cancelTap)
+                self.mainVC!.openNewlyCreatedWallet()
             } else {
-                self.mainVC?.progressHUD.hide()
-                self.mainVC?.presentAlert(with: "Error while creating wallet!")
+                self.mainVC?.presentAlert(with: self.localize(string: Constants.errorWhileCreatingWalletString))
             }
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
     }
 }

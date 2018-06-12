@@ -1,0 +1,257 @@
+
+/* Class = "UILabel"; text = "Transaction Fee"; ObjectID = "0ZI-tj-Idl"; */
+"0ZI-tj-Idl.text" = "Transaction Fee";
+
+/* Class = "UILabel"; text = "1.1234 BTC / 1 123 USD"; ObjectID = "31h-f9-3fx"; */
+"31h-f9-3fx.text" = "1.1234 BTC / 1 123 USD";
+
+/* Class = "UILabel"; text = "Send All"; ObjectID = "3Fn-W0-b7o"; */
+"3Fn-W0-b7o.text" = "Send All";
+
+/* Class = "UILabel"; text = "Fee Rate"; ObjectID = "3mW-J9-IU9"; */
+"3mW-J9-IU9.text" = "Fee Rate";
+
+/* Class = "UILabel"; text = "Pay for commission        "; ObjectID = "5Ie-5f-uXv"; */
+"5Ie-5f-uXv.text" = "Pay for commission        ";
+
+/* Class = "UITextField"; text = "0.0001"; ObjectID = "5NH-ZP-Pzn"; */
+"5NH-ZP-Pzn.text" = "0.0001";
+
+/* Class = "UILabel"; text = "Recent Addresses"; ObjectID = "66b-bM-oOH"; */
+"66b-bM-oOH.text" = "Recent Addresses";
+
+/* Class = "UILabel"; text = "Active Requests: 0 "; ObjectID = "6a2-EL-VA4"; */
+"6a2-EL-VA4.text" = "Active Requests: 0 ";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "6iC-xp-ZDN"; */
+"6iC-xp-ZDN.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "7g9-UJ-RsT"; */
+"7g9-UJ-RsT.text" = "(work in progress)";
+
+/* Class = "UITextField"; placeholder = "Enter price here"; ObjectID = "84M-y9-Blm"; */
+"84M-y9-Blm.placeholder" = "Enter price here";
+
+/* Class = "UILabel"; text = "Sending..."; ObjectID = "9Jg-ab-E9W"; */
+"9Jg-ab-E9W.text" = "Sending...";
+
+/* Class = "UILabel"; text = "Fee Rate affects how fast your transaction is going to be accepted in the blockchain."; ObjectID = "9nM-mt-kya"; */
+"9nM-mt-kya.text" = "Fee Rate affects how fast your transaction is going to be accepted in the blockchain.";
+
+/* Class = "UILabel"; text = "1 174.23 USD"; ObjectID = "AkA-WX-ZNe"; */
+"AkA-WX-ZNe.text" = "1 174.23 USD";
+
+/* Class = "UILabel"; text = "Amount from QR: 1 BTC"; ObjectID = "B2E-Qe-eWd"; */
+"B2E-Qe-eWd.text" = "Amount from QR: 1 BTC";
+
+/* Class = "UITextField"; placeholder = "Search or Enter Address Here"; ObjectID = "C5d-7f-xmF"; */
+"C5d-7f-xmF.placeholder" = "Enter Address Here";
+
+/* Class = "UILabel"; text = "Fast"; ObjectID = "CAx-k6-U4B"; */
+"CAx-k6-U4B.text" = "Fast";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "CEc-LJ-btu"; */
+"CEc-LJ-btu.text" = "BTC";
+
+/* Class = "UILabel"; text = "Next"; ObjectID = "Cg1-VD-fBS"; */
+"Cg1-VD-fBS.text" = "Next";
+
+/* Class = "UILabel"; text = "Transaction Fee"; ObjectID = "CmP-mh-W1O"; */
+"CmP-mh-W1O.text" = "Transaction Fee";
+
+/* Class = "UILabel"; text = "Scan\nQR"; ObjectID = "Cmu-SL-LS1"; */
+"Cmu-SL-LS1.text" = "Scan\nQR";
+
+/* Class = "UILabel"; text = "To:"; ObjectID = "Ed2-gG-ZRs"; */
+"Ed2-gG-ZRs.text" = "To:";
+
+/* Class = "UILabel"; text = "Fee Rate"; ObjectID = "Ewh-6y-aEq"; */
+"Ewh-6y-aEq.text" = "Fee Rate";
+
+/* Class = "UILabel"; text = "Please Check your Bluetooth connection"; ObjectID = "GPJ-dz-boD"; */
+"GPJ-dz-boD.text" = "Please Check your Bluetooth connection";
+
+/* Class = "UILabel"; text = "ETH"; ObjectID = "GcC-ye-4hC"; */
+"GcC-ye-4hC.text" = "ETH";
+
+/* Class = "UILabel"; text = "Bluetooth Error"; ObjectID = "GuO-y4-IZM"; */
+"GuO-y4-IZM.text" = "Bluetooth is not enabled";
+
+/* Class = "UILabel"; text = "Searching active requests"; ObjectID = "GzI-Rv-HuM"; */
+"GzI-Rv-HuM.text" = "Searching active requests";
+
+/* Class = "UILabel"; text = "0x1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX"; ObjectID = "Jpx-D9-l5y"; */
+"Jpx-D9-l5y.text" = "0x1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "Lfo-SJ-k1k"; */
+"Lfo-SJ-k1k.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "Confirm Sending\n"; ObjectID = "Mk1-tu-7rf"; */
+"Mk1-tu-7rf.text" = "Confirm Sending\n";
+
+/* Class = "UILabel"; text = "Send From"; ObjectID = "PrT-By-RHO"; */
+"PrT-By-RHO.text" = "Send From";
+
+/* Class = "UILabel"; text = "Select Wallet:"; ObjectID = "Rcp-zA-Ubf"; */
+"Rcp-zA-Ubf.text" = "Select Wallet:";
+
+/* Class = "UILabel"; text = "0.002 BTC / 1.54 USD"; ObjectID = "RhC-aH-HrF"; */
+"RhC-aH-HrF.text" = "0.002 BTC / 1.54 USD";
+
+/* Class = "UILabel"; text = " Custom Fee Rate "; ObjectID = "Ro9-45-B2B"; */
+"Ro9-45-B2B.text" = " Custom Fee Rate";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "S0T-Fm-OmK"; */
+"S0T-Fm-OmK.normalTitle" = "Next";
+
+/* Class = "UILabel"; text = "Sending From"; ObjectID = "Seu-LQ-0oR"; */
+"Seu-LQ-0oR.text" = "Sending From";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "Sia-Lf-ccw"; */
+"Sia-Lf-ccw.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "No recent addresses yet."; ObjectID = "TqU-bF-Cd8"; */
+"TqU-bF-Cd8.text" = "No recent addresses yet.";
+
+/* Class = "UILabel"; text = "Pay for commission        "; ObjectID = "VW7-w3-CZx"; */
+"VW7-w3-CZx.text" = "Pay for commission        ";
+
+/* Class = "UILabel"; text = "Send Amount"; ObjectID = "VhT-01-bTB"; */
+"VhT-01-bTB.text" = "Send Amount";
+
+/* Class = "UILabel"; text = "MAX"; ObjectID = "Xhi-Qs-0Ca"; */
+"Xhi-Qs-0Ca.text" = "MAX";
+
+/* Class = "UILabel"; text = "1.5"; ObjectID = "YTg-nf-xCh"; */
+"YTg-nf-xCh.text" = "1.5";
+
+/* Class = "UILabel"; text = "0,0152"; ObjectID = "Ycp-p1-sYK"; */
+"Ycp-p1-sYK.text" = "0,0152";
+
+/* Class = "UITextField"; placeholder = "0.0"; ObjectID = "ZTX-ha-607"; */
+"ZTX-ha-607.placeholder" = "0.0";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "aO6-lQ-C4K"; */
+"aO6-lQ-C4K.text" = "0";
+
+/* Class = "UILabel"; text = "GAS Price (in Gwei)"; ObjectID = "axx-5t-akg"; */
+"axx-5t-akg.text" = "GAS Price (in Gwei)";
+
+/* Class = "UITextField"; placeholder = "+ Add Note"; ObjectID = "b5c-CM-iki"; */
+"b5c-CM-iki.placeholder" = "+ Add Note";
+
+/* Class = "UILabel"; text = "1.1234 ETH"; ObjectID = "bha-Kb-4Pk"; */
+"bha-Kb-4Pk.text" = "1.1234 ETH";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "cLW-Qu-SGI"; */
+"cLW-Qu-SGI.normalTitle" = "Cancel";
+
+/* Class = "UIButton"; normalTitle = "Done"; ObjectID = "dSj-73-kB0"; */
+"dSj-73-kB0.normalTitle" = "Done";
+
+/* Class = "UILabel"; text = "GAS Limit"; ObjectID = "enn-zm-3do"; */
+"enn-zm-3do.text" = "GAS Limit";
+
+/* Class = "UILabel"; text = "Available:"; ObjectID = "fDn-cT-aUG"; */
+"fDn-cT-aUG.text" = "Available:";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "fOo-l7-Vq8"; */
+"fOo-l7-Vq8.text" = "BTC";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "gdi-l2-max"; */
+"gdi-l2-max.text" = "BTC";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "gdm-sm-QZF"; */
+"gdm-sm-QZF.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "gfE-Vc-rTR"; */
+"gfE-Vc-rTR.text" = "0";
+
+/* Class = "UILabel"; text = "1.1234 BTC"; ObjectID = "git-q0-VGX"; */
+"git-q0-VGX.text" = "1.1234 BTC";
+
+/* Class = "UILabel"; text = "Next"; ObjectID = "h1N-oK-MNU"; */
+"h1N-oK-MNU.text" = "Next";
+
+/* Class = "UILabel"; text = "Enter Address Here"; ObjectID = "h7O-aw-YOV"; */
+"h7O-aw-YOV.text" = "Enter Address Here";
+
+/* Class = "UILabel"; text = "0 "; ObjectID = "hUT-w7-NZ6"; */
+"hUT-w7-NZ6.text" = "0 ";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "i0x-ST-vE8"; */
+"i0x-ST-vE8.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "0 "; ObjectID = "iP4-gf-E0A"; */
+"iP4-gf-E0A.text" = "0 ";
+
+/* Class = "UILabel"; text = "3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K"; ObjectID = "j2L-wX-UIu"; */
+"j2L-wX-UIu.text" = "3DA28WCp4Cu5LQiddJnDJJmKWvmmZAKP5K";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "jNT-j7-dlk"; */
+"jNT-j7-dlk.normalTitle" = "Next";
+
+/* Class = "UILabel"; text = "Available: "; ObjectID = "k7z-h6-tBd"; */
+"k7z-h6-tBd.text" = "Available: ";
+
+/* Class = "UILabel"; text = "By donating to Multy you show your support and appreciation of a product. We are open-source project and your donation is the only source of profit for us. "; ObjectID = "lXZ-a8-UvA"; */
+"lXZ-a8-UvA.text" = "By donating to Multy you show your support and appreciation of a product. We are open-source project and your donation is the only source of profit for us.";
+
+/* Class = "UILabel"; text = "Slide to Send"; ObjectID = "m0G-xr-zmf"; */
+"m0G-xr-zmf.text" = "Slide to Send";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "mEs-GB-5Is"; */
+"mEs-GB-5Is.text" = "USD";
+
+/* Class = "UILabel"; text = "Fee Rate affects how fast your transaction is going to be accepted in the blockchain."; ObjectID = "n95-In-KXo"; */
+"n95-In-KXo.text" = "Fee Rate affects how fast your transaction is going to be accepted in the blockchain.";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "njG-Gh-LWY"; */
+"njG-Gh-LWY.text" = "USD";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "oaC-Rz-vgT"; */
+"oaC-Rz-vgT.text" = "0";
+
+/* Class = "UILabel"; text = "0 BTC"; ObjectID = "otH-zU-Rpe"; */
+"otH-zU-Rpe.text" = "0 BTC";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "r6j-44-IV8"; */
+"r6j-44-IV8.normalTitle" = "Next";
+
+/* Class = "UITextField"; placeholder = "0.0"; ObjectID = "riz-ND-96h"; */
+"riz-ND-96h.placeholder" = "0.0";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "s8N-my-GN0"; */
+"s8N-my-GN0.text" = "0";
+
+/* Class = "UITextField"; placeholder = "Enter limit here"; ObjectID = "sAV-0f-SxV"; */
+"sAV-0f-SxV.placeholder" = "Enter limit here";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "sEm-BU-U5Q"; */
+"sEm-BU-U5Q.text" = "USD";
+
+/* Class = "UILabel"; text = "Support Multy"; ObjectID = "t0h-5W-plS"; */
+"t0h-5W-plS.text" = "Support Multy";
+
+/* Class = "UILabel"; text = "Send To"; ObjectID = "ttx-83-gVw"; */
+"ttx-83-gVw.text" = "Send To";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "uaU-U0-1YQ"; */
+"uaU-U0-1YQ.text" = "(work in progress)";
+
+/* Class = "UILabel"; text = "Send Amount"; ObjectID = "vsy-Hb-OWB"; */
+"vsy-Hb-OWB.text" = "Send Amount";
+
+/* Class = "UILabel"; text = "Donate to Multy"; ObjectID = "wCG-9b-EeH"; */
+"wCG-9b-EeH.text" = "Donate to Multy";
+
+/* Class = "UILabel"; text = "Contacts"; ObjectID = "zJa-f3-tWD"; */
+"zJa-f3-tWD.text" = "Contacts";
+
+/* Class = "UILabel"; text = "Fee Rate"; ObjectID = "zcW-Zo-Z1f"; */
+"zcW-Zo-Z1f.text" = "Fee Rate";
+
+/* Class = "UILabel"; text = "Donation Sum"; ObjectID = "zg1-x3-6WV"; */
+"zg1-x3-6WV.text" = "Donation Sum";
+
+"3y0-pp-VR3.text" = "Magical\nsend";

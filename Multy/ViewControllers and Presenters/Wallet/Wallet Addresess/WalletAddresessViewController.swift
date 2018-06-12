@@ -9,9 +9,11 @@ class WalletAddresessViewController: UIViewController,AnalyticsProtocol {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerLbl: UILabel!
+    @IBOutlet weak var addButton: UIButton!
     
     let presenter = WalletAddresessPresenter()
     var whereFrom: UIViewController?
+    var addressTransferDelegate: AddressTransferProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,11 @@ class WalletAddresessViewController: UIViewController,AnalyticsProtocol {
         self.registerCell()
         
         self.tableView.tableFooterView = UIView()
+        
+        if self.whereFrom?.className == WalletSettingsViewController.className {
+            self.addButton.isHidden = true
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateExchange), name: NSNotification.Name("exchageUpdated"), object: nil)
         sendAnalyticsEvent(screenName: "\(screenWalletAddressWithChain)\(presenter.wallet!.chain)", eventName: "\(screenWalletAddressWithChain)\(presenter.wallet!.chain)")
     }
@@ -33,6 +40,11 @@ class WalletAddresessViewController: UIViewController,AnalyticsProtocol {
         self.navigationController?.popViewController(animated: true)
         sendAnalyticsEvent(screenName: "\(screenWalletAddressWithChain)\(presenter.wallet!.chain)", eventName: "\(closeWithChainTap)\(presenter.wallet!.chain)")
     }
+    
+    @IBAction func addAdress(_ sender: Any) {
+        addAddress()
+    }
+    
     
     @objc func updateExchange() {
         let cells = self.tableView.visibleCells
@@ -76,10 +88,12 @@ extension WalletAddresessViewController: UITableViewDelegate, UITableViewDataSou
             //        self.mainVC.present
             self.present(adressVC, animated: true, completion: nil)
             sendAnalyticsEvent(screenName: "\(screenWalletAddressWithChain)\(presenter.wallet!.chain)", eventName: "\(addressWithChainTap)\(presenter.wallet!.chain)")
-            
-            //FIXME: adding adresses to wallet//remove
-//            addAddress()
         } else {
+            if whereFrom?.className == ReceiveAllDetailsViewController.className {
+                self.addressTransferDelegate?.transfer(newAddress: self.presenter.wallet!.addresses[indexPath.row].address)
+                self.navigationController?.popViewController(animated: true)
+                return
+            }
             let privateKeyVC = storyboard.instantiateViewController(withIdentifier: "privateKey") as! PrivateKeyViewController
             privateKeyVC.modalPresentationStyle = .overCurrentContext
             

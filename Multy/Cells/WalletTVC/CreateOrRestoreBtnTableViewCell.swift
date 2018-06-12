@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = CreateOrRestoreBtnTableViewCell
+
 class CreateOrRestoreBtnTableViewCell: UITableViewCell {
 
     @IBOutlet weak var content: UIView!
@@ -31,11 +33,17 @@ class CreateOrRestoreBtnTableViewCell: UITableViewCell {
     
     func makeRestoreCell() {
         self.leftImage.image = #imageLiteral(resourceName: "restoreMulty")
-        self.mainLabel.text = "Restore Multy"
+        self.mainLabel.text = localize(string: Constants.restoreMultyString)
     }
     
     func setupShadow() {
         shadowView.setShadow(with: UIColor.gray)
     }
     
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
+    }
 }

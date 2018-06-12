@@ -4,8 +4,16 @@
 
 import UIKit
 import Branch
+import Lottie
 
-class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, CancelProtocol {
+enum ReceivingOption {
+    case qrCode
+    case wireless
+}
+
+private typealias LocalizeDelegate = ReceiveAllDetailsViewController
+
+class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, CancelProtocol, AddressTransferProtocol {
 
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var qrImage: UIImageView!
@@ -21,11 +29,43 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
     @IBOutlet weak var walletNameLbl: UILabel!
     @IBOutlet weak var walletCryptoSumBtn: UIButton! //set title with sum here
     @IBOutlet weak var walletFiatSumLbl: UILabel!
-    @IBOutlet weak var constraintForSum: NSLayoutConstraint!
+    @IBOutlet weak var walletCryptoSumLbl: UILabel!
+    @IBOutlet weak var qrCodeTabSelectedView: UIView!
+    @IBOutlet weak var qrCodeTabImageView: UIImageView!
+    @IBOutlet weak var wirelessTabImageView: UIImageView!
+    @IBOutlet weak var wirelessTabSelectedView: UIView!
+    @IBOutlet weak var receiveViaLbl: UILabel!
+    @IBOutlet weak var qrHolderView: UIView!
+    @IBOutlet weak var invoiceHolderView: UIView!
+    @IBOutlet weak var invoiceImage: UIImageView!
+    @IBOutlet weak var requestSummLbl: UILabel!
+    @IBOutlet weak var requestSummImageView: UIImageView!
+    @IBOutlet weak var walletTokenImageView: UIImageView!
+    
+    @IBOutlet weak var wirelessButton: UIButton!
+    @IBOutlet weak var hidedWalletView: UIView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var hidedImage: UIImageView!
+    @IBOutlet weak var hidedSumLabel: UILabel!
+    @IBOutlet weak var hidedAddressLabel: UILabel!
+    @IBOutlet weak var bluetoothDisabledContentView: UIView!
+    @IBOutlet weak var searchingAnimationHolder: UIView!
+    @IBOutlet weak var hidedWalletBackgroundView: UIView!
+    
+    var searchingAnimationView : LOTAnimationView?
     
     let presenter = ReceiveAllDetailsPresenter()
     
     var qrcodeImage: CIImage!
+    var stringIdOfProduct: String?
+    
+    var option = ReceivingOption.qrCode {
+        didSet {
+            if option != oldValue {
+                self.presenter.didChangeReceivingOption()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +74,10 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
         self.tabBarController?.tabBar.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)")
         self.viewForShadow.setShadow(with: #colorLiteral(red: 0.6509803922, green: 0.6941176471, blue: 0.7764705882, alpha: 0.5))
+        self.requestSummImageView.setShadow(with: #colorLiteral(red: 0.6509803922, green: 0.6941176471, blue: 0.7764705882, alpha: 0.5))
+        self.walletTokenImageView.setShadow(with: #colorLiteral(red: 0.6509803922, green: 0.6941176471, blue: 0.7764705882, alpha: 0.5))
+        self.wirelessButton.setShadow(with: #colorLiteral(red: 0.6509803922, green: 0.6941176471, blue: 0.7764705882, alpha: 0.5))
+        self.presenter.viewControllerViewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,11 +86,51 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
         self.updateUIWithWallet()
         self.makeQRCode()
         self.ipadFix()
+        self.presenter.viewControllerViewWillAppear()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        presenter.viewControllerViewWillDisappear()
+        super.viewWillDisappear(animated)
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        refreshBackground()
+    }
+    
+    func refreshBackground() {
+        if bluetoothDisabledContentView.isHidden {
+            hidedWalletBackgroundView.applyOrUpdateGradient(withColours: [
+                UIColor(ciColor: CIColor(red: 29.0 / 255.0, green: 176.0 / 255.0, blue: 252.0 / 255.0)),
+                UIColor(ciColor: CIColor(red: 21.0 / 255.0, green: 126.0 / 255.0, blue: 252.0 / 255.0))],
+                                                    gradientOrientation: .topRightBottomLeft)
+        } else {
+            hidedWalletBackgroundView.applyOrUpdateGradient(withColours: [
+                UIColor(ciColor: CIColor(red: 23.0 / 255.0, green: 30.0 / 255.0, blue: 38.0 / 255.0)),
+                UIColor(ciColor: CIColor(red: 67.0 / 255.0, green: 74.0 / 255.0, blue: 78.0 / 255.0))],
+                                                            gradientOrientation: .vertical)
+        }
+    }
+    
+    func presentDidReceivePaymentAlert(address : String, amount : String) {
+        let storyboard = UIStoryboard(name: "Send", bundle: nil)
+        let sendOKVc = storyboard.instantiateViewController(withIdentifier: "SuccessSendVC") as! SendingAnimationViewController
+        sendOKVc.presenter.fundsReceived(amount, address)
+        
+        self.navigationController?.pushViewController(sendOKVc, animated: true)
+    }
+    
+    func updateUIForBluetoothState(_ isEnable : Bool) {
+        if option == .wireless {
+            bluetoothDisabledContentView.isHidden = isEnable
+            refreshBackground()
+        }
     }
     
     @IBAction func cancelAction(_ sender: Any) {
-        self.tabBarController?.selectedIndex = 0
-        self.navigationController?.popToRootViewController(animated: false)
+        self.presenter.cancelViewController()
         sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: closeTap)
     }
     
@@ -65,43 +149,62 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
     }
     
     @IBAction func addressAction(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Wallet", bundle: nil)
+        let allAddressVC = storyboard.instantiateViewController(withIdentifier: "walletAddresses") as! WalletAddresessViewController
+        allAddressVC.addressTransferDelegate = self
+        allAddressVC.presenter.wallet = self.presenter.wallet
+        allAddressVC.whereFrom = self
+        self.navigationController?.pushViewController(allAddressVC, animated: true)
         sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: addressTap)
     }
-    
+
+/*
     @IBAction func wirelessScanAction(_ sender: Any) {
-        self.openDonat()
+        self.openDonat(productID: "io.multy.wirelessScan50")
+        stringIdOfProduct = "io.multy.wirelessScan5"
 //        sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: wirelessScanTap)
         
         logAnalytics(code: donationForWirelessScanFUNC)
     }
+ */
     
     @IBAction func addressBookAction(_ sender: Any) {
-        self.openDonat()
+        self.openDonat(productID: "io.multy.addingContacts50")
+        stringIdOfProduct = "io.multy.addingContacts5"
 //        sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: addressBookTap)
         logAnalytics(code: donationForContactSC)
     }
-    
+ 
     func branchDict() -> NSDictionary {
         //check for blockchain
         //if bitcoin - address: "\(chainName):\(presenter.walletAddress)"
         let dict: NSDictionary = ["$og_title" : "Multy",
                                   "address"   : "\(presenter.qrBlockchainString):\(presenter.walletAddress)",
-                                  "amount"    : presenter.cryptoSum?.fixedFraction(digits: 8) ?? "0.0"]
+                                  "amount"    : presenter.cryptoSum ?? "0.0"]
         
         return dict
     }
     
     func cancelAction() {
-        presentDonationVCorAlert()
+//        presentDonationVCorAlert()
+        self.makePurchaseFor(productId: stringIdOfProduct!)
+    }
+    
+    @IBAction func enableBluetoothAction(_ sender: Any) {
+        presentGoToBluetoothSettingsAlert()
+    }
+    
+    func donate50(idOfProduct: String) {
+        self.makePurchaseFor(productId: idOfProduct)
     }
     
     func presentNoInternet() {
         
     }
     
-    func openDonat() {
+    func openDonat(productID: String) {
         unowned let weakSelf =  self
-        self.presentDonationAlertVC(from: weakSelf)
+        self.presentDonationAlertVC(from: weakSelf, with: productID)
     }
     
     func logAnalytics(code: Int) {
@@ -128,28 +231,6 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
             self.present(activityVC, animated: true, completion: nil)
         })
         sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: moreOptionsTap)
-        
-//        let linkProperties: BranchLinkProperties = BranchLinkProperties()
-//        linkProperties.feature = "sharing"
-////        linkProperties.addControlParam("$desktop_url", withValue: "http://onliner.by/")
-////        linkProperties.addControlParam("$ios_url", withValue: "multy://")
-//        linkProperties.addControlParam("address", withValue: self.presenter.walletAddress)
-//
-//
-//        let branchUniversalObject: BranchUniversalObject = BranchUniversalObject(canonicalIdentifier: "item/12345")
-//        branchUniversalObject.title = "My Content Title"
-//        branchUniversalObject.getShortUrl(with: linkProperties) { (url, error) in
-//            let objectsToShare = [url] as! [String]
-//            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-//            activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-//            self.present(activityVC, animated: true, completion: nil)
-//        }
-        
-//        let message = "MULTY \n\nYour Address: \n\(self.presenter.walletAddress) \n\nRequested Amount: \(self.presenter.cryptoSum ?? 0.0) \(self.presenter.cryptoName ?? "")"
-//        let objectsToShare = [message] as [String]
-//        let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-//        activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-//        self.present(activityVC, animated: true, completion: nil)
     }
     
     @IBAction func chooseAnotherWalletAction(_ sender: Any) {
@@ -160,22 +241,87 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
         self.navigationController?.pushViewController(walletsVC, animated: true)
         sendAnalyticsEvent(screenName: "\(screenReceiveSummaryWithChain)\(presenter.wallet!.chain)", eventName: changeWalletTap)
     }
-    
+ 
     func updateUIWithWallet() {
         self.walletNameLbl.text = self.presenter.wallet?.name
         
         //FIXME: BLOCKCHAIN
         let blockchain = BlockchainType.create(wallet: presenter.wallet!)
-        self.walletCryptoSumBtn.setTitle("\((self.presenter.wallet?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(blockchain.shortName /*self.presenter.wallet?.cryptoName ?? ""*/)", for: .normal)
+
+//        self.walletCryptoSumBtn.setTitle("\((self.presenter.wallet?.sumInCryptoString) ?? "") \(blockchain.shortName /*self.presenter.wallet?.cryptoName ?? ""*/)", for: .normal)
+        //FIXME:  Check this
+        self.walletCryptoSumLbl.text = "\(self.presenter.wallet!.sumInCryptoString) \(blockchain.shortName /*self.presenter.wallet?.cryptoName ?? ""*/)"
+
         let sum = presenter.wallet!.sumInFiat.fixedFraction(digits: 2)
         self.walletFiatSumLbl.text = "\(sum) \(self.presenter.wallet?.fiatSymbol ?? "")"
-        self.presenter.walletAddress = (self.presenter.wallet?.address)!
+        self.walletTokenImageView.image = UIImage(named: blockchain.iconString)
+        if presenter.walletAddress == "" {
+            self.presenter.walletAddress = (self.presenter.wallet?.address)!
+        }
         self.addressLbl.text = self.presenter.walletAddress
+        
+        if sumValueLbl.isHidden == false {
+            setupUIWithAmounts()
+        }
     }
     
-    
     func makeStringForQRWithSumAndAdress(cryptoName: String) -> String { // cryptoName = bitcoin
-        return "\(cryptoName):\(self.presenter.walletAddress)?amount=\((self.presenter.cryptoSum ?? 0.0).fixedFraction(digits: 8))"
+        return cryptoName + ":" + presenter.walletAddress + "?amount=" + (presenter.cryptoSum ?? "0.0")
+    }
+   
+    @IBAction func receiveViaQRCodeAction(_ sender: Any) {
+        self.option = .qrCode
+    }
+    
+    @IBAction func receiveViaWirelessScanAction(_ sender: Any) {
+        if presenter.cryptoSum == nil  {
+            shakeView(viewForShake: requestSumBtn)
+        } else {
+            switch option {
+            case .wireless:
+                option = .qrCode
+                changeVisibility(isHidden: true)
+                wirelessButton.setTitle(localize(string: Constants.magicalReceiveString), for: .normal)
+                
+            case .qrCode:
+                option = .wireless
+                changeVisibility(isHidden: false)
+                wirelessButton.setTitle(localize(string: Constants.cancelString), for: .normal)
+            }
+        }
+    }
+    
+    func changeVisibility(isHidden: Bool) {
+        if presenter.wirelessRequestImageName != nil {
+            self.hidedImage.image = UIImage(named: presenter.wirelessRequestImageName!)
+        }
+        
+        if !isHidden {
+            hidedSumLabel.text = "\(sumValueLbl.text!) \(cryptoNameLbl.text!) / \(fiatSumLbl.text!) \(fiatNameLbl.text!)"
+            hidedAddressLabel.text = presenter.walletAddress
+        }
+        
+        updateSearchingAnimation()
+        
+        scrollView.isHidden = !isHidden
+        hidedWalletView.isHidden = isHidden
+    }
+    
+    func updateSearchingAnimation() {
+        if option == .wireless {
+            if searchingAnimationView == nil {
+                searchingAnimationView = LOTAnimationView(name: "circle_grow")
+                searchingAnimationView!.frame = searchingAnimationHolder.bounds
+                searchingAnimationHolder.insertSubview(searchingAnimationView!, at: 0)
+                searchingAnimationView!.transform = CGAffineTransform(scaleX: screenHeight/screenWidth, y: 1)
+                searchingAnimationView!.loopAnimation = true
+                searchingAnimationView!.play()
+            } else {
+                searchingAnimationView!.play()
+            }
+        } else {
+            searchingAnimationView?.stop()
+        }
     }
     
 // MARK: QRCode Activity
@@ -210,27 +356,30 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
         let context:CIContext = CIContext.init(options: nil)
         let cgImage:CGImage = context.createCGImage(cmage, from: cmage.extent)!
         let image:UIImage = UIImage.init(cgImage: cgImage)
+        
         return image
     }
     //
     
     func setupUIWithAmounts() {
         self.requestSumBtn.titleLabel?.isHidden = true
-        self.sumValueLbl.isHidden = false
-        self.cryptoNameLbl.isHidden = false
-        self.fiatSumLbl.isHidden = false
-        self.fiatNameLbl.isHidden = false
+        self.requestSummImageView.isHidden = false
+        self.requestSummLbl.isHidden = false
         
-        self.sumValueLbl.text = "\((self.presenter.cryptoSum ?? 0.0).fixedFraction(digits: 8))"
+        sumValueLbl.isHidden = false
+        cryptoNameLbl.isHidden = false
+        fiatSumLbl.isHidden = false
+        fiatNameLbl.isHidden = false
         
-        //FIXME: BLOCKCHAIN
-        let blockchain = BlockchainType.create(wallet: presenter.wallet!)
-        self.cryptoNameLbl.text = blockchain.shortName// self.presenter.cryptoName
+        sumValueLbl.text = presenter.cryptoSum
         
-        self.fiatSumLbl.text = "\((self.presenter.fiatSum ?? 0.0).fixedFraction(digits: 2))"
-        self.fiatNameLbl.text = self.presenter.fiatName
+        let blockchainType = BlockchainType.create(wallet: presenter.wallet!)
+        cryptoNameLbl.text = blockchainType.shortName
         
-        self.makeQrWithSum()
+        fiatSumLbl.text = presenter.cryptoSum?.fiatValueString(for: blockchainType)
+        fiatNameLbl.text = presenter.fiatName
+        
+        makeQrWithSum()
     }
     
     func checkValuesAndSetupUI() {
@@ -241,18 +390,22 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
         }
     }
     
+    func transfer(newAddress: String) {
+        presenter.walletAddress = newAddress
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "receiveAmount" {
             let destVC = segue.destination as! ReceiveAmountViewController
             destVC.delegate = self.presenter
-            destVC.blockchain = BlockchainType.create(wallet: presenter.wallet!)
+            destVC.blockchainType = BlockchainType.create(wallet: presenter.wallet!)
             destVC.presenter.wallet = self.presenter.wallet
             
             if self.presenter.cryptoSum != nil {
-                destVC.sumInCrypto = self.presenter.cryptoSum!
+                destVC.sumInCryptoString = self.presenter.cryptoSum!
                 destVC.cryptoName = self.presenter.cryptoName!
                 destVC.fiatName = self.presenter.fiatName!
-                destVC.sumInFiat = self.presenter.fiatSum!
+                destVC.sumInFiatString = self.presenter.fiatSum!
             }
         }
     }
@@ -262,5 +415,11 @@ class ReceiveAllDetailsViewController: UIViewController, AnalyticsProtocol, Canc
             self.sumValueLbl.font = sumValueLbl.font.withSize(30)
             self.cryptoNameLbl.font = cryptoNameLbl.font.withSize(30)
         }
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Receives"
     }
 }

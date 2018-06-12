@@ -4,6 +4,8 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = TransactionWalletCell
+
 class TransactionWalletCell: UITableViewCell {
     @IBOutlet weak var transactionImage: UIImageView!
     @IBOutlet weak var addressLabel: UILabel!
@@ -30,11 +32,6 @@ class TransactionWalletCell: UITableViewCell {
     }
     
     public func fillCell() {
-        if histObj.txInputs.count == 0 {
-            return
-        }
-        let dateFormatter = Date.defaultGMTDateFormatter()
-        
         if histObj.txStatus.intValue == TxStatus.MempoolIncoming.rawValue ||
             histObj.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
             self.transactionImage.image = #imageLiteral(resourceName: "pending")
@@ -63,29 +60,66 @@ class TransactionWalletCell: UITableViewCell {
             self.cryptoAmountLabel.textColor = .black
         }
         
-        if histObj.isIncoming() {
-//            self.addressLabel.text = histObj.txInputs[0].address
-            self.addressLabel.text = wallet.incomingTxAddress(for: histObj)
-        } else {
-//            self.addressLabel.text = histObj.txOutputs[0].address
-            self.addressLabel.text = wallet.outcomingTxAddress(for: histObj)
-        }
+        let dateFormatter = Date.defaultGMTDateFormatter()
+//        if histObj.isIncoming() {
+////            self.addressLabel.text = histObj.txInputs[0].address
+//            self.addressLabel.text = wallet.incomingTxAddress(for: histObj)
+//        } else {
+////            self.addressLabel.text = histObj.txOutputs[0].address
+//            self.addressLabel.text = wallet.outcomingTxAddress(for: histObj)
+//        }
         
         if histObj.txStatus.intValue < 0 /* rejected tx*/ {
-            self.timeLabel.text = "Unable to send transaction"
+            self.timeLabel.text = localize(string: Constants.unableToSendString)
         } else {
             self.timeLabel.text = dateFormatter.string(from: histObj.blockTime)
         }
         
+        switch wallet.blockchainType.blockchain {
+        case BLOCKCHAIN_BITCOIN:
+            fillBitcoinCell()
+        case BLOCKCHAIN_ETHEREUM:
+            fillEthereumCell()
+        default:
+            return
+        }
+    }
+    
+    func fillEthereumCell() {
+        if histObj.isIncoming() {
+            self.addressLabel.text = histObj.addressesArray.first
+        } else {
+            self.addressLabel.text = histObj.addressesArray.last
+        }
+        
+        let ethAmountString = BigInt(histObj.txOutAmountString).cryptoValueString(for: BLOCKCHAIN_ETHEREUM)
+        let labelsCryproText = ethAmountString + " " + wallet.cryptoName
+        self.cryptoAmountLabel.text = labelsCryproText
+        
+        let fiatAmountString = (BigInt(histObj.txOutAmountString) * histObj.fiatCourseExchange).fiatValueString(for: BLOCKCHAIN_ETHEREUM)
+        fiatAmountLabel.text = fiatAmountString + " " + wallet.fiatName
+    }
+    
+    func fillBitcoinCell() {
+        if histObj.txInputs.count == 0 {
+            return
+        }
+        
+        if histObj.isIncoming() {
+            self.addressLabel.text = histObj.txInputs[0].address
+        } else {
+            self.addressLabel.text = histObj.txOutputs[0].address
+        }
+        
         if histObj.txStatus.intValue == TxStatus.BlockOutcoming.rawValue ||
-        histObj.txStatus.intValue == TxStatus.BlockConfirmedOutcoming.rawValue {
+            histObj.txStatus.intValue == TxStatus.BlockConfirmedOutcoming.rawValue {
             let outgoingAmount = wallet.outgoingAmount(for: histObj).btcValue
             
-            self.cryptoAmountLabel.text = "\(outgoingAmount.fixedFraction(digits: 8)) BTC"
-            self.fiatAmountLabel.text = "\((outgoingAmount * histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+            self.cryptoAmountLabel.text = "\(outgoingAmount.fixedFraction(digits: 8)) \(wallet.cryptoName)"
+            self.fiatAmountLabel.text = "\((outgoingAmount * histObj.fiatCourseExchange).fixedFraction(digits: 2)) \(wallet.fiatName)"
         } else {
-            self.cryptoAmountLabel.text = "\(histObj.txOutAmount.uint64Value.btcValue.fixedFraction(digits: 8)) BTC"
-            self.fiatAmountLabel.text = "\((histObj.txOutAmount.uint64Value.btcValue * histObj.btcToUsd).fixedFraction(digits: 2)) USD"
+            self.cryptoAmountLabel.text = "\(histObj.txOutAmount.uint64Value.btcValue.fixedFraction(digits: 8)) \(wallet.cryptoName)"
+            self.fiatAmountLabel.text = "\((histObj.txOutAmount.uint64Value.btcValue * histObj.fiatCourseExchange).fixedFraction(digits: 2)) \(wallet.fiatName)"
         }
     }
     
@@ -111,5 +145,11 @@ class TransactionWalletCell: UITableViewCell {
     
     func changeTopConstraint() {
         self.topConstraint.constant = 15
+    }
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Wallets"
     }
 }

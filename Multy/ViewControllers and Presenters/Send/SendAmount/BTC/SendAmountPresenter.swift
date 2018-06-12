@@ -9,29 +9,29 @@ class SendAmountPresenter: NSObject {
     var sendAmountVC: SendAmountViewController?
     var transactionDTO = TransactionDTO() {
         didSet {
-            blockedAmount = transactionDTO.choosenWallet!.calculateBlockedAmount()
+            exchangeCourse = transactionDTO.choosenWallet!.exchangeCourse
+            blockedAmount = transactionDTO.choosenWallet!.blockedAmount
+            availableSumInCrypto = transactionDTO.choosenWallet!.availableAmount
+            availableSumInFiat = availableSumInCrypto * exchangeCourse
+            
             if transactionDTO.sendAmount != nil {
-                sumInCrypto = transactionDTO.sendAmount!
+                sumInCrypto = transactionDTO.sendAmountString!.convertCryptoAmountStringToMinimalUnits(in: BLOCKCHAIN_BITCOIN)
             }
             transactionObj = transactionDTO.transaction!.transactionRLM
-            cryptoName = transactionDTO.blockchainType.shortName
+            cryptoName = transactionDTO.blockchainType!.shortName
         }
     }
     var account = DataManager.shared.realmManager.account
-    var blockedAmount           : UInt64? {
-        didSet {
-            let exchangeCourse = transactionDTO.choosenWallet!.exchangeCourse
-            availableSumInCrypto = transactionDTO.choosenWallet!.sumInCrypto - blockedAmount!.btcValue
-            availableSumInFiat = availableSumInCrypto! * exchangeCourse
-        }
-    }
-    var availableSumInCrypto    : Double?
-    var availableSumInFiat      : Double?
+    var blockedAmount = BigInt("0")
+
+    var availableSumInCrypto = BigInt("0")
+    var availableSumInFiat = BigInt("0")
     
     var transactionObj: TransactionRLM?
+    var exchangeCourse = Double(0.0)
     
-    var sumInCrypto = Double(0.0)
-    var sumInFiat = Double(0.0)
+    var sumInCrypto = BigInt("0")
+    var sumInFiat = BigInt("0")
     
     var fiatName = "USD"
     var cryptoName = "BTC"
@@ -41,11 +41,13 @@ class SendAmountPresenter: NSObject {
     
     var maxLengthForSum = 12
     
-    var sumInNextBtn = 0.0
-    var maxAllowedToSpend = 0.0
-    var cryptoMaxSumWithFeeAndDonate = 0.0
+    var sumInNextBtn = BigInt("0")
+    var maxAllowedToSpend = BigInt("0")
+    var cryptoMaxSumWithFeeAndDonate = BigInt("0")
     
-    var rawTransaction: String?
+    var rawTransaction = String()
+    var rawTransactionEstimation = 0.0
+    var rawTransactionBigIntEstimation = BigInt.zero()
     
 //    var customFee : UInt64?
     
@@ -62,91 +64,78 @@ class SendAmountPresenter: NSObject {
         let wallet = transactionDTO.choosenWallet!
         binaryData = account!.binaryDataString.createBinaryData()!
         
-        addressData = core.createAddress(blockchain:    transactionDTO.blockchainType,
+        addressData = core.createAddress(blockchain:    transactionDTO.blockchainType!,
                                          walletID:      wallet.walletID.uint32Value,
                                          addressID:     UInt32(wallet.addresses.count),
                                          binaryData:    &binaryData!)
     }
     
-    func estimateTransaction() -> Double {
-        if transactionDTO.blockchainType.blockchain == BLOCKCHAIN_BITCOIN {
-            let trData = DataManager.shared.coreLibManager.createTransaction(addressPointer: addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>,
-                                                                             sendAddress: transactionDTO.sendAddress!,
-                                                                             sendAmountString: self.sumInCrypto.fixedFraction(digits: 8),
-                                                                             feePerByteAmount: "\(transactionDTO.transaction!.customFee!)",
-                                                                             isDonationExists: transactionDTO.transaction!.donationDTO!.sumInCrypto != 0.0,
-                                                                             donationAmount: transactionDTO.transaction!.donationDTO!.sumInCrypto!.fixedFraction(digits: 8),
-                                                                             isPayCommission: self.sendAmountVC!.commissionSwitch.isOn,
-                                                                             wallet: transactionDTO.choosenWallet!,
-                                                                             binaryData: &binaryData!,
-                                                                             inputs: transactionDTO.choosenWallet!.addresses)
-            
-            self.rawTransaction = trData.0
-            
-            return trData.1
-        } else { // if transactionDTO.blockchainType.blockchain == BLOCKCHAIN_ETHEREUM {
-            let trData = DataManager.shared.coreLibManager.createEtherTransaction(addressPointer: addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>,
-                                                                                  sendAddress: transactionDTO.sendAddress!,
-                                                                                  sendAmountString: self.sumInCrypto.fixedFraction(digits: 18),
-                                                                                  nonce: transactionDTO.choosenWallet!.ethWallet.nonce.intValue,
-                                                                                  balanceAmount: "\(transactionDTO.choosenWallet?.availableAmount())",
-                                                                                  ethereumChainID: BLOCKCHAIN_ETHEREUM.rawValue,
-                                                                                  gasPrice: "\(transactionDTO.transaction?.customGAS?.gasPrice ?? 0)",
-                                                                                  gasLimit: "\(transactionDTO.transaction?.customGAS?.gasPrice ?? 0)")
-            
-            self.rawTransaction = trData
-            //FIXME: retrun something
-            return 0
+    func estimateTransaction() -> Bool {
+        if transactionDTO.blockchainType!.blockchain != BLOCKCHAIN_BITCOIN {
+            print("\n\n\nnot right screen\n\n\n")
         }
+        
+        let trData = DataManager.shared.coreLibManager.createTransaction(addressPointer: addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>,
+                                                                         sendAddress: transactionDTO.sendAddress!,
+                                                                         sendAmountString: sumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN),
+                                                                         feePerByteAmount: "\(transactionDTO.transaction!.customFee!)",
+            isDonationExists: transactionDTO.transaction!.donationDTO!.sumInCrypto != 0.0,
+            donationAmount: transactionDTO.transaction!.donationDTO!.sumInCrypto!.fixedFraction(digits: 8),
+            isPayCommission: self.sendAmountVC!.commissionSwitch.isOn,
+            wallet: transactionDTO.choosenWallet!,
+            binaryData: &binaryData!,
+            inputs: transactionDTO.choosenWallet!.addresses)
+        
+        rawTransaction = trData.0
+        rawTransactionEstimation = trData.1
+        rawTransactionBigIntEstimation = BigInt(trData.2)
+
+        
+        return trData.1 >= 0
     }
     
     func setAmountFromQr() {
         if self.sumInCrypto != 0.0 {
-            self.sendAmountVC?.amountTF.text = self.sumInCrypto.fixedFraction(digits: 8)
-            self.sendAmountVC?.topSumLbl.text = self.sumInCrypto.fixedFraction(digits: 8)
-            self.sendAmountVC?.btnSumLbl.text = self.sumInCrypto.fixedFraction(digits: 8)
+            self.sendAmountVC?.amountTF.text = self.sumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN)
+            self.sendAmountVC?.topSumLbl.text = self.sumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN)
+            self.sendAmountVC?.btnSumLbl.text = self.sumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN)
         }
     }
     
     func cryptoToUsd() {
-//        self.sumInFiat = transactionDTO.choosenWallet!.sumInFiat
-//        self.sumInFiat = Double(round(100 * self.sumInFiat)/100)
-        self.sumInFiat = Double(self.sendAmountVC!.topSumLbl.text!.replacingOccurrences(of: ",", with: "."))! * transactionDTO.choosenWallet!.exchangeCourse
-        self.sendAmountVC?.bottomSumLbl.text = "\(self.sumInFiat.fixedFraction(digits: 2)) "
+//        self.sumInFiat = Double(self.sendAmountVC!.topSumLbl.text!.replacingOccurrences(of: ",", with: "."))! * transactionDTO.choosenWallet!.exchangeCourse
+        sendAmountVC?.bottomSumLbl.text = sumInFiat.fiatValueString(for: BLOCKCHAIN_BITCOIN)
     }
     
     func usdToCrypto() {
-        let exchangeCourse = transactionDTO.choosenWallet!.exchangeCourse
-        self.sumInCrypto = self.sumInFiat/exchangeCourse
-        self.sumInCrypto = Double(round(100000000 * self.sumInCrypto)/100000000)
-        if self.sumInCrypto > self.availableSumInCrypto! {
-            self.sendAmountVC?.bottomSumLbl.text = "\((self.availableSumInCrypto ?? 0.0).fixedFraction(digits: 8))"
+        sumInCrypto = sumInFiat / exchangeCourse
+        if sumInCrypto > availableSumInCrypto {
+            sendAmountVC?.bottomSumLbl.text = availableSumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN)
         } else {
-            self.sendAmountVC?.bottomSumLbl.text = "\((self.sumInCrypto).fixedFraction(digits: 8))"
+            sendAmountVC?.bottomSumLbl.text = sumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN)
         }
     }
     
     func setSpendableAmountText() {
-        if self.isCrypto {
-            self.sendAmountVC?.spendableSumAndCurrencyLbl.text = "\((self.availableSumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)"
+        if isCrypto {
+            sendAmountVC?.spendableSumAndCurrencyLbl.text = availableSumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN) + " " + cryptoName
         } else {
-            self.sendAmountVC?.spendableSumAndCurrencyLbl.text = "\((self.availableSumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName)"
+            sendAmountVC?.spendableSumAndCurrencyLbl.text = availableSumInFiat.fiatValueString(for: BLOCKCHAIN_BITCOIN) + " " + fiatName
         }
     }
     
-    func getNextBtnSum() -> Double {
-        let satoshiAmount = UInt64(sumInCrypto * pow(10, 8))
-        let exchangeCourse = transactionDTO.choosenWallet!.exchangeCourse
+    func getNextBtnSum() -> BigInt {
         
-        if satoshiAmount == 0 {
-            return 0
+        if sumInCrypto == Int64(0) {
+            return sumInCrypto
         }
         
-        let estimate = satoshiAmount == 0 ? 0.0 : estimateTransaction()
+        let estimate = estimateTransaction()
         
-        if estimate < 0 {
-            let message = rawTransaction!
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        if estimate == false {
+            //FIXME: localize errors from core lib
+            let message = rawTransaction
+            let alert = UIAlertController(title: sendAmountVC!.localize(string: Constants.errorString), message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in }))
             sendAmountVC!.present(alert, animated: true, completion: nil)
             
@@ -156,39 +145,48 @@ class SendAmountPresenter: NSObject {
             checkMaxEntered()
             sendAmountVC?.setSumInNextBtn()
             sendAmountVC?.sendAnalyticsEvent(screenName: "\(screenSendAmountWithChain)\(transactionDTO.choosenWallet!.chain)", eventName: transactionErr)
-            return 0
+            return BigInt("-1")
         }
         
-        self.transactionObj?.sumInCrypto = estimate
-        self.transactionObj?.sumInFiat = estimate * exchangeCourse
+        transactionObj?.sumInCrypto = rawTransactionEstimation
+        transactionObj?.sumInFiat = rawTransactionEstimation * exchangeCourse
         
-        switch self.isCrypto {
+        let fiatEstimation = rawTransactionBigIntEstimation ?? BigInt.zero() * exchangeCourse
+        
+        switch isCrypto {
         case true:
-            if (self.sendAmountVC?.commissionSwitch.isOn)! {
+            if sendAmountVC!.commissionSwitch.isOn {
                 if transactionDTO.transaction?.donationDTO != nil {
-                    self.sumInNextBtn = self.sumInCrypto + self.transactionObj!.sumInCrypto + transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                    let donationBigIntValue = Constants.BigIntSwift.oneBTCInSatoshiKey * transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                    sumInNextBtn = sumInCrypto + rawTransactionBigIntEstimation + donationBigIntValue
                 } else {
-                    self.sumInNextBtn = self.sumInCrypto + (self.transactionObj?.sumInCrypto)!
+                    sumInNextBtn = sumInCrypto + rawTransactionBigIntEstimation
                 }
             } else {  //pay for commision off
-                self.sumInNextBtn = self.sumInCrypto
+                sumInNextBtn = sumInCrypto
             }
-            if self.sumInNextBtn > self.availableSumInCrypto! {
-                self.sumInNextBtn = self.availableSumInCrypto ?? 0.0
+            
+            if sumInNextBtn > availableSumInCrypto {
+                sumInNextBtn = availableSumInCrypto
             }
-            return self.sumInNextBtn
+            
+            return sumInNextBtn
         case false:
-            if (self.sendAmountVC?.commissionSwitch.isOn)! {
+            if sendAmountVC!.commissionSwitch.isOn {
                 if transactionDTO.transaction!.donationDTO != nil {
-                    self.sumInNextBtn = self.sumInFiat + self.transactionObj!.sumInFiat + transactionDTO.transaction!.donationDTO!.sumInFiat!
+                    let donationCryptoValue = Constants.BigIntSwift.oneBTCInSatoshiKey * transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                    let donationFiatValue = donationCryptoValue * exchangeCourse
+                    
+                    sumInNextBtn = sumInFiat + fiatEstimation + donationFiatValue
                 } else {
-                    self.sumInNextBtn = self.sumInFiat + (self.transactionObj?.sumInFiat)!
+                    sumInNextBtn = sumInFiat + transactionObj!.sumInFiat
                 }
             } else {  //pay for commision off
-                self.sumInNextBtn = self.sumInFiat
+                sumInNextBtn = sumInFiat
             }
-            if self.sumInNextBtn > self.availableSumInFiat! {
-                self.sumInNextBtn = self.availableSumInFiat ?? 0.0
+            
+            if sumInNextBtn > availableSumInFiat {
+                sumInNextBtn = availableSumInFiat
             }
             
             return self.sumInNextBtn
@@ -196,50 +194,57 @@ class SendAmountPresenter: NSObject {
     }
     
     func setMaxAllowed() {
-        switch self.isCrypto {
+        switch isCrypto {
         case true:
-            if (self.sendAmountVC?.commissionSwitch.isOn)! {
+            if sendAmountVC!.commissionSwitch.isOn {
                 if transactionDTO.transaction!.donationDTO != nil {
-                    self.maxAllowedToSpend = self.availableSumInCrypto! - self.transactionObj!.sumInCrypto - transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                    let donationCryptoValue = Constants.BigIntSwift.oneBTCInSatoshiKey * transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                    
+                    maxAllowedToSpend = availableSumInCrypto - rawTransactionBigIntEstimation - donationCryptoValue
                 } else {
-                    self.maxAllowedToSpend = self.availableSumInCrypto! - self.transactionObj!.sumInCrypto
+                    maxAllowedToSpend = availableSumInCrypto - rawTransactionBigIntEstimation
                 }
             } else {
-                self.maxAllowedToSpend = self.availableSumInCrypto!
+                maxAllowedToSpend = availableSumInCrypto
             }
         case false:
-            if (self.sendAmountVC?.commissionSwitch.isOn)! {
+            let fiatEstimation = rawTransactionBigIntEstimation ?? BigInt.zero() * exchangeCourse
+            
+            if sendAmountVC!.commissionSwitch.isOn {
                 if transactionDTO.transaction!.donationDTO != nil {
-                    self.maxAllowedToSpend = self.availableSumInFiat! - self.transactionObj!.sumInFiat - transactionDTO.transaction!.donationDTO!.sumInFiat!
+                    let donationCryptoValue = Constants.BigIntSwift.oneBTCInSatoshiKey * transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                    let donationFiatValue = donationCryptoValue * exchangeCourse
+                    
+                    maxAllowedToSpend = availableSumInFiat - fiatEstimation - donationFiatValue
                 } else {
-                    self.maxAllowedToSpend = self.availableSumInFiat! - self.transactionObj!.sumInFiat
+                    maxAllowedToSpend = availableSumInFiat - fiatEstimation
                 }
             } else {
-                self.maxAllowedToSpend = (self.availableSumInFiat)!
+                maxAllowedToSpend = availableSumInFiat
             }
         }
     }
     
     func saveTfValue() {
-        let exchangeCourse = transactionDTO.choosenWallet!.exchangeCourse
-        if self.isCrypto {
-            self.sumInCrypto = self.sendAmountVC!.topSumLbl.text!.convertStringWithCommaToDouble()
-            self.sumInFiat = self.sumInCrypto * exchangeCourse
-            self.sumInFiat = Double(round(100 * self.sumInFiat)/100)
-            if self.sumInFiat > transactionDTO.choosenWallet!.sumInFiat {
-                self.sendAmountVC?.bottomSumLbl.text = "\((transactionDTO.choosenWallet?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) "
+        if isCrypto {
+            sumInCrypto = sendAmountVC!.topSumLbl.text!.convertCryptoAmountStringToMinimalUnits(in: BLOCKCHAIN_BITCOIN)
+            sumInFiat = sumInCrypto * exchangeCourse
+
+            if sumInFiat > availableSumInFiat {
+                sendAmountVC?.bottomSumLbl.text = availableSumInFiat.cryptoValueString(for: BLOCKCHAIN_BITCOIN) + " "
             } else {
-                self.sendAmountVC?.bottomSumLbl.text = "\(self.sumInFiat.fixedFraction(digits: 2)) "
+                sendAmountVC?.bottomSumLbl.text = sumInFiat.fiatValueString(for: BLOCKCHAIN_BITCOIN) + " "
             }
-            self.sendAmountVC?.bottomCurrencyLbl.text = self.fiatName
+            
+            sendAmountVC?.bottomCurrencyLbl.text = fiatName
         } else {
-            self.sumInFiat = self.sendAmountVC!.topSumLbl.text!.convertStringWithCommaToDouble()
-            self.sumInCrypto = self.sumInFiat / exchangeCourse
-            self.sumInCrypto = Double(round(100000000 * self.sumInCrypto)/100000000)
-            if self.sumInCrypto > self.availableSumInCrypto! {
-                self.sendAmountVC?.bottomSumLbl.text = "\((self.availableSumInCrypto ?? 0.0).fixedFraction(digits: 8)) "
+            sumInFiat = BLOCKCHAIN_BITCOIN.multiplyerToMinimalUnits * Double(sendAmountVC!.topSumLbl.text!.stringWithDot)
+            sumInCrypto = sumInFiat / exchangeCourse
+            
+            if sumInCrypto > availableSumInCrypto {
+                sendAmountVC?.bottomSumLbl.text = availableSumInCrypto.cryptoValueString(for: BLOCKCHAIN_BITCOIN) + " "
             } else {
-                self.sendAmountVC?.bottomSumLbl.text = "\(self.sumInCrypto.fixedFraction(digits: 8)) "
+                self.sendAmountVC?.bottomSumLbl.text = sumInCrypto.cryptoValueString(for: BLOCKCHAIN_ETHEREUM) + " "
             }
             
             self.sendAmountVC?.bottomCurrencyLbl.text = self.cryptoName
@@ -247,36 +252,36 @@ class SendAmountPresenter: NSObject {
     }
    
     func checkMaxEntered() {
-        if self.isCrypto {
-            switch self.sendAmountVC?.commissionSwitch.isOn {
+        if isCrypto {
+            switch sendAmountVC?.commissionSwitch.isOn {
             case true?:
-                if self.sumInCrypto >= self.cryptoMaxSumWithFeeAndDonate {
-                    self.isMaxEntered = true
+                if sumInCrypto >= cryptoMaxSumWithFeeAndDonate {
+                    isMaxEntered = true
                 } else {
-                    self.isMaxEntered = false
+                    isMaxEntered = false
                 }
             case false?:
-                if self.sumInCrypto >= self.availableSumInCrypto!  {
-                    self.isMaxEntered = true
+                if sumInCrypto >= availableSumInCrypto  {
+                    isMaxEntered = true
                 } else {
-                    self.isMaxEntered = false
+                    isMaxEntered = false
                 }
             case .none:
                 return
             }
         } else {
-            switch self.sendAmountVC?.commissionSwitch.isOn {
+            switch sendAmountVC?.commissionSwitch.isOn {
             case true?:
-                if self.sumInFiat >= self.cryptoMaxSumWithFeeAndDonate {
-                    self.isMaxEntered = true
+                if sumInFiat >= cryptoMaxSumWithFeeAndDonate {
+                    isMaxEntered = true
                 } else {
-                    self.isMaxEntered = false
+                    isMaxEntered = false
                 }
             case false?:
-                if self.sumInFiat >= self.availableSumInFiat!  {
-                    self.isMaxEntered = true
+                if sumInFiat >= availableSumInFiat  {
+                    isMaxEntered = true
                 } else {
-                    self.isMaxEntered = false
+                    isMaxEntered = false
                 }
             case .none:
                 return
@@ -285,17 +290,24 @@ class SendAmountPresenter: NSObject {
     }
     
     func makeMaxSumWithFeeAndDonate() {
-        if self.isCrypto {
+        if isCrypto {
             if transactionDTO.transaction!.donationDTO != nil {
-                self.cryptoMaxSumWithFeeAndDonate = self.availableSumInCrypto! - self.transactionObj!.sumInCrypto - transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                let donationCryptoValue = Constants.BigIntSwift.oneBTCInSatoshiKey * transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                
+                cryptoMaxSumWithFeeAndDonate = availableSumInCrypto - rawTransactionBigIntEstimation - donationCryptoValue
             } else {
-                self.cryptoMaxSumWithFeeAndDonate = self.availableSumInCrypto! - self.transactionObj!.sumInCrypto
+                cryptoMaxSumWithFeeAndDonate = availableSumInCrypto - rawTransactionBigIntEstimation
             }
         } else {
+            let fiatEstimation = rawTransactionBigIntEstimation * exchangeCourse
+            
             if transactionDTO.transaction!.donationDTO != nil {
-                self.cryptoMaxSumWithFeeAndDonate = self.availableSumInFiat! - (self.transactionObj?.sumInFiat)! - transactionDTO.transaction!.donationDTO!.sumInFiat!
+                let donationCryptoValue = Constants.BigIntSwift.oneBTCInSatoshiKey * transactionDTO.transaction!.donationDTO!.sumInCrypto!
+                let donationFiatValue = donationCryptoValue * exchangeCourse
+                
+                cryptoMaxSumWithFeeAndDonate = availableSumInFiat - fiatEstimation - donationFiatValue
             } else {
-                self.cryptoMaxSumWithFeeAndDonate = self.availableSumInFiat! - self.transactionObj!.sumInFiat
+                cryptoMaxSumWithFeeAndDonate = availableSumInFiat - fiatEstimation
             }
         }
     }
@@ -305,40 +317,30 @@ class SendAmountPresenter: NSObject {
         switch isCrypto {
         case true:
             if transactionDTO.transaction!.donationDTO != nil {
-                message = "You can`t spend sum more than you have!\nDon`t forget about Fee and donation.\n\nYour fee is \((self.transactionObj?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName) \nand donation is \((transactionDTO.transaction!.donationDTO?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)"
+                message = sendAmountVC!.localize(string: Constants.youCantSpendMoreThanFeeAndDonationString) +
+                    "\((self.transactionObj?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)" +
+                    sendAmountVC!.localize(string: Constants.andDonationString) +
+                "\((transactionDTO.transaction!.donationDTO?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)"
             } else {
-                message = "You can`t spend sum more than you have!\nDon`t forget about Fee.\nYour is fee \((self.transactionObj?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)"
+                message = sendAmountVC!.localize(string: Constants.youCantSpendMoreThanFeeString) + "\((self.transactionObj?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)) \(self.cryptoName)"
             }
         case false:
             if transactionDTO.transaction!.donationDTO != nil {
-                message = "You can`t spend sum more than you have!\nDon`t forget about Fee and donation.\n\nYour fee is \((self.transactionObj?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName) \nand donation is \((transactionDTO.transaction!.donationDTO?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName)"
+                message = sendAmountVC!.localize(string: Constants.youCantSpendMoreThanFeeAndDonationString) +
+                "\((self.transactionObj?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName)" +
+                sendAmountVC!.localize(string: Constants.andDonationString) +
+                "\((transactionDTO.transaction!.donationDTO?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName)"
             } else {
-                message = "You can`t spend sum more than you have!\nDon`t forget about Fee.\nYour is fee \((self.transactionObj?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName)"
+                message = sendAmountVC!.localize(string: Constants.youCantSpendMoreThanFeeString) + "\((self.transactionObj?.sumInFiat ?? 0.0).fixedFraction(digits: 2)) \(self.fiatName)"
             }
         }
+        
         return message
     }
     
-//    func blockedAmount(for transaction: HistoryRLM) -> UInt64 {
-//        var sum = UInt64(0)
-//
-//        if transaction.txStatus.intValue == TxStatus.MempoolIncoming.rawValue {
-//            sum += transaction.txOutAmount.uint64Value
-//        } else if transaction.txStatus.intValue == TxStatus.MempoolOutcoming.rawValue {
-//            let addresses = transactionDTO.choosenWallet!.fetchAddresses()
-//
-//            for tx in transaction.txOutputs {
-//                if addresses.contains(tx.address) {
-//                    sum += tx.amount.uint64Value
-//                }
-//            }
-//        }
-//
-//        return sum
-//    }
     deinit {
         let accountPointer = addressData!["addressPointer"] as! UnsafeMutablePointer<OpaquePointer?>
         free_account(accountPointer.pointee)
-        accountPointer.deallocate(capacity: 1)
+        accountPointer.deallocate()
     }
 }

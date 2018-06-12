@@ -20,17 +20,17 @@ class WebTextPageViewController: UIViewController, UIWebViewDelegate {
     }
     
     func loadPage(tag: Int?) {
-        var url = String()
+        var url = URL(string: "http://multy.io")!
         switch tag {
         case 0:
-            url = "https://raw.githubusercontent.com/wiki/Appscrunch/Multy/Legal:-Privacy-Policy.md"
+            url = LocalLanguage.shared.getPPLink()
         case 1:
-            url = "https://raw.githubusercontent.com/wiki/Appscrunch/Multy/Legal:-Terms-of-service.md"
+            url = LocalLanguage.shared.getTOSLink()
         default: break
         }
         self.webView.scalesPageToFit = true
         self.webView.contentMode = .scaleAspectFit
-        self.webView.loadRequest(URLRequest(url: URL(string: url)!))
+        self.webView.loadRequest(URLRequest(url: url))
     }
     
     

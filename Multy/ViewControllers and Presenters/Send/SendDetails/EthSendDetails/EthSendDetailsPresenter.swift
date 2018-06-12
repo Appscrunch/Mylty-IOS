@@ -5,6 +5,8 @@
 import UIKit
 import RealmSwift
 
+private typealias LocalizeDelegate = EthSendDetailsPresenter
+
 class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
     
     var sendDetailsVC: EthSendDetailsViewController?
@@ -35,12 +37,19 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
     
     let customGas = EthereumGasInfo()
     
-    var cusomtGasPrice: Int?
-    var cusomtGasLimit: Int?
+    var cusomtGasPrice: UInt64?
+    var cusomtGasLimit: UInt64?
     
     var feeRate: NSDictionary? {
         didSet {
-            sendDetailsVC?.tableView.reloadData()
+            if let verySlowFeeRate = feeRate?["VerySlow"] as? UInt64 {
+                if cusomtGasPrice == nil {
+                    cusomtGasPrice = UInt64(verySlowFeeRate)
+                }
+                
+                sendDetailsVC?.tableView.reloadData()
+                updateCellsVisibility()
+            }
         }
     }
     
@@ -55,26 +64,7 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
             if error != nil {
                 return
             }
-            
-            DataManager.shared.getTransactionHistory(currencyID: self.transactionDTO.choosenWallet!.chain,
-                                                     networkID:self.transactionDTO.choosenWallet!.chainType,
-                                                     walletID: self.transactionDTO.choosenWallet!.walletID) { (histList, err) in
-                if err == nil && histList != nil {
-                    self.historyArray = histList!
-                }
-            }
         }
-    }
-    
-    func getWalletVerbose() {
-        //MARK: implement changes
-        
-        //        DataManager.shared.getAccount { (account, err) in
-        //            DataManager.shared.getOneWalletVerbose(account!.token,
-        //                                                   walletID: self.choosenWallet!.walletID,
-        //                                                   completion: { (addresses, error) in
-        //            })
-        //        }
     }
     
     func requestFee() {
@@ -90,52 +80,56 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
     }
     
     func createTransaction(index: Int) {
+        if feeRate == nil {
+            return
+        }
+        
         let exchangeCourse = transactionDTO.choosenWallet!.exchangeCourse
         switch index {
         case 0:
-            self.transactionObj.speedName = "Very Fast"
+            self.transactionObj.speedName = localize(string: Constants.veryFastString)
             self.transactionObj.speedTimeString = "∙ 10 minutes"
-            self.transactionObj.sumInCrypto = 0.00000005
+            self.transactionObj.sumInCryptoBigInt = BigInt("\(feeRate?.object(forKey: "VeryFast") as? UInt64 ?? UInt64(5000000000))")
             self.transactionObj.sumInFiat = Double(round(100*self.transactionObj.sumInCrypto * exchangeCourse)/100)
             self.transactionObj.cryptoName = "ETH"
             self.transactionObj.fiatName = "USD"
             self.transactionObj.numberOfBlocks = 6
         case 1:
-            self.transactionObj.speedName = "Fast"
+            self.transactionObj.speedName = localize(string: Constants.fastString)
             self.transactionObj.speedTimeString = "∙ 6 hour"
-            self.transactionObj.sumInCrypto = 0.00000005
+            self.transactionObj.sumInCryptoBigInt = BigInt("\(feeRate?.object(forKey: "Fast") as? UInt64 ?? UInt64(4000000000))")
             self.transactionObj.sumInFiat = Double(round(100*self.transactionObj.sumInCrypto * exchangeCourse)/100)
             self.transactionObj.cryptoName = "ETH"
             self.transactionObj.fiatName = "USD"
             self.transactionObj.numberOfBlocks = 10
         case 2:
-            self.transactionObj.speedName = "Normal"
+            self.transactionObj.speedName = localize(string: Constants.mediumString)
             self.transactionObj.speedTimeString = "∙ 5 days"
-            self.transactionObj.sumInCrypto = 0.00000005
+            self.transactionObj.sumInCryptoBigInt = BigInt("\(feeRate?.object(forKey: "Medium") as? UInt64 ?? UInt64(3000000000))")
             self.transactionObj.sumInFiat = Double(round(100*self.transactionObj.sumInCrypto * exchangeCourse)/100)
             self.transactionObj.cryptoName = "ETH"
             self.transactionObj.fiatName = "USD"
             self.transactionObj.numberOfBlocks = 20
         case 3:
-            self.transactionObj.speedName = "Slow"
+            self.transactionObj.speedName = localize(string: Constants.slowString)
             self.transactionObj.speedTimeString = "∙ 1 week"
-            self.transactionObj.sumInCrypto = 0.00000005
+            self.transactionObj.sumInCryptoBigInt = BigInt("\(feeRate?.object(forKey: "Slow") as? UInt64 ?? UInt64(2000000000))")
             self.transactionObj.sumInFiat = Double(round(100*self.transactionObj.sumInCrypto * exchangeCourse)/100)
             self.transactionObj.cryptoName = "ETH"
             self.transactionObj.fiatName = "USD"
             self.transactionObj.numberOfBlocks = 50
         case 4:
-            self.transactionObj.speedName = "Very Slow"
+            self.transactionObj.speedName = localize(string: Constants.verySlowString)
             self.transactionObj.speedTimeString = "∙ 2 weeks"
-            self.transactionObj.sumInCrypto = 0.00000005
+            self.transactionObj.sumInCryptoBigInt = BigInt("\(feeRate?.object(forKey: "VerySlow") as? UInt64 ?? UInt64(1000000000))")
             self.transactionObj.sumInFiat = Double(round(100*self.transactionObj.sumInCrypto * exchangeCourse)/100)
             self.transactionObj.cryptoName = "ETH"
             self.transactionObj.fiatName = "USD"
             self.transactionObj.numberOfBlocks = 70
         case 5:
-            self.transactionObj.speedName = "Custom"
+            self.transactionObj.speedName = localize(string: Constants.customString)
             self.transactionObj.speedTimeString = ""
-//            self.transactionObj.sumInCrypto = convertSatoshiToBTC(sum: self.customFee)
+            self.transactionObj.sumInCryptoBigInt = customGas.gasPrice
             self.transactionObj.sumInFiat = 0.0
             self.transactionObj.cryptoName = "ETH"
             self.transactionObj.fiatName = "USD"
@@ -151,14 +145,6 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
     }
     
     func checkMaxAvailable() {
-//        if self.availableSumInCrypto == nil || availableSumInCrypto! < 0.0 {
-//            self.sendDetailsVC?.presentWarning(message: "Wrong wallet data. Please download wallet data again.")
-//            
-//            return
-//        }
-        
-//        self.maxAllowedToSpend = self.availableSumInCrypto!
-        
         self.sendDetailsVC?.performSegue(withIdentifier: "sendEthVC", sender: Any.self)
         
     }
@@ -170,16 +156,47 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         }
         let cell = self.sendDetailsVC?.tableView.cellForRow(at: [0, selectedIndexOfSpeed!]) as! CustomTrasanctionFeeTableViewCell
 //        cell.value = firstValue
-        self.customGas.gasPrice = firstValue!
-        self.customGas.gasLimit = secValue!
-        cell.setupUIFor(gasPrice: firstValue!, gasLimit: secValue!)
+        self.customGas.gasPrice = BigInt("\(firstValue!)") * Int64(1000000000)
+        self.customGas.gasLimit = BigInt("\(firstValue ?? 0)")
+        cusomtGasPrice = UInt64(firstValue!) * 1000000000
+        cell.value = cusomtGasPrice!
+        cell.setupUI()
+//        cell.setupUIFor(gasPrice: firstValue!, gasLimit: secValue!)
 //        self.customFee = UInt64(firstValue)
-        self.sendDetailsVC?.tableView.reloadData()
+//        self.sendDetailsVC?.tableView.reloadData()
+        updateCellsVisibility()
         sendDetailsVC?.sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(transactionDTO.choosenWallet!.chain)", eventName: customFeeSetuped)
+        
+        
+        var cells = sendDetailsVC!.tableView.visibleCells
+        cells.removeLast()
+        let trueCells = cells as! [TransactionFeeTableViewCell]
+        for cell in trueCells {
+            cell.checkMarkImage.isHidden = true
+        }
+        if trueCells.count > 5 {
+            trueCells[5].checkMarkImage.isHidden = false
+            selectedIndexOfSpeed = 5
+        }
     }
     
-    func setPreviousSelected(index: Int?) {
+    func updateCellsVisibility () {
+        var cells = sendDetailsVC?.tableView.visibleCells
+        let selectedCell = selectedIndexOfSpeed == nil ? nil : cells![selectedIndexOfSpeed!]
         
+        for cell in cells! {
+            cell.alpha = (cell === selectedCell) ? 1.0 : 0.3
+            
+            if !cell.isKind(of: CustomTrasanctionFeeTableViewCell.self) {
+                (cell as! TransactionFeeTableViewCell).checkMarkImage.isHidden = (cell !== selectedCell)
+            }
+        }
+    }
+    
+    func setPreviousSelected(index: Int?) {      
+        self.sendDetailsVC?.tableView.selectRow(at: [0,index!], animated: false, scrollPosition: .none)
+        self.sendDetailsVC?.tableView.delegate?.tableView!(self.sendDetailsVC!.tableView, didSelectRowAt: [0,index!])
+        self.selectedIndexOfSpeed = index!
     }
     
     //==============================
@@ -229,4 +246,10 @@ class EthSendDetailsPresenter: NSObject, CustomFeeRateProtocol {
         
         return sum
     } 
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
+    }
 }

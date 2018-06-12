@@ -5,6 +5,8 @@
 import UIKit
 import ZFRippleButton
 
+private typealias LocalizeDelegate = EthSendDetailsViewController
+
 class EthSendDetailsViewController: UIViewController, AnalyticsProtocol {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -26,14 +28,11 @@ class EthSendDetailsViewController: UIViewController, AnalyticsProtocol {
         self.presenter.sendDetailsVC = self
         self.registerCells()
         self.presenter.makeCryptoName()
-//        presenter.requestFee()
         
-        presenter.getWalletVerbose()
+        presenter.requestFee()
         
-//        presenter.getData()
+        presenter.getData()
         
-//        sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(self.presenter.transactionDTO.choosenWallet!.chain)", eventName: "\(screenTransactionFeeWithChain)\(self.presenter.transactionDTO.choosenWallet!.chain)")
-//        sendAnalyticsEvent(screenName: "\(screenTransactionFeeWithChain)\(self.presenter.transactionDTO.choosenWallet!.chain)", eventName: donationEnableTap)
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,6 +54,11 @@ class EthSendDetailsViewController: UIViewController, AnalyticsProtocol {
             topButtonConstraint.constant = 70
         } else if screenHeight == heightOfPlus {
             topButtonConstraint.constant = 58
+        }
+        
+        if self.presenter.selectedIndexOfSpeed == nil {
+            self.tableView.selectRow(at: [0,2], animated: false, scrollPosition: .none)
+            self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: [0,2])
         }
     }
     
@@ -81,26 +85,26 @@ class EthSendDetailsViewController: UIViewController, AnalyticsProtocol {
     @IBAction func nextAction(_ sender: Any) {
         self.view.endEditing(true)
         
-//        if self.presenter.selectedIndexOfSpeed != nil {
-//            self.presenter.createTransaction(index: self.presenter.selectedIndexOfSpeed!)
+        if self.presenter.selectedIndexOfSpeed != nil {
+            self.presenter.createTransaction(index: self.presenter.selectedIndexOfSpeed!)
             self.presenter.checkMaxAvailable()
-//        } else {
-//            let alert = UIAlertController(title: "Please choose Fee Rate.", message: "You can use predefined one or set a custom value.", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
-//        }
+        } else {
+            let alert = UIAlertController(title: localize(string: Constants.pleaseChooseGasPriceString), message: localize(string: Constants.youCanUsePredefinedValueString), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     
     func presentWarning(message: String) {
-        let alert = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: localize(string: Constants.warningString), message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "sendEthVC" {
-            let sendAmountVC = segue.destination as! SendAmountViewController
+            let sendAmountVC = segue.destination as! SendAmountEthViewController
             
             presenter.transactionDTO.transaction!.transactionRLM = presenter.transactionObj
             presenter.transactionDTO.transaction!.customGAS = presenter.customGas
@@ -129,6 +133,9 @@ extension EthSendDetailsViewController: UITableViewDelegate, UITableViewDataSour
             return transactionCell
         } else {
             let customFeeCell = self.tableView.dequeueReusableCell(withIdentifier: "customFeeCell") as! CustomTrasanctionFeeTableViewCell
+            customFeeCell.blockchainType = presenter.transactionDTO.blockchainType
+            customFeeCell.value = presenter.cusomtGasPrice ?? 0
+            customFeeCell.setupUI()
             
             return customFeeCell
         }
@@ -152,40 +159,45 @@ extension EthSendDetailsViewController: UITableViewDelegate, UITableViewDataSour
         }
         
         if indexPath.row != 5 {
-            if self.isCustom {
-                let customCell = self.tableView.cellForRow(at: [0,5]) as! CustomTrasanctionFeeTableViewCell
-                customCell.reloadUI()
-            }
-            var cells = self.tableView.visibleCells
-            cells.removeLast()
-            let trueCells = cells as! [TransactionFeeTableViewCell]
-            if trueCells[indexPath.row].checkMarkImage.isHidden == false {
-                trueCells[indexPath.row].checkMarkImage.isHidden = true
-                self.presenter.selectedIndexOfSpeed = nil
-                
-                return
-            }
-            for cell in trueCells {
-                cell.checkMarkImage.isHidden = true
-            }
-            trueCells[indexPath.row].checkMarkImage.isHidden = false
-            self.presenter.selectedIndexOfSpeed = indexPath.row
+//            if self.isCustom {
+//                let customCell = self.tableView.cellForRow(at: [0,5]) as! CustomTrasanctionFeeTableViewCell
+//                customCell.reloadUI()
+//            }
+//            var cells = self.tableView.visibleCells
+//            cells.removeLast()
+//            let trueCells = cells as! [TransactionFeeTableViewCell]
+//            if trueCells[indexPath.row].checkMarkImage.isHidden == false {
+//                trueCells[indexPath.row].checkMarkImage.isHidden = true
+//                self.presenter.selectedIndexOfSpeed = nil
+//
+//                return
+//            }
+//            for cell in trueCells {
+//                cell.checkMarkImage.isHidden = true
+//            }
+//            trueCells[indexPath.row].checkMarkImage.isHidden = false
+            presenter.selectedIndexOfSpeed = indexPath.row
+            presenter.updateCellsVisibility()
         } else {
-            self.isCustom = true
+            isCustom = true
+            
             let storyboard = UIStoryboard(name: "Send", bundle: nil)
             let customVC = storyboard.instantiateViewController(withIdentifier: "customVC") as! CustomFeeViewController
-            customVC.presenter.chainId = self.presenter.transactionDTO.choosenWallet!.chain
-            customVC.delegate = self.presenter
+            customVC.presenter.blockchainType = presenter.transactionDTO.choosenWallet!.blockchainType
+            customVC.previousSelected = presenter.selectedIndexOfSpeed
+            customVC.delegate = presenter
+            customVC.rate = Int(presenter.cusomtGasPrice ?? 1)
+            customVC.previousSelected = presenter.selectedIndexOfSpeed
+            presenter.selectedIndexOfSpeed = indexPath.row
             
-            self.presenter.selectedIndexOfSpeed = indexPath.row
-            self.navigationController?.pushViewController(customVC, animated: true)
+            navigationController?.pushViewController(customVC, animated: true)
             
-            var cells = self.tableView.visibleCells
-            cells.removeLast()
-            let trueCells = cells as! [TransactionFeeTableViewCell]
-            for cell in trueCells {
-                cell.checkMarkImage.isHidden = true
-            }
+//            var cells = self.tableView.visibleCells
+//            cells.removeLast()
+//            let trueCells = cells as! [TransactionFeeTableViewCell]
+//            for cell in trueCells {
+//                cell.checkMarkImage.isHidden = true
+//            }
         }
         
     }
@@ -195,4 +207,8 @@ extension EthSendDetailsViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
-
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Sends"
+    }
+}

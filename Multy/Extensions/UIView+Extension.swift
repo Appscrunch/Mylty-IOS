@@ -74,6 +74,16 @@ extension UIView {
         gradient.endPoint = orientation.endPoint
         self.layer.insertSublayer(gradient, at: 0)
     }
+    
+    func applyOrUpdateGradient(withColours colours: [UIColor], gradientOrientation orientation: GradientOrientation) {
+        if self.layer.sublayers != nil && self.layer.sublayers!.count > 0 {
+            for sublayer in self.layer.sublayers! {
+                sublayer.removeFromSuperlayer()
+            }
+        }
+        
+        applyGradient(withColours: colours, gradientOrientation: orientation)
+    }
 }
 
 

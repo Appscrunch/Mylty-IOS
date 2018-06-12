@@ -48,7 +48,7 @@ class FastOperationsViewController: UIViewController, AnalyticsProtocol {
             self.alertForCreatingWallet()
         } else {
             let storyboard = UIStoryboard(name: "Send", bundle: nil)
-            let destVC = storyboard.instantiateViewController(withIdentifier: "sendStart")
+            let destVC = storyboard.instantiateViewController(withIdentifier: "send")
             self.navigationController?.pushViewController(destVC, animated: true)
             sendAnalyticsEvent(screenName: screenFastOperation, eventName: sendTap)
         }

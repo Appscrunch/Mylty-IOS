@@ -4,7 +4,18 @@
 
 import UIKit
 
-class SendingAnimationPresenter: NSObject {
-
+class SendingAnimationPresenter: NSObject, ReceiveSumTransferProtocol {
+    var sendingAnimationVC : SendingAnimationViewController?
     
+    var transactionAddress : String?
+    var transactionAmount : String?
+    
+    func viewControllerViewWillAppear() {
+        sendingAnimationVC?.updateUI()
+    }
+    
+    func fundsReceived(_ amount: String,_ address: String) {
+        transactionAddress = address
+        transactionAmount = amount
+    }
 }

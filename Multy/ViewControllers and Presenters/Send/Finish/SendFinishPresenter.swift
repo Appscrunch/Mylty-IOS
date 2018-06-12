@@ -9,7 +9,7 @@ class SendFinishPresenter: NSObject {
     var sendFinishVC: SendFinishViewController?
     var transactionDTO = TransactionDTO() {
         didSet {
-            cryptoName = transactionDTO.blockchainType.shortName
+            cryptoName = transactionDTO.blockchainType!.shortName
         }
     }
     
@@ -18,21 +18,48 @@ class SendFinishPresenter: NSObject {
     var selectedSpeedIndex: Int?
     
     var sumInCrypto: Double?
+    var sumInCryptoString = String()
     var sumInFiat: Double?
-    var cryptoName: String?
-    var fiatName: String = "USD"//MARK: get from settings
+    var sumInFiatString = String()
+    
+    var feeAmountInCryptoString = String()
+    var feeAmountInFiatString = String()
+    
+    var cryptoName = "BTC"
+    var fiatName = "USD" // MARK: get from settings
     
     var isCrypto = true
     
     func makeEndSum() {
-        switch self.isCrypto {
-        case true:
-            self.sumInCrypto = transactionDTO.transaction?.endSum
-            self.sumInFiat = self.sumInCrypto! * transactionDTO.choosenWallet!.exchangeCourse
-        case false:
-            self.sumInFiat = transactionDTO.transaction?.endSum
-            self.sumInCrypto = self.sumInFiat!
-        }
+//        switch isCrypto {
+//        case true:
+            if transactionDTO.choosenWallet!.blockchainType.blockchain == BLOCKCHAIN_BITCOIN {
+                sumInCrypto = transactionDTO.sendAmountString?.stringWithDot.doubleValue
+                sumInCryptoString = sumInCrypto!.fixedFraction(digits: 8)
+                sumInFiat = sumInCrypto! * transactionDTO.choosenWallet!.exchangeCourse
+                sumInFiatString = sumInFiat!.fixedFraction(digits: 2)
+                
+                feeAmountInCryptoString = (transactionDTO.transaction?.transactionRLM?.sumInCrypto ?? 0.0).fixedFraction(digits: 8)
+                feeAmountInFiatString = (transactionDTO.transaction?.transactionRLM?.sumInFiat ?? 0.0).fixedFraction(digits: 2)
+            } else if transactionDTO.choosenWallet!.blockchainType.blockchain == BLOCKCHAIN_ETHEREUM {
+                sumInCryptoString = transactionDTO.sendAmountString!
+                if isCrypto {
+                    sumInFiatString = (transactionDTO.transaction!.endSumBigInt! * transactionDTO.choosenWallet!.exchangeCourse).fiatValueString(for: BLOCKCHAIN_ETHEREUM)
+                } else {
+                    sumInFiatString = (transactionDTO.transaction!.endSumBigInt!).fiatValueString(for: BLOCKCHAIN_ETHEREUM)
+                }
+                
+                
+                let feeAmount = transactionDTO.transaction!.feeAmount
+                let feeAmountInWei = feeAmount * transactionDTO.choosenWallet!.exchangeCourse
+                feeAmountInCryptoString = feeAmount.cryptoValueString(for: BLOCKCHAIN_ETHEREUM)
+                feeAmountInFiatString = feeAmountInWei.fiatValueString(for: BLOCKCHAIN_ETHEREUM)
+            }
+//        case false:
+//            self.sumInFiat = transactionDTO.transaction?.endSum
+//
+//            self.sumInCrypto = self.sumInFiat!
+//        }
     }
     
     func makeFrameForSlider() -> CGRect {

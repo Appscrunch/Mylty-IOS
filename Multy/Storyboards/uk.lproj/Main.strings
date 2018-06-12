@@ -1,0 +1,203 @@
+
+/* Class = "UILabel"; text = "Exchange"; ObjectID = "0qt-Qh-fw1"; */
+"0qt-Qh-fw1.text" = "Біржа";
+
+/* Class = "UILabel"; text = "Security Settings"; ObjectID = "0rb-aE-nDa"; */
+"0rb-aE-nDa.text" = "Безпека";
+
+/* Class = "UILabel"; text = "Create Wallet"; ObjectID = "1wC-lj-ECJ"; */
+"1wC-lj-ECJ.text" = "Створити Гаманець";
+
+/* Class = "UILabel"; text = "Cancel"; ObjectID = "20j-m8-EKe"; */
+"20j-m8-EKe.text" = "Скасувати";
+
+/* Class = "UILabel"; text = "Currency to convert"; ObjectID = "2Rh-CD-yeA"; */
+"2Rh-CD-yeA.text" = "Валюта оцінки";
+
+/* Class = "UILabel"; text = "Donate for this option"; ObjectID = "2af-jb-4m3"; */
+"2af-jb-4m3.text" = "Зробити внесок для цієї опції";
+
+/* Class = "UILabel"; text = "Unfortunately you are not conencted to \nthe network now. Multy needs constant \nconenction to provide it’s work\ncorrectly"; ObjectID = "312-E7-Xe2"; */
+"312-E7-Xe2.text" = "На жаль, ви не підключені \n до інтернету зараз. Multy необхідно постійне \nз'єднання для забезпечення коректної роботи";
+
+/* Class = "UITabBarItem"; title = "Activity"; ObjectID = "3Tm-8r-aym"; */
+"3Tm-8r-aym.title" = "Активності";
+
+/* Class = "UIButton"; normalTitle = "Privacy Policy"; ObjectID = "4BO-WF-MtY"; */
+"4BO-WF-MtY.normalTitle" = "Політика конфіденційності";
+
+/* Class = "UIButton"; normalTitle = "Donate USD 50"; ObjectID = "97Y-tc-SZM"; */
+"97Y-tc-SZM.normalTitle" = "Пожертвувати USD 50";
+
+/* Class = "UILabel"; text = "Activity"; ObjectID = "AX1-QS-lfe"; */
+"AX1-QS-lfe.text" = "Активності";
+
+/* Class = "UILabel"; text = "Send"; ObjectID = "AYV-Wk-0pe"; */
+"AYV-Wk-0pe.text" = "Відправити";
+
+/* Class = "UILabel"; text = "Vote for features"; ObjectID = "CFB-1G-kDZ"; */
+"CFB-1G-kDZ.text" = "Голосуй криптой";
+
+/* Class = "UILabel"; text = "Reference Currency"; ObjectID = "Cmf-Vv-6EE"; */
+"Cmf-Vv-6EE.text" = "Валюта оцінки";
+
+/* Class = "UILabel"; text = "Vote for contacts"; ObjectID = "Cnj-cT-4pf"; */
+"Cnj-cT-4pf.text" = "Проголосувати за контакти";
+
+/* Class = "UILabel"; text = "Push Notifications"; ObjectID = "E6X-rf-6eP"; */
+"E6X-rf-6eP.text" = "Повідомлення";
+
+/* Class = "UIButton"; normalTitle = "Create"; ObjectID = "EcK-ls-Eh8"; */
+"EcK-ls-Eh8.normalTitle" = "Створити";
+
+/* Class = "UILabel"; text = "No contacts yet"; ObjectID = "F39-3R-vjc"; */
+"F39-3R-vjc.text" = "Поки тут порожньо";
+
+/* Class = "UILabel"; text = "Fee Rate"; ObjectID = "GOV-kb-79y"; */
+"GOV-kb-79y.text" = "Розмір комісії";
+
+/* Class = "UILabel"; text = "Cancel"; ObjectID = "IEC-wG-9xS"; */
+"IEC-wG-9xS.text" = "Скасувати";
+
+/* Class = "UILabel"; text = "1 233$"; ObjectID = "Ibn-Hy-A0R"; */
+"Ibn-Hy-A0R.text" = "1 233$";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "Ij3-vx-Kh2"; */
+"Ij3-vx-Kh2.text" = "(в розробці)";
+
+/* Class = "UILabel"; text = "1:59"; ObjectID = "KBZ-NF-ahF"; */
+"KBZ-NF-ahF.text" = "1:59";
+
+/* Class = "UITabBarItem"; title = "Main"; ObjectID = "KWB-7P-gFV"; */
+"KWB-7P-gFV.title" = "Гаманці";
+
+/* Class = "UIButton"; normalTitle = "Discard"; ObjectID = "MBi-5j-Fq1"; */
+"MBi-5j-Fq1.normalTitle" = "Відхилити";
+
+/* Class = "UILabel"; text = "Donation Sum"; ObjectID = "Mp9-2D-EV6"; */
+"Mp9-2D-EV6.text" = "Сума пожертви";
+
+/* Class = "UILabel"; text = "Contacts"; ObjectID = "SCG-Oy-IO5"; */
+"SCG-Oy-IO5.text" = "Контакти";
+
+/* Class = "UILabel"; text = "Wallet Name"; ObjectID = "TIE-mG-uUa"; */
+"TIE-mG-uUa.text" = "Назва Гаманця";
+
+/* Class = "UITextField"; text = "0.00000001"; ObjectID = "TQN-Ah-3fP"; */
+"TQN-Ah-3fP.text" = "0.00000001";
+
+/* Class = "UILabel"; text = "Reference currency"; ObjectID = "UPE-4y-AFR"; */
+"UPE-4y-AFR.text" = "Валюта оцінки";
+
+/* Class = "UILabel"; text = "Donation"; ObjectID = "VE2-jw-Snq"; */
+"VE2-jw-Snq.text" = "Пожертвування";
+
+/* Class = "UILabel"; text = "Blockchains"; ObjectID = "Vis-uX-a9U"; */
+"Vis-uX-a9U.text" = "Блокчейни";
+
+/* Class = "UILabel"; text = "Import Wallet"; ObjectID = "XSz-h8-kEl"; */
+"XSz-h8-kEl.text" = "Імпортувати гаманець";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "XXC-0f-DEu"; */
+"XXC-0f-DEu.text" = "BTC";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "Z17-jd-0eD"; */
+"Z17-jd-0eD.title" = "Установки";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "ZPG-iV-jLD"; */
+"ZPG-iV-jLD.normalTitle" = "Скасувати";
+
+/* Class = "UILabel"; text = "Exchange"; ObjectID = "aOY-Hs-fDh"; */
+"aOY-Hs-fDh.text" = "Біржа";
+
+/* Class = "UILabel"; text = "Bitcoin ∙ BTC"; ObjectID = "aVq-ZB-lDs"; */
+"aVq-ZB-lDs.text" = "Bitcoin ∙ BTC";
+
+/* Class = "UILabel"; text = "We want you to speak up. By voting with your crypto, you can give a feedback on features you want the most and support project at the same time. Your vote will help us to choose the right path."; ObjectID = "aqW-mj-53c"; */
+"aqW-mj-53c.text" = "Ми хочемо дізнатися вашу думку. Проголосувавши за функціонал, ви даєте нам знати що він важливий і одночасно підтримуєте розробників проекту. Ваш голос допоможе нам обрати вірний шлях.";
+
+/* Class = "UILabel"; text = "Leave Feedback"; ObjectID = "cGT-gp-Wpw"; */
+"cGT-gp-Wpw.text" = "Залишити відгук";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "ccX-Hp-ZvL"; */
+"ccX-Hp-ZvL.text" = "(в розробці)";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "db1-Nv-fng"; */
+"db1-Nv-fng.text" = "USD";
+
+/* Class = "UILabel"; text = "US Dollars ∙ USD"; ObjectID = "df5-ol-Doo"; */
+"df5-ol-Doo.text" = "US Dollars ∙ USD";
+
+/* Class = "UIButton"; normalTitle = "Terms of Service"; ObjectID = "dk1-AS-aPV"; */
+"dk1-AS-aPV.normalTitle" = "Умови надання послуг";
+
+/* Class = "UILabel"; text = "Receive"; ObjectID = "dmp-ig-v3f"; */
+"dmp-ig-v3f.text" = "Отримати";
+
+/* Class = "UILabel"; text = "No internet connection"; ObjectID = "eXV-cf-GXL"; */
+"eXV-cf-GXL.text" = "Немає з'єднання з інтернетом";
+
+/* Class = "UILabel"; text = "(work in progress)"; ObjectID = "g69-dn-xlO"; */
+"g69-dn-xlO.text" = "(в розробці)";
+
+/* Class = "UILabel"; text = "Multy is temporary locked.\n"; ObjectID = "g9R-o2-GoW"; */
+"g9R-o2-GoW.text" = "Multy is temporary locked.\n";
+
+/* Class = "UITabBarItem"; title = "Contacts"; ObjectID = "gAL-wV-lQc"; */
+"gAL-wV-lQc.title" = "Контакти";
+
+/* Class = "UIButton"; normalTitle = "Donate USD 5"; ObjectID = "gwH-0Q-jV7"; */
+"gwH-0Q-jV7.normalTitle" = "Пожертвувати USD 5";
+
+/* Class = "UIButton"; normalTitle = "Create New"; ObjectID = "hgF-yi-Usi"; */
+"hgF-yi-Usi.normalTitle" = "Створювати Новий";
+
+/* Class = "UILabel"; text = "Select wallet and donation sum"; ObjectID = "kVh-aV-sdy"; */
+"kVh-aV-sdy.text" = "Виберіть гаманець і суму пожертви";
+
+/* Class = "UILabel"; text = "By donation for this option you help the\ndevelopment team work more diligently\nand develop new application functionality"; ObjectID = "lQD-5J-hkF"; */
+"lQD-5J-hkF.text" = "Своїм пожертвуванням ви допомагаєте команді розробників. Зібрані кошти підуть на розробку нового функціоналу.";
+
+/* Class = "UIButton"; normalTitle = "Accept"; ObjectID = "m7p-Iz-hvC"; */
+"m7p-Iz-hvC.normalTitle" = "Прийняти";
+
+/* Class = "UILabel"; text = "Terms of Service"; ObjectID = "mMS-bs-LWa"; */
+"mMS-bs-LWa.text" = "Умови надання послуг";
+
+/* Class = "UIButton"; normalTitle = "1.1234 BTC"; ObjectID = "mj4-An-rNI"; */
+"mj4-An-rNI.normalTitle" = "1.1234 BTC";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "pCz-aZ-HZS"; */
+"pCz-aZ-HZS.normalTitle" = "Скасувати";
+
+/* Class = "UILabel"; text = "Create or Import New Wallet"; ObjectID = "sRz-3m-UVg"; */
+"sRz-3m-UVg.text" = "Створити або імпортувати новий гаманець";
+
+/* Class = "UIButton"; normalTitle = "Try Again"; ObjectID = "tdq-0K-Sb2"; */
+"tdq-0K-Sb2.normalTitle" = "Спробувати знову";
+
+/* Class = "UILabel"; text = "Blockchain"; ObjectID = "u64-Q0-7bi"; */
+"u64-Q0-7bi.text" = "Блокчейн";
+
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "vCc-C8-70s"; */
+"vCc-C8-70s.normalTitle" = "Відправити";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "wOA-Hu-U4A"; */
+"wOA-Hu-U4A.title" = "Налаштування";
+
+/* Class = "UILabel"; text = "You have enterred \npin incorrectly 5 times.\n\nTry again in:"; ObjectID = "wSj-OL-MZJ"; */
+"wSj-OL-MZJ.text" = "You have enterred \npin incorrectly 5 times.\n\nTry again in:";
+
+/* Class = "UILabel"; text = "Vote for activity"; ObjectID = "xU0-fA-viF"; */
+"xU0-fA-viF.text" = "Проголосувати за події";
+
+/* Class = "UILabel"; text = "About Multy"; ObjectID = "xfR-da-DhP"; */
+"xfR-da-DhP.text" = "О Multy";
+
+/* Class = "UITextField"; placeholder = "Wallet name"; ObjectID = "yYM-Z4-2M4"; */
+"yYM-Z4-2M4.placeholder" = "Назва Гаманця";
+
+/* Class = "UILabel"; text = "US Dollars ∙ USD"; ObjectID = "zG3-vO-HLP"; */
+"zG3-vO-HLP.text" = "Долари США ∙ USD";
+
+"tRx-hg-wDk.normalTitle" = " Скопіювати ";

@@ -32,6 +32,8 @@ class ApiManager: NSObject, RequestRetrier {
         }
     }
     var userID = String()
+    var pushToken = String()
+    
     
     override init() {
         super.init()
@@ -70,7 +72,14 @@ class ApiManager: NSObject, RequestRetrier {
         if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
             
             if userID.isEmpty {
-                completion(false, 0.0)
+                DispatchQueue.main.async {
+                    DataManager.shared.getAccount { (acc, err) in
+                        if acc != nil {
+                            self.userID = acc!.userID
+                        }
+                        completion(false, 0.0)
+                    }
+                }
             }
             
             var params : Parameters = [ : ]
@@ -78,8 +87,8 @@ class ApiManager: NSObject, RequestRetrier {
             params["userID"] = userID
             params["deviceID"] = "iOS \(UIDevice.current.name)"
             params["deviceType"] = 1
-            params["pushToken"] = UUID().uuidString
-            params["appVersion"] = ((infoPlist["CFBundleShortVersionString"] as! String) + (infoPlist["CFBundleVersion"] as! String))
+            params["pushToken"] = pushToken
+            params["appVersion"] = ((infoPlist["CFBundleShortVersionString"] as! String) + " " + (infoPlist["CFBundleVersion"] as! String))
             
             self.auth(with: params, completion: { (dict, error) in
                 completion(true, 0.2) // retry after 0.2 second
@@ -117,6 +126,7 @@ class ApiManager: NSObject, RequestRetrier {
             case .success(_):
                 if response.result.value != nil {
                     if let token = (response.result.value as! NSDictionary)["token"] as? String {
+                        DataManager.shared.updateToken(token)
                         self!.token = token
                     }
                     completion((response.result.value as! NSDictionary), nil)
@@ -256,12 +266,17 @@ class ApiManager: NSObject, RequestRetrier {
     }
     
     func getWalletsVerbose(completion: @escaping(_ answer: NSDictionary?,_ error: Error?) -> ()) {
+        DataManager.shared.getAccount(completion: { (acc, err) in
+            if acc != nil {
+                self.token = acc!.token
+            }
+        
         let header: HTTPHeaders = [
             "Content-Type": "application/json",
             "Authorization" : "Bearer \(self.token)"
         ]
         
-        requestManager.request("\(apiUrl)api/v1/wallets/verbose", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: header).validate().debugLog().responseJSON { (response: DataResponse<Any>) in
+        self.requestManager.request("\(apiUrl)api/v1/wallets/verbose", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: header).validate().debugLog().responseJSON { (response: DataResponse<Any>) in
             switch response.result {
             case .success(_):
                 if response.result.value != nil {
@@ -272,6 +287,7 @@ class ApiManager: NSObject, RequestRetrier {
                 break
             }
         }
+        })
     }
     
     func getOneWalletVerbose(walletID: NSNumber, blockchain: BlockchainType, completion: @escaping(_ answer: NSDictionary?,_ error: Error?) -> ()) {
@@ -328,11 +344,12 @@ class ApiManager: NSObject, RequestRetrier {
             case .success(_):
                 if response.result.value != nil {
                     completion((response.result.value as! NSDictionary), nil)
-                }
+                } 
             case .failure(_):
                 completion(nil, response.result.error)
                 break
             }
+            
         }
     }
 

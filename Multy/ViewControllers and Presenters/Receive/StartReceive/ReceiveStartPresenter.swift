@@ -38,14 +38,40 @@ class ReceiveStartPresenter: NSObject {
         return self.walletsArr.count
     }
     
+    func blockUI() {
+        receiveStartVC!.loader.show(customTitle: receiveStartVC?.localize(string: Constants.gettingWalletString))
+        receiveStartVC?.tableView.isUserInteractionEnabled = false
+        receiveStartVC?.tabBarController?.view.isUserInteractionEnabled = false
+    }
+    
+    func unlockUI() {
+        receiveStartVC!.loader.hide()
+        receiveStartVC?.tableView.isUserInteractionEnabled = true
+        receiveStartVC?.tabBarController?.view.isUserInteractionEnabled = true
+    }
+    
     func getWallets() {
-        DataManager.shared.getAccount { (acc, err) in
-            if err == nil {
-                // MARK: check this
-                self.walletsArr = acc!.wallets.sorted(by: { $0.availableSumInCrypto > $1.availableSumInCrypto })
+//        DataManager.shared.getAccount { (acc, err) in
+//            if err == nil {
+//                // MARK: check this
+//                self.walletsArr = acc!.wallets.sorted(by: { $0.availableSumInCrypto > $1.availableSumInCrypto })
+//                self.receiveStartVC?.updateUI()
+//            }
+//        }
+        blockUI()
+        DataManager.shared.getWalletsVerbose() { (walletsArrayFromApi, err) in
+            self.unlockUI()
+            if err != nil {
+                return
+            } else {
+                let walletsArr = UserWalletRLM.initWithArray(walletsInfo: walletsArrayFromApi!)
+                print("afterVerbose:rawdata: \(walletsArrayFromApi)")
+                
+                self.walletsArr = walletsArr.sorted(by: { $0.availableSumInCrypto > $1.availableSumInCrypto })
                 self.receiveStartVC?.updateUI()
             }
         }
+        
     }
 }
 

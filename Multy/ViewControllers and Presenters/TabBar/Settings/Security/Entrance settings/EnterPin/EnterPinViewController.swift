@@ -101,6 +101,10 @@ class EnterPinViewController: UIViewController, UITextFieldDelegate {
         if self.whereFrom!.className == "SettingsViewController" {
             self.cancelBtn.isHidden = false
         }
+        
+        cancelBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+        cancelBtn.titleLabel?.minimumScaleFactor = 0.5
+        cancelBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     @IBAction func tapAction(_ sender: Any) {
@@ -175,7 +179,7 @@ class EnterPinViewController: UIViewController, UITextFieldDelegate {
     
     func biometricAuth() {
         self.touchMe.authenticateUser { (message) in
-            if let message = message {
+            if let _ = message {
                 self.tabBarController?.tabBar.isUserInteractionEnabled = false
             } else {
                 self.cancelDelegate?.presentNoInternet()

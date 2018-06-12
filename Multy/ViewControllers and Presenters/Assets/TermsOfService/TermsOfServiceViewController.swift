@@ -4,10 +4,13 @@
 
 import UIKit
 
+private typealias LocalizeDelegate = TermsOfServiceViewController
+
 class TermsOfServiceViewController: UIViewController, UIWebViewDelegate {
 
     @IBOutlet weak var webView: UIWebView!
     @IBOutlet weak var spiner: UIActivityIndicatorView!
+    @IBOutlet weak var agreeTextLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,13 +18,14 @@ class TermsOfServiceViewController: UIViewController, UIWebViewDelegate {
         self.loadPage()
         self.webView.delegate = self
         self.spiner.hidesWhenStopped = true
+        agreeTextLabel.text = localize(string: Constants.agreeWithTermsString)
     }
     
     func loadPage() {
-        let url = "https://raw.githubusercontent.com/wiki/Appscrunch/Multy/Legal:-Terms-of-service.md"
+        let url = LocalLanguage.shared.getTOSLink()
         self.webView.scalesPageToFit = true
         self.webView.contentMode = .scaleAspectFit
-        self.webView.loadRequest(URLRequest(url: URL(string: url)!))
+        self.webView.loadRequest(URLRequest(url: url))
     }
     
     
@@ -45,9 +49,7 @@ class TermsOfServiceViewController: UIViewController, UIWebViewDelegate {
     }
     
     @IBAction func openPrivacyPolicy(_ sender: Any) {
-        guard let url = URL(string: "https://raw.githubusercontent.com/wiki/Appscrunch/Multy/Legal:-Privacy-Policy.md") else {
-            return //be safe
-        }
+        let url = LocalLanguage.shared.getPPLink()
         
         if #available(iOS 10.0, *) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -62,10 +64,15 @@ class TermsOfServiceViewController: UIViewController, UIWebViewDelegate {
     }
     
     @IBAction func discardAction(_ sender: Any) {
-        let message = "In order to use Multy you have to accept Terms of Service. By pressing \"Accept\" you confirm that you have read, understood and agree to the following Terms of Service and that you have the right, power and authority to do so."
-        let alert = UIAlertController(title: "Sorry", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        let message = localize(string: Constants.useTermsOfService)
+        let alert = UIAlertController(title: localize(string: Constants.sorryString), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localize(string: Constants.cancelString), style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
+}
+
+extension LocalizeDelegate: Localizable {
+    var tableName: String {
+        return "Assets"
+    }
 }

@@ -4,16 +4,16 @@
 
 import UIKit
 
-extension UITextField{
+extension UITextField {
     
-    func addDoneCancelToolbar(onDone: (target: Any, action: Selector)? = nil) {
+    func addDoneCancelToolbar(onDone: (target: Any, action: Selector)? = nil, viewController: Localizable) {
         let onDone = onDone ?? (target: self, action: #selector(doneButtonTapped))
         
         let toolbar: UIToolbar = UIToolbar()
         toolbar.barStyle = .default
         toolbar.items = [
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(title: "Done", style: .done, target: onDone.target, action: onDone.action)
+            UIBarButtonItem(title: viewController.localize(string: Constants.doneString), style: .done, target: onDone.target, action: onDone.action)
         ]
         toolbar.sizeToFit()
         
